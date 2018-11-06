@@ -1,6 +1,6 @@
 <template>
   <ul class="workspace-contents">
-    <li v-for="(item, index) in tabs" :key="index" v-show="item.show">
+    <li v-for="(item, index) in tabs" :key="index" :data-id="item.id" v-show="item.show">
       <section>{{ item.id }}</section>
     </li>
   </ul>
@@ -56,6 +56,20 @@
 
         }
 
+      },
+
+      getContent(id, fn) {
+
+        let tab
+
+        setTimeout(() => {
+
+          if (tab = this.$el.querySelector(`li[data-id="${id}"] > section`)) {
+            fn.call(tab, tab, id)
+          }
+
+        }, 0)
+
       }
 
     },
@@ -71,7 +85,11 @@
       })
 
       this.$root.$on('closeWorkspaceTab-content', id => {
-        this.closeContent(id);
+        this.closeContent(id)
+      })
+
+      this.$root.$on('getWorkspaceTab', (id, fn = function () {}) => {
+        this.getContent(id, fn)
       })
 
     }

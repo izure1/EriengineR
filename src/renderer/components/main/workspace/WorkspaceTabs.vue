@@ -24,15 +24,16 @@
       /**
        * @description Workspace에서 새로운 탭을 열도록 도와줍니다.
        * 
-       * @param {String} id 탭을 구분짓는 유일무이한 값입니다. WorkspaceContent 에서도 동일한 값을 같습니다.
        * @param {String} name 새로운 탭의 이름을 설정합니다.
-       * @param {Function} onclick 탭을 클릭했을 때 작동하는 콜백함수입니다.
-       * @param {Function} onclose 탭을 닫았을 때 작동하는 콜백함수입니다.
+       * @param {String} ud 새로운 탭의 유일무이한 고유값입니다. 이것을 지정하지 않으면 getWorkspaceTab 이벤트 발생으로 원하는 탭을 찾을 수 없습니다
+       * @param {Object} events 새로운 탭의 이벤트핸들러 함수가 담겨있습니다
        */
-      createTab(id, name, onclick, onclose) {
+      createTab(name, id, events) {
+
+        this.tabs.push(new WorkspaceTab(id, name, events))
 
         this.$root.$emit('createWorkspaceTab-content', id)
-        this.tabs.push(new WorkspaceTab(...arguments))
+        this.$root.$emit('getWorkspaceTab', id, events.oncreate)
 
       },
       tabMousedown(item) {
@@ -77,8 +78,8 @@
     },
     mounted() {
 
-      this.$root.$on('createWorkspaceTab', (name, cb, onclick, onclose) => {
-        this.createTab(createUUID(), name, onclick, onclose)
+      this.$root.$on('createWorkspaceTab', (name, events = {}, id = createUUID()) => {
+        this.createTab(name, id, events)
       })
 
     }

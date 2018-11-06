@@ -17,7 +17,7 @@
       Aside,
       Main
     },
-    mounted(){
+    mounted() {
       this.$root.$emit('createWorkspaceTab', '시작')
       this.$root.$emit('createWorkspaceTab', '시작')
       this.$root.$emit('createWorkspaceTab', '시작')

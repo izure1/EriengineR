@@ -1,11 +1,15 @@
 class WorkspaceTab {
 
-  constructor(id, name, onclick = function () {}, onclose = function () {}) {
+  constructor(id, name, events = {}) {
+
     this.id = id
     this.name = name
-    this.onclick = onclick
-    this.onclose = onclose
-    this.selected = false;
+    this.selected = false
+
+    this.oncreate = events.oncreate
+    this.onclick = events.onclick
+    this.onclose = events.onclose
+
   }
 
 }
