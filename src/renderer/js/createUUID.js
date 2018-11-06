@@ -1,4 +1,4 @@
-export default function UUID() {
+export default function createUUID() {
 
   let uuid
 
@@ -7,6 +7,6 @@ export default function UUID() {
     return v.toString(16)
   })
 
-  return new String(uuid)
+  return uuid
 
 }

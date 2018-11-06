@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import UUID from '@/js/UUID'
+  import createUUID from '@/js/createUUID'
   import WorkspaceTab from './js/WorkspaceTab'
 
   export default {
@@ -58,7 +58,7 @@
 
           t = this.tabs[i]
 
-          if (t.name !== item.name) continue
+          if (t.id !== item.id) continue
           if (t.onclose && t.onclose.call) {
             t.onclose()
           }
@@ -77,8 +77,8 @@
     },
     mounted() {
 
-      this.$root.$on('createWorkspaceTab', (name, onclick, onclose) => {
-        this.createTab(new UUID, name, onclick, onclose)
+      this.$root.$on('createWorkspaceTab', (name, cb, onclick, onclose) => {
+        this.createTab(createUUID(), name, onclick, onclose)
       })
 
     }
@@ -101,6 +101,7 @@
     list-style: none;
     position: relative;
     z-index: 0;
+    background-color: #d9d9d9;
 
     >li {
       max-width: 200px;

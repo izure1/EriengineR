@@ -7,7 +7,6 @@
 </template>
 
 <script>
-  import UUID from '@/js/UUID'
   import WorkspaceContent from './js/WorkspaceContent'
 
   export default {

@@ -18,7 +18,8 @@
       Main
     },
     mounted(){
-      this.$root.$emit('createWorkspaceTab', '시작asdhjkfajskdfhlaskjdfsf')
+      this.$root.$emit('createWorkspaceTab', '시작')
+      this.$root.$emit('createWorkspaceTab', '시작')
       this.$root.$emit('createWorkspaceTab', '시작')
       this.$root.$emit('createWorkspaceTab', '시작')
       this.$root.$emit('createWorkspaceTab', '시작')
