@@ -3,13 +3,15 @@
     <li v-for="(item, index) in tabs" :key="index" :class="item.selected === true ? 'workspace-tabs-selected' : ''">
       <a href="#">
         <p @mousedown="tabMousedown(item)">{{ item.name }}</p>
-        <span @click="tabClose(item)">✖</span>
+        <span @click="tabClose(item)">⨉</span>
       </a>
     </li>
   </ul>
 </template>
 
 <script>
+  import fs from 'fs'
+
   import createUUID from '@/js/createUUID'
   import WorkspaceTab from './js/WorkspaceTab'
 
@@ -25,15 +27,19 @@
        * @description Workspace에서 새로운 탭을 열도록 도와줍니다.
        * 
        * @param {String} name 새로운 탭의 이름을 설정합니다.
-       * @param {String} ud 새로운 탭의 유일무이한 고유값입니다. 이것을 지정하지 않으면 getWorkspaceTab 이벤트 발생으로 원하는 탭을 찾을 수 없습니다
+       * @param {String} id 새로운 탭의 유일무이한 고유값입니다. 이것을 지정하지 않으면 getWorkspaceTab 이벤트 발생으로 원하는 탭을 찾을 수 없습니다
+       * @param {String} template 새로운 탭의 기본 템플릿을 지정합니다
        * @param {Object} events 새로운 탭의 이벤트핸들러 함수가 담겨있습니다
        */
-      createTab(name, id, events) {
+      createTab(name, id, template, events) {
 
-        this.tabs.push(new WorkspaceTab(id, name, events))
+        let tab = new WorkspaceTab(id, name, events)
 
-        this.$root.$emit('createWorkspaceTab-content', id)
-        this.$root.$emit('getWorkspaceTab', id, events.oncreate)
+        this.tabs.push(tab)
+
+        this.$root.$emit('createWorkspaceTab-content', id, template)
+
+        this.tabMousedown(tab)
 
       },
       tabMousedown(item) {
@@ -78,8 +84,8 @@
     },
     mounted() {
 
-      this.$root.$on('createWorkspaceTab', (name, events = {}, id = createUUID()) => {
-        this.createTab(name, id, events)
+      this.$root.$on('createWorkspaceTab', (name, id = createUUID(), template = 'DEFAULT', events = {}) => {
+        this.createTab(name, id, template, events)
       })
 
     }

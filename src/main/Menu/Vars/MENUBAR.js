@@ -206,7 +206,8 @@ export default function () {
       type: 'separator'
     },
     {
-      label: '엔진 정보'
+      label: '엔진 정보',
+      accelerator: 'CmdOrCtrl + I'
     },
     {
       label: '개발자 센터',

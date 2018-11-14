@@ -10,7 +10,7 @@ import {
 import Modal from './Modal/modal'
 
 import IPC_MENU from './Menu/ipc'
-import IPC_ERROR from './Terminal/ipc'
+import IPC_TERMINAL from './Terminal/ipc'
 
 /**
  * Set `__static` path to static files in production
@@ -48,7 +48,7 @@ function createWindow () {
 
   // 메뉴바 생성
   IPC_MENU(mainWindow)
-  IPC_ERROR(mainWindow)
+  IPC_TERMINAL(mainWindow)
 
   ipcMain.emit('menu-disable')
 }

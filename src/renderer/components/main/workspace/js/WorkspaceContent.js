@@ -1,8 +1,10 @@
 class WorkspaceContent {
 
-  constructor(id) {
+  constructor(id, template) {
     this.id = id
     this.show = false
+    this.template = template
+    this.data = {}
   }
 
 }

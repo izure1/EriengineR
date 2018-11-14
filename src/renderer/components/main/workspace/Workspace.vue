@@ -17,7 +17,6 @@
       WorkspaceContents
     },
     mounted() {
-
       init()
     }
   }

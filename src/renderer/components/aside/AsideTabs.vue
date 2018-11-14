@@ -33,7 +33,7 @@
         }
 
         this.tabs[key].select = true
-        this.$store.state.Aside.tabId = id
+        this.$root.$emit('showAsideTab', this.tabs[key].id)
       }
     },
     data() {

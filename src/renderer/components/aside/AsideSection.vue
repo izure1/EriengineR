@@ -1,10 +1,10 @@
 <template>
   <section id="aside-section">
-    <aside-section-home v-if="checkSelectThisTab == 'home'"></aside-section-home>
-    <aside-section-asset v-if="checkSelectThisTab == 'asset'"></aside-section-asset>
-    <aside-section-design v-if="checkSelectThisTab == 'design'"></aside-section-design>
-    <aside-section-interface v-if="checkSelectThisTab == 'interface'"></aside-section-interface>
-    <aside-section-script v-if="checkSelectThisTab == 'script'"></aside-section-script>
+    <aside-section-home v-if="tabId === 'home'"></aside-section-home>
+    <aside-section-asset v-if="tabId === 'asset'"></aside-section-asset>
+    <aside-section-design v-if="tabId === 'design'"></aside-section-design>
+    <aside-section-interface v-if="tabId === 'interface'"></aside-section-interface>
+    <aside-section-script v-if="tabId === 'script'"></aside-section-script>
   </section>
 </template>
 
@@ -28,18 +28,24 @@
       AsideSectionInterface,
       AsideSectionScript
     },
-    computed: {
-      checkSelectThisTab () {
-        return this.$store.state.Aside.tabId
+    data(){
+      return {
+        tabId: 'home'
       }
     },
-    created (e) {
+    mounted(e) {
+
+      this.$root.$on('showAsideTab', tabId => {
+        this.tabId = tabId
+      })
+
       $(document).ready(function () {
         $('#aside-section').resizable({
           handles: 'e',
           minWidth: 0
         })
       })
+      
     }
   }
 </script>

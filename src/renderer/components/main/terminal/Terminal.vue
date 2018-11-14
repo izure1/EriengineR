@@ -64,6 +64,10 @@
           return
         }
 
+        if (!e.target.value) {
+          return
+        }
+
         try {
 
           out.content = eval(`(${e.target.value})`)
@@ -148,6 +152,7 @@
       input {
         width: 100%;
         height: 100%;
+        font-family: consolas;
         color: gray;
         background-color: transparent;
         border: 0;

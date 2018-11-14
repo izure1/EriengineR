@@ -7,6 +7,7 @@
 
 <script>
   import $ from 'jquery'
+  import Lve from 'lve'
 
   import Aside from './components/aside/Aside'
   import Main from './components/main/Main'
@@ -18,11 +19,10 @@
       Main
     },
     mounted() {
-      this.$root.$emit('createWorkspaceTab', '시작')
-      this.$root.$emit('createWorkspaceTab', '시작')
-      this.$root.$emit('createWorkspaceTab', '시작')
-      this.$root.$emit('createWorkspaceTab', '시작')
-      this.$root.$emit('createWorkspaceTab', '시작')
+      let a = this
+      this.$root.$emit('createWorkspaceTab', '테스트', 'asdf', 'SCRIPT-VIEWER', {})
+      this.$root.$emit('setDataForWorkspaceTab', 'asdf', [1,2,3])
+      this.$root.$emit('createWorkspaceTab', '시작', 'test', 'CANVAS', {})
     }
   }
 </script>

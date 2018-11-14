@@ -6,9 +6,5 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
 
-    Aside: {
-      tabId: 0
-    }
-    
   }
 })
