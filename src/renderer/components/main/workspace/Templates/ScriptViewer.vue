@@ -1,6 +1,6 @@
 <template>
-  <div v-dragscroll:nochilddrag class="template-script">
-    <span class="template-script-eof"></span>
+  <div v-dragscroll:nochilddrag class="template-scriptviewer">
+    <span class="template-scriptviwer-eof"></span>
     <section class="script-box" v-for="(script, index) in data" :key="index">
       <div class="script-box-header">
         <span>{{ script.id }}</span>
@@ -53,9 +53,6 @@
         let width
         let height
         let eof
-
-        eof = this.$el.querySelector('.template-script-eof')
-        eof = eof.offsetParent
 
         this.$el.scrollTop = 500000
         this.$el.scrollLeft = 500000
@@ -114,7 +111,7 @@
   $maxXAxis: 1000000px;
   $maxYAxis: 1000000px;
 
-  .template-script {
+  .template-scriptviewer {
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -125,7 +122,7 @@
       cursor: grabbing;
     }
 
-    >.template-script-eof {
+    >.template-scriptviewer-eof {
       width: 1px;
       height: 1px;
       position: absolute;

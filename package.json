@@ -59,6 +59,7 @@
     "jquery-ui": "^1.12.1",
     "lve": "^3.0.3",
     "vue": "^2.5.16",
+    "graceful-fs": "^4.1.15",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
     "vue-dragscroll": "^1.8.0",

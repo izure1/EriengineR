@@ -155,6 +155,7 @@
 
         >section {
           height: 100%;
+          overflow: scroll;
         }
       }
     }
