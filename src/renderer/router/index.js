@@ -3,16 +3,27 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+let router
+
+router = new Router({
   routes: [
     {
-      path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      path: '/engine',
+      name: 'Engine',
+      component: require('@/components/engine/Engine').default
+    },
+    {
+      path: '/engine/test',
+      name: 'test',
+      component: require('@/components/engine/Test').default
     },
     {
       path: '*',
-      redirect: '/'
+      name: 'error',
+      component: require('@/components/error/Error404').default
     }
   ]
 })
+
+
+export default router

@@ -1,7 +1,7 @@
 <template>
   <div v-dragscroll:nochilddrag class="template-scriptviewer">
     <span class="template-scriptviwer-eof"></span>
-    <section class="script-box" v-for="(script, index) in data" :key="index">
+    <section class="script-box" v-for="script in data" :key="script.id">
       <div class="script-box-header">
         <span>{{ script.id }}</span>
         <a href="#" @click="dropScript(script)">⨉</a>
@@ -92,10 +92,13 @@
       },
       modifyScript(script) {
 
+        this.$root.$emit('createWorkspaceTab', script.id, script.id, 'SCRIPT-EDITOR', {})
+        this.$root.$emit('setDataForWorkspaceTab', script.id, script)
+
       }
     },
     mounted() {
-      
+
       this.setDefaultViewPosition()
       this.setDraggableBox()
 

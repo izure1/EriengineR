@@ -8,7 +8,7 @@
           <a href="#" @click="modifyItem(event)">{{ event.text }}</a>
         </li>
       </ul>
-      <a href="#" @click="addItem('events')" v-if="!data.events.length">+</a>
+      <a href="#" @click="addItem(data, 'events')" v-if="!data.events.length">+</a>
     </div>
     <div>
       <h6>조건</h6>
@@ -18,7 +18,7 @@
           <a href="#" @click="modifyItem(condition)">{{ condition.text }}</a>
         </li>
       </ul>
-      <a href="#" @click="addItem('conditions')">+</a>
+      <a href="#" @click="addItem(data, 'conditions')">+</a>
     </div>
     <div>
       <h6>행동</h6>
@@ -28,12 +28,17 @@
           <a href="#" @click="modifyItem(action)">{{ action.text }}</a>
         </li>
       </ul>
-      <a href="#" @click="addItem('actions')">+</a>
+      <a href="#" @click="addItem(data, 'actions')">+</a>
     </div>
   </div>
 </template>
 
 <script>
+  import url from 'url'
+  import path from 'path'
+
+  import electron from 'electron'
+
   export default {
     props: ['data'],
     methods: {
@@ -41,8 +46,50 @@
         console.log(item)
       },
 
-      addItem(prop) {
-        console.log(this)
+      addItem(item, prop) {
+
+        let collection
+        let browser, parent, uri
+
+        collection = item[prop]
+
+        if (!collection) {
+          electron.ipcRenderer.send('send-error', {
+            user: 'ScriptEditor',
+            content: `'${prop}' is not exits in item.`
+          })
+          return
+        }
+
+
+        parent = electron.remote.getCurrentWindow()
+
+        uri = parent.getURL()
+        uri = url.parse(uri)
+
+        console.log(uri)
+
+        uri.hash = '#/engine/test'
+        uri.slashes = true
+
+        uri = url.format(uri)
+
+        console.log(uri)
+
+        browser = new electron.remote.BrowserWindow({
+          width: 800,
+          height: 450,
+          modal: true,
+          parent
+        })
+
+        browser.setMenu(null)
+        browser.loadURL(uri)
+
+        browser.on('closed', () => {
+          browser = null
+        })
+
       }
     }
   }

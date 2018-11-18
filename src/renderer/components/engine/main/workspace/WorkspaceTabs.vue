@@ -1,6 +1,7 @@
 <template>
-  <ul class="workspace-tabs">
-    <li v-for="(item, index) in tabs" :key="index" :class="item.selected === true ? 'workspace-tabs-selected' : ''">
+  <ul class="workspace-tabs" @dragover.self="allowDropTab" @drop.self="dropTab(null)">
+    <li v-for="item in tabs" :key="item.id" :class="item.selected === true ? 'workspace-tabs-selected' : ''" draggable="true"
+      @dragstart="startDragTab(item)" @dragover="allowDropTab" @drop="dropTab(item)">
       <a href="#">
         <p @mousedown="tabMousedown(item)">{{ item.name }}</p>
         <span @click="tabClose(item)">⨉</span>
@@ -19,7 +20,8 @@
     data() {
       return {
         // Workspace에 열려있는 탭의 목록을 관리하는 배열입니다.
-        tabs: []
+        tabs: [],
+        draggingTab: null
       }
     },
     methods: {
@@ -33,11 +35,20 @@
        */
       createTab(name, id, template, events) {
 
-        let tab = new WorkspaceTab(id, name, events)
+        let tab
 
-        this.tabs.push(tab)
+        tab = this.tabs.filter(t => t.id === id)
+        tab = tab[0]
 
-        this.$root.$emit('createWorkspaceTab-content', id, template)
+        // 이미 같은 id 값을 가진 탭이 존재할 경우 생성하지 않습니다
+        if (!tab) {
+
+          tab = new WorkspaceTab(id, name, events)
+
+          this.tabs.push(tab)
+          this.$root.$emit('createWorkspaceTab-content', id, template)
+
+        }
 
         this.tabMousedown(tab)
 
@@ -79,6 +90,40 @@
         if (this.tabs.length) {
           this.tabMousedown(this.tabs[0])
         }
+
+      },
+
+      startDragTab(tab) {
+        this.draggingTab = tab
+      },
+
+      allowDropTab(e) {
+        e.preventDefault()
+      },
+
+      dropTab(tab) {
+
+        let dropped
+        let current
+
+        dropped = this.draggingTab
+        current = tab
+
+        if (dropped === current) {
+          return
+        }
+
+        dropped = this.tabs.indexOf(dropped)
+        current = this.tabs.indexOf(current)
+
+        tab = this.tabs.splice(dropped, 1)
+        tab = tab[0]
+
+        if (current === -1) {
+          current = this.tabs.length
+        }
+
+        this.tabs.splice(current, 0, tab)
 
       }
     },

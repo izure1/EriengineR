@@ -11,6 +11,7 @@ import Modal from './Modal/modal'
 
 import IPC_MENU from './Menu/ipc'
 import IPC_TERMINAL from './Terminal/ipc'
+import electronDevtoolsInstaller from 'electron-devtools-installer';
 
 /**
  * Set `__static` path to static files in production
@@ -21,15 +22,27 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 let mainWindow
-const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
-  : url.format({
+let winURL
+
+winURL = process.env.NODE_ENV === 'development' ?
+
+  url.format({
+    protocol: 'http',
+    hostname: 'localhost',
+    pathname: '/',
+    port: 9080,
+    hash: '/engine'
+  }) :
+
+  url.format({
     protocol: 'file',
     slashes: true,
-    pathname: path.join(__dirname, 'index.html')
+    pathname: path.join(__dirname, 'index.html'),
+    hash: '/engine'
   })
 
-function createWindow () {
+
+function createWindow() {
   /**
    * Initial window options
    */

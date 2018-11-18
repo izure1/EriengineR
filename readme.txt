@@ -53,12 +53,10 @@
 
   Asset (esa)
     UUID
-    Path
     MIME
 
   Script (ess)
     UUID
-    Path
     Comment
     Events []
     Conditions []
@@ -68,12 +66,10 @@
   Design (esd)
     UUID
     AssetId
-    Path
 
   Interface (esi)
     UUID
     DesignId
-    Path
     Style {}
   
 
