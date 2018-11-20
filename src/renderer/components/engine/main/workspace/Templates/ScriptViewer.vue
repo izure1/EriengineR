@@ -50,12 +50,10 @@
     },
     methods: {
       setDefaultViewPosition() {
-        let width
-        let height
-        let eof
 
-        this.$el.scrollTop = 500000
-        this.$el.scrollLeft = 500000
+        this.$el.scrollTop = (this.$el.scrollHeight / 2) - 100
+        this.$el.scrollLeft = (this.$el.scrollWidth / 2) - 100
+
       },
       setDraggableBox() {
 
@@ -142,7 +140,6 @@
     top: $maxYAxis / 2;
     background-color: white;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .15);
-    //transform: translateZ(-1000px);
 
     &.ui-draggable-dragging {
       z-index: 1;

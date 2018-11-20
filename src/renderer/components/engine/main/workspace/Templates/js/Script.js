@@ -7,6 +7,10 @@ class ScriptContext {
     this.id = createUUID()
     this.macro = null
     this.arguments = {}
+    this.position = {
+      x: 0,
+      y: 0
+    }
   }
 
   get text() {

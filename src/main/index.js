@@ -11,7 +11,7 @@ import Modal from './Modal/modal'
 
 import IPC_MENU from './Menu/ipc'
 import IPC_TERMINAL from './Terminal/ipc'
-import IPC_SETTING from './Setting/ipc'
+import IPC_VAR from './Variables/ipc'
 
 import electronDevtoolsInstaller from 'electron-devtools-installer';
 
@@ -25,6 +25,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow
 let winURL
+let variables
 
 winURL = process.env.NODE_ENV === 'development' ?
 
@@ -42,6 +43,8 @@ winURL = process.env.NODE_ENV === 'development' ?
     pathname: path.join(__dirname, 'index.html'),
     hash: '/engine'
   })
+
+variables = {}
 
 
 function createWindow() {
@@ -63,7 +66,7 @@ function createWindow() {
 
   IPC_MENU(mainWindow)
   IPC_TERMINAL(mainWindow)
-  IPC_SETTING()
+  IPC_VAR(variables)
 
   ipcMain.emit('menu-disable')
 }
