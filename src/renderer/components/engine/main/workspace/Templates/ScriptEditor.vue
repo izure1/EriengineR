@@ -67,15 +67,11 @@
         uri = parent.getURL()
         uri = url.parse(uri)
 
-        console.log(uri)
-
-        uri.hash = '#/engine/test'
+        uri.hash = '#/script-editor'
         uri.slashes = true
 
         uri = url.format(uri)
-
-        console.log(uri)
-
+        
         browser = new electron.remote.BrowserWindow({
           width: 800,
           height: 450,

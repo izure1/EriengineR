@@ -1,6 +1,6 @@
 <template>
   <div v-dragscroll:nochilddrag class="template-scriptviewer">
-    <span class="template-scriptviwer-eof"></span>
+    <span class="template-scriptviewer-eof"></span>
     <section class="script-box" v-for="script in data" :key="script.id">
       <div class="script-box-header">
         <span>{{ script.id }}</span>
@@ -138,11 +138,11 @@
   .script-box {
     width: 420px;
     position: absolute;
-    left: 100px;
-    top: 100px;
+    left: $maxXAxis / 2;
+    top: $maxYAxis / 2;
     background-color: white;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .15);
-    //transform: translateZ(-300px);
+    //transform: translateZ(-1000px);
 
     &.ui-draggable-dragging {
       z-index: 1;

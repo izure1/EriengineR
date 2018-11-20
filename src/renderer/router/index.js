@@ -9,17 +9,18 @@ router = new Router({
   routes: [
     {
       path: '/engine',
-      name: 'Engine',
       component: require('@/components/engine/Engine').default
     },
     {
-      path: '/engine/test',
-      name: 'test',
-      component: require('@/components/engine/Test').default
+      path: '/script-editor',
+      component: require('@/components/script-editor/ScriptEditor').default
+    },
+    {
+      path: '/',
+      redirect: '/engine'
     },
     {
       path: '*',
-      name: 'error',
       component: require('@/components/error/Error404').default
     }
   ]

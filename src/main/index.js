@@ -11,6 +11,8 @@ import Modal from './Modal/modal'
 
 import IPC_MENU from './Menu/ipc'
 import IPC_TERMINAL from './Terminal/ipc'
+import IPC_SETTING from './Setting/ipc'
+
 import electronDevtoolsInstaller from 'electron-devtools-installer';
 
 /**
@@ -47,8 +49,7 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
-    useContentSize: true,
+    height: 560,
     width: 1000,
     icon: path.join(__dirname, '../assets/image/ico.ico')
   })
@@ -59,9 +60,10 @@ function createWindow() {
     mainWindow = null
   })
 
-  // 메뉴바 생성
+
   IPC_MENU(mainWindow)
   IPC_TERMINAL(mainWindow)
+  IPC_SETTING()
 
   ipcMain.emit('menu-disable')
 }

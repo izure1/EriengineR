@@ -1,10 +1,14 @@
-# eriengine
+# Eriengine
 
 > Web Visualnovel Engine
+
+[Eriengine-dev-forum](http://cafe.naver.com/lvejs) (Korean)
 
 #### Build Setup
 
 ``` bash
+#install windows-build-tools for global
+npm install windows-build-tools -g
 # install dependencies
 npm install
 
@@ -16,8 +20,6 @@ npm run build
 
 # run unit & end-to-end tests
 npm test
-
-
 ```
 
 ---
