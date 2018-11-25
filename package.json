@@ -64,7 +64,12 @@
     "vue-router": "^3.0.1",
     "vue-dragscroll": "^1.8.0",
     "vuex": "^3.0.1",
-    "vuex-electron": "^1.0.1"
+    "vuex-electron": "^1.0.1",
+    "directory-tree": "^2.1.0",
+    "del": "^3.0.0",
+    "trash": "^4.3.0",
+    "copy": "^0.3.2",
+    "fs-extra": "^7.0.1"
   },
   "devDependencies": {
     "ajv": "^6.5.5",

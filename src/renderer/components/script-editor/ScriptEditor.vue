@@ -7,14 +7,6 @@
     ipcRenderer
   } from 'electron'
 
-  ipcRenderer.on('var-get', function(e, msg) {
-
-    console.log(msg)
-
-  })
-
-  ipcRenderer.send('var-get')
-
   export default {
     data() {
       return {}

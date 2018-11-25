@@ -6,8 +6,7 @@ Vue.use(Router)
 let router
 
 router = new Router({
-  routes: [
-    {
+  routes: [{
       path: '/engine',
       component: require('@/components/engine/Engine').default
     },
@@ -16,8 +15,12 @@ router = new Router({
       component: require('@/components/script-editor/ScriptEditor').default
     },
     {
-      path: '/',
-      redirect: '/engine'
+      path: '/project-manager',
+      component: require('@/components/project-manager/ProjectManager').default
+    },
+    {
+      path: '',
+      redirect: '/project-manager'
     },
     {
       path: '*',

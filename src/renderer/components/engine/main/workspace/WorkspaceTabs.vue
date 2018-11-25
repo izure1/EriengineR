@@ -28,12 +28,12 @@
       /**
        * @description Workspace에서 새로운 탭을 열도록 도와줍니다.
        * 
-       * @param {String} name 새로운 탭의 이름을 설정합니다.
        * @param {String} id 새로운 탭의 유일무이한 고유값입니다. 이것을 지정하지 않으면 getWorkspaceTab 이벤트 발생으로 원하는 탭을 찾을 수 없습니다
+       * @param {String} name 새로운 탭의 이름을 설정합니다.
        * @param {String} template 새로운 탭의 기본 템플릿을 지정합니다
        * @param {Object} events 새로운 탭의 이벤트핸들러 함수가 담겨있습니다
        */
-      createTab(name, id, template, events) {
+      createTab(id, name, template, events) {
 
         let tab
 
@@ -129,8 +129,8 @@
     },
     mounted() {
 
-      this.$root.$on('createWorkspaceTab', (name, id = createUUID(), template = 'DEFAULT', events = {}) => {
-        this.createTab(name, id, template, events)
+      this.$root.$on('createWorkspaceTab', (id, name, template = 'DEFAULT', events = {}) => {
+        this.createTab(id, name, template, events)
       })
 
     }

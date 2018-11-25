@@ -1,10 +1,10 @@
 <template>
   <section id="aside-section">
-    <aside-section-home v-if="tabId === 'home'"></aside-section-home>
-    <aside-section-asset v-if="tabId === 'asset'"></aside-section-asset>
-    <aside-section-design v-if="tabId === 'design'"></aside-section-design>
-    <aside-section-interface v-if="tabId === 'interface'"></aside-section-interface>
-    <aside-section-script v-if="tabId === 'script'"></aside-section-script>
+    <aside-section-home v-show="tabId === 'home'"></aside-section-home>
+    <aside-section-asset v-show="tabId === 'asset'"></aside-section-asset>
+    <aside-section-design v-show="tabId === 'design'"></aside-section-design>
+    <aside-section-interface v-show="tabId === 'interface'"></aside-section-interface>
+    <aside-section-script v-show="tabId === 'script'"></aside-section-script>
   </section>
 </template>
 
@@ -53,9 +53,9 @@
 <style lang="scss" scoped>
   #aside-section {
     width: 260px;
-    height: 100%;
     background-color: white;
-    overflow: hidden;
+    overflow: auto;
+    overflow-x: hidden;
     position: relative;
     z-index: 1;
   }

@@ -135,7 +135,7 @@
             width: 10px;
             height: 10px;
             display: inline-block;
-            background: url('~@/assets/img/ico_arrow-right.svg') no-repeat;
+            background: url('~@/assets/img/ico_arrow_right.svg') no-repeat;
             background-size: cover;
             margin-right: 10px;
             opacity: 0.4;

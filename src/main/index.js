@@ -10,6 +10,8 @@ import {
 import Modal from './Modal/modal'
 
 import IPC_MENU from './Menu/ipc'
+import IPC_MODAL from './Modal/ipc'
+import IPC_PROJECT from './Project/ipc'
 import IPC_TERMINAL from './Terminal/ipc'
 import IPC_VAR from './Variables/ipc'
 
@@ -34,17 +36,19 @@ winURL = process.env.NODE_ENV === 'development' ?
     hostname: 'localhost',
     pathname: '/',
     port: 9080,
-    hash: '/engine'
+    hash: '/'
   }) :
 
   url.format({
     protocol: 'file',
     slashes: true,
     pathname: path.join(__dirname, 'index.html'),
-    hash: '/engine'
+    hash: '/'
   })
 
-variables = {}
+variables = {
+  projectDirectory: null
+}
 
 
 function createWindow() {
@@ -52,23 +56,40 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 560,
+    height: 670,
     width: 1000,
+    resizable: false,
     icon: path.join(__dirname, '../assets/image/ico.ico')
   })
 
   mainWindow.loadURL(winURL)
+  mainWindow.setMenu(null)
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 
+  IPC_MODAL(mainWindow)
+  IPC_PROJECT(mainWindow, openProject)
+  IPC_VAR(variables)
+
+}
+
+
+function openProject(projectDirectory) {
+
+  variables.projectDirectory = projectDirectory
+  winURL = url.resolve(winURL, '#/engine')
+
+  mainWindow.setResizable(true)
+  mainWindow.loadURL(winURL)
+  mainWindow.maximize()
 
   IPC_MENU(mainWindow)
   IPC_TERMINAL(mainWindow)
-  IPC_VAR(variables)
 
   ipcMain.emit('menu-disable')
+
 }
 
 app.on('ready', createWindow)

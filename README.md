@@ -9,6 +9,7 @@
 ``` bash
 #install windows-build-tools for global
 npm install windows-build-tools -g
+
 # install dependencies
 npm install
 

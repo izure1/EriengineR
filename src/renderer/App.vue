@@ -9,7 +9,7 @@
     name: 'eriengine',
     mounted() {
       let a = this
-      this.$root.$emit('createWorkspaceTab', '테스트', 'asdf', 'SCRIPT-VIEWER', {})
+      this.$root.$emit('createWorkspaceTab', 'asdf', '테스트', 'SCRIPT-VIEWER', {})
       this.$root.$emit('setDataForWorkspaceTab', 'asdf', [{
           id: 'asdf1',
           events: [],
@@ -67,5 +67,16 @@
     font-family: 'NanumBarunGothicUltraLight', 돋움, 굴림;
     padding: 0;
     margin: 0;
+  }
+
+  input,
+  textarea {
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+  }
+
+  .ui-resizable-e {
+    right: 0;
   }
 </style>

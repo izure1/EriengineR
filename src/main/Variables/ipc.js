@@ -5,22 +5,22 @@ import {
 
 export default function (data = {}) {
 
-  ipcMain.on('var-get', function (e, msg) {
+  ipcMain.on('var-get-sync', (e, msg) => {
 
     let res
 
     res = msg ? data[msg] : data
-    e.sender.send('var-get', res)
+    e.returnValue = res
 
   })
 
-  ipcMain.on('var-set', function (e, msg) {
+  ipcMain.on('var-set-sync', (e, msg) => {
 
     for (let k in msg) {
       data[k] = msg[k]
     }
 
-    e.sender.send('var-set', data[k])
+    e.returnValue = data[k]
 
   })
 
