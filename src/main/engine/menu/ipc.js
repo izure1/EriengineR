@@ -4,8 +4,8 @@ import enableMenu from './enableMenu'
 import disableMenu from './disableMenu'
 
 // SETTING
-import MAIN_MENUBAR from './Vars/MENUBAR'
-import CONTEXTBAR from './Vars/CONTEXTBAR'
+import MAIN_MENUBAR from './vars/MENUBAR'
+import CONTEXTBAR from './vars/CONTEXTBAR'
 
 const Menu = electron.Menu
 

@@ -13,7 +13,7 @@
 <script>
   import fs from 'fs'
 
-  import createUUID from '@/js/createUUID'
+  import createUUID from '@static/js/createUUID'
   import WorkspaceTab from './js/WorkspaceTab'
 
   export default {

@@ -4,10 +4,10 @@ import {
 } from 'electron'
 
 import path from 'path'
-import fse from 'fs-extra'
+import fs from 'fs-extra'
 
 
-export default function (win, oncreated) {
+export default function (win, onopened) {
 
   ipcMain.on('project-create', async (e, options) => {
 
@@ -24,10 +24,10 @@ export default function (win, oncreated) {
     }
 
     try {
-      await fse.copy(src, dist)
+      await fs.copy(src, dist)
     } catch (err) {
       res.success = false
-      dialog.showErrorBox(err.code, err.message)
+      dialog.showErrorBox(err.message, err.stack)
       e.sender.send('project-create', res)
       return
     }
@@ -36,11 +36,9 @@ export default function (win, oncreated) {
 
   })
 
-  ipcMain.on('project-create-done', async (e, project) => {
+  ipcMain.on('project-open', async (e, project) => {
 
-    let projectDirectory = path.join(project.directory, project.id)
-
-    oncreated(projectDirectory)
+    onopened(project)
 
   })
 

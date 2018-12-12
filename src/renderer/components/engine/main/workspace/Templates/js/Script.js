@@ -1,4 +1,4 @@
-import createUUID from '@/js/createUUID'
+import createUUID from '@static/js/createUUID'
 
 
 class ScriptContext {

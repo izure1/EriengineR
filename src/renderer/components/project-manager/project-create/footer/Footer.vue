@@ -7,8 +7,8 @@
         <a href="#" @click="selectDirectory" :title="getFullDirectoryPath">{{ getFullDirectoryPath }}</a>
       </div>
       <div class="project-setting-directory-done">
-        <button @click="createProject" :disabled="isAllDone ? false : true" v-if="!creating">
-          {{ isAllDone ? '프로젝트 생성하기': '세부 설정을 입력하세요'}}
+        <button @click="createProject" :disabled="!setting.ready" v-if="!creating">
+          {{ setting.ready ? '프로젝트 생성하기': '세부 설정을 입력하세요'}}
         </button>
         <button disabled v-if="creating">
           <img src="@/assets/img/ico_loading.svg">
@@ -29,18 +29,12 @@
       }
     },
     props: {
-      project: Object
+      project: Object,
+      setting: Object
     },
     computed: {
       getFullDirectoryPath() {
         return path.join(this.project.directory, this.project.id)
-      },
-      isAllDone() {
-        return this.project.id &&
-          this.project.name &&
-          this.project.template &&
-          this.project.width &&
-          this.project.height
       }
     },
     methods: {
@@ -63,7 +57,7 @@
 
         this.creating = true
 
-        electron.ipcRenderer.send('project-create', this.project)
+        electron.ipcRenderer.send('project-create', Object.assign({}, this.project, this.setting))
         electron.ipcRenderer.once('project-create', async (e, msg) => {
 
           this.creating = false
@@ -72,7 +66,7 @@
             return
           }
 
-          electron.ipcRenderer.send('project-create-done', this.project)
+          electron.ipcRenderer.send('project-open', path.join(this.project.directory, this.project.id))
 
         })
 
@@ -136,7 +130,7 @@
       background-color: rgba(255, 255, 255, .1);
       cursor: pointer;
 
-      > img {
+      >img {
         width: 50px;
         height: 50px;
       }

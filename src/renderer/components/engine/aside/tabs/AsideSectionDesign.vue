@@ -8,7 +8,7 @@
   import Treeview from '@/components/treeview/Treeview'
   import os from 'os'
   import path from 'path'
-  import fs from 'graceful-fs'
+  import fs from 'fs-extra'
 
   import {
     ipcRenderer,

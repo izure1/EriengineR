@@ -1,21 +1,96 @@
+import os from 'os'
+import fs from 'fs-extra'
 import url from 'url'
 import path from 'path'
 
 import {
   app,
   BrowserWindow,
-  ipcMain
+  ipcMain,
+  dialog
 } from 'electron'
 
-import Modal from './Modal/modal'
 
-import IPC_MENU from './Menu/ipc'
-import IPC_MODAL from './Modal/ipc'
-import IPC_PROJECT from './Project/ipc'
-import IPC_TERMINAL from './Terminal/ipc'
-import IPC_VAR from './Variables/ipc'
+let mainWindow
+let winURL
+let variables
+
+app.on('ready', start)
+
+
+/**
+ * 
+ * 엔진 초기화 및 실행
+ * 
+ * 사용자의 정보(최근 프로젝트, 이메일)등을 저장하는 디렉토리를 생성합니다.
+ * 기본적으로 생성되는 위치는 %appdata% 입니다.
+ * 
+ */
+
+const HOME = os.homedir() // %appdata%
+
+import initor from './engine/init/initor'
+import {
+  watch
+} from 'melanke-watchjs'
+
+async function start() {
+
+  variables.engine = await initor.init(HOME)
+  variables.user = await initor.getUserData(variables.engine.user)
+
+
+  // 사용자 정보가 변경되면 자동으로 이를 감지하여 user.json 파일에 갱신합니다
+  watch(variables.user, () => {
+    fs.writeJSONSync(variables.engine.user, variables.user)
+  }, 0, true)
+
+
+  await runEngine()
+
+}
+
+
+
+/**
+ * 
+ * Start Eriengine
+ * 
+ */
+
+import ipcMenu from './engine/Menu/ipc'
+import ipcModal from './modal/ipc'
+import ipcProject from './project/ipc'
+import ipcTerminal from './terminal/ipc'
+import ipcVar from './variables/ipc'
 
 import electronDevtoolsInstaller from 'electron-devtools-installer';
+
+
+async function runEngine() {
+
+  // Electron 에서 사용자의 Gesture를 입력받기전에 Audio가 재생되지 않는 WebPolicy 문제점을 해결하기 위한 임시방편
+  // Electron 에서 추후 이 기능을 지원한다면 아래 커맨드 라인은 삭제되어야 합니다
+  app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+
+  // 앱 실행
+  createWindow()
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  })
+
+  app.on('activate', () => {
+    if (mainWindow === null) {
+      createWindow()
+    }
+  })
+
+  return
+
+}
 
 /**
  * Set `__static` path to static files in production
@@ -24,10 +99,6 @@ import electronDevtoolsInstaller from 'electron-devtools-installer';
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
-
-let mainWindow
-let winURL
-let variables
 
 winURL = process.env.NODE_ENV === 'development' ?
 
@@ -47,7 +118,10 @@ winURL = process.env.NODE_ENV === 'development' ?
   })
 
 variables = {
-  projectDirectory: null
+  project: {
+    directory: null,
+    information: {}
+  }
 }
 
 
@@ -59,52 +133,51 @@ function createWindow() {
     height: 670,
     width: 1000,
     resizable: false,
-    icon: path.join(__dirname, '../assets/image/ico.ico')
+    icon: path.join(__dirname, '../assets/image/ico.ico'),
+    webPreferences: {
+      webSecurity: false
+    }
   })
 
   mainWindow.loadURL(winURL)
   mainWindow.setMenu(null)
+  mainWindow.focus()
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 
-  IPC_MODAL(mainWindow)
-  IPC_PROJECT(mainWindow, openProject)
-  IPC_VAR(variables)
+  ipcModal(mainWindow)
+  ipcProject(mainWindow, openProject)
+  ipcVar(variables)
 
 }
 
 
 function openProject(projectDirectory) {
 
-  variables.projectDirectory = projectDirectory
+  try {
+    variables.project.directory = path.dirname(projectDirectory)
+    variables.project.information = fs.readJSONSync(projectDirectory)
+  } catch (e) {
+    dialog.showErrorBox(e.message, e.stack)
+    app.exit(1)
+  }
+
   winURL = url.resolve(winURL, '#/engine')
 
   mainWindow.setResizable(true)
   mainWindow.loadURL(winURL)
   mainWindow.maximize()
 
-  IPC_MENU(mainWindow)
-  IPC_TERMINAL(mainWindow)
+  ipcMenu(mainWindow)
+  ipcTerminal(mainWindow)
 
-  ipcMain.emit('menu-disable')
+  ipcMain.emit('menu-enable')
 
 }
 
-app.on('ready', createWindow)
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
 
 /**
  * Auto Updater

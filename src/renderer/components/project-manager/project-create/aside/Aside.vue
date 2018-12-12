@@ -2,7 +2,7 @@
   <aside>
     <ul>
       <li v-for="sample in samples" :key="sample.name">
-        <a href="#" @click="project.template = sample">
+        <a href="#" @click="setting.template = sample">
           <div class="project-aside-btn">+</div>
           <div class="project-aside-info">
             <div>
@@ -17,12 +17,13 @@
 </template>
 
 <script>
-  import fs from 'graceful-fs'
+  import fs from 'fs-extra'
   import samples from '../Vars/samples'
 
   export default {
     props: {
-      project: Object
+      project: Object,
+      setting: Object
     },
     data() {
       return {

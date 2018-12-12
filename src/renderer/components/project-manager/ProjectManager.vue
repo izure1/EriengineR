@@ -1,74 +1,92 @@
 <template>
   <section id="project">
-    <header>
-      <h1>에리엔진 프로젝트</h1>
-      <p>
-        왼쪽에서 새로운 프로젝트의 시작점으로 사용할 템플릿을 선택하세요.
-        <br>
-        이는 더욱 쉽게 게임을 제작할 수 있도록 도와줍니다.
-      </p>
-    </header>
-    <div class="container">
-      <Aside :project="project"></Aside>
-      <Main :project="project"></Main>
-    </div>
-    <Footer :project="project"></Footer>
+    <transition name="project-workspace">
+      <div class="project-workspace" v-if="workspaceType === null">
+        <div class="project-workspace-type">
+          <div>
+            <button @click="selectWorkspaceType('open')">기존 프로젝트 열기</button>
+            <button @click="selectWorkspaceType('create')">새로운 프로젝트 시작</button>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <project-create v-if="workspaceType === 'create'"></project-create>
+    <project-open v-else-if="workspaceType === 'open'" @failOpenProject="workspaceType = null"></project-open>
   </section>
 </template>
 
 <script>
-  import Aside from './Aside/Aside'
-  import Main from './Main/Main'
-  import Footer from './Footer/Footer'
+  import ProjectCreate from './project-create/ProjectCreate'
+  import ProjectOpen from './project-open/ProjectOpen'
 
-  import os from 'os'
-  import path from 'path'
-  import createUUID from '@/js/createUUID'
+  import snd_startup from '@/assets/media/snd_startup.mp3'
+
+
+  let audio_startup
 
   export default {
     components: {
-      Aside,
-      Main,
-      Footer
+      ProjectCreate,
+      ProjectOpen
     },
     data() {
       return {
-        project: {
-          name: '새로운 프로젝트',
-          template: null,
-          directory: path.join(os.homedir(), 'Desktop'),
-          id: this.getProjectUUID(),
-          width: 1366,
-          height: 768,
-        }
+        workspaceType: null
       }
     },
     methods: {
-      getProjectUUID() {
-        return `org.izure.eriengine.p_${createUUID().split('-').pop()}`
+      selectWorkspaceType(type) {
+        this.workspaceType = type
+        audio_startup.pause()
       }
+    },
+    mounted() {
+      audio_startup = new Audio(snd_startup)
+      audio_startup.play()
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  p {
-    font-size: small;
-    line-height: 1.5;
-  }
-
   #project {
-    min-height: 100%;
+    height: 100%;
     color: white;
     background-color: #282c34;
     padding: 30px;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
-  .container {
-    height: 300px;
-    margin-top: 50px;
-    display: flex;
-    flex-direction: row;
+  .project-workspace {
+    height: 100%;
+  }
+
+  .project-workspace-type {
+    width: 100%;
+    height: 100%;
+    display: table;
+
+    >div {
+      text-align: center;
+      display: table-cell;
+      vertical-align: middle;
+
+      >button {
+        width: 800px;
+        height: 100px;
+        font-size: xx-large;
+        color: white;
+        margin: 10px auto;
+        display: block;
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+
+        &:hover {
+          color: white;
+          background-color: #0075c8;
+        }
+      }
+    }
   }
 </style>
