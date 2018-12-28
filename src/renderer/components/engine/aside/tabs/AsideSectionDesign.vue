@@ -21,10 +21,9 @@
     },
     data() {
       return {
-        path: 'D:\\asdf',
+        path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Designs'),
         filter: {
-          extensions: /\.esd/,
-          exclude: /node_modules/
+          extensions: /\.esdesign/
         },
         openItem(p) {
           shell.openExternal(p)

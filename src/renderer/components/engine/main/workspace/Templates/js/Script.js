@@ -5,7 +5,7 @@ class ScriptContext {
 
   constructor() {
     this.id = createUUID()
-    this.macro = null
+    this.cid = null
     this.arguments = {}
     this.position = {
       x: 0,
@@ -33,7 +33,7 @@ class Script {
 }
 
 
-export default {
+export {
   Script,
   ScriptContext
 }

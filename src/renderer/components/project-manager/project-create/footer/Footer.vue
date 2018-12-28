@@ -66,7 +66,7 @@
             return
           }
 
-          electron.ipcRenderer.send('project-open', path.join(this.project.directory, this.project.id))
+          electron.ipcRenderer.send('project-open', msg.esproject)
 
         })
 

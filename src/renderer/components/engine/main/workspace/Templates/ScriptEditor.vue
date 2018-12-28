@@ -5,7 +5,7 @@
       <p>아래 내용이 발생했을 때 시작합니다</p>
       <ul v-if="data.events.length">
         <li v-for="(event, index) in data.events" :key="index">
-          <a href="#" @click="modifyItem(event)">{{ event.text }}</a>
+          <a href="#" @click="modifyItem(data, event)">{{ event.text }}</a>
         </li>
       </ul>
       <a href="#" @click="addItem(data, 'events')" v-if="!data.events.length">+</a>
@@ -15,7 +15,7 @@
       <p>위 사건이 발생했지만, 아래 내용이 충족되어야 작동합니다. 원한다면 아무것도 넣지 않아도 됩니다</p>
       <ul v-if="data.conditions.length">
         <li v-for="(condition, index) in data.conditions" @dblclick="modifyItem(condition)" :key="index">
-          <a href="#" @click="modifyItem(condition)">{{ condition.text }}</a>
+          <a href="#" @click="modifyItem(data, condition)">{{ condition.text }}</a>
         </li>
       </ul>
       <a href="#" @click="addItem(data, 'conditions')">+</a>
@@ -25,7 +25,7 @@
       <p>모든 조건이 만족하면 순서대로 실행됩니다</p>
       <ul v-if="data.actions.length">
         <li v-for="(action, index) in data.actions" @dblclick="modifyItem(action)" :key="index">
-          <a href="#" @click="modifyItem(action)">{{ action.text }}</a>
+          <a href="#" @click="modifyItem(data, action)">{{ action.text }}</a>
         </li>
       </ul>
       <a href="#" @click="addItem(data, 'actions')">+</a>
@@ -36,57 +36,59 @@
 <script>
   import url from 'url'
   import path from 'path'
-
   import electron from 'electron'
+
+  import getResolvedURI from '@static/js/getResolvedURI'
 
   export default {
     props: ['data'],
     methods: {
-      modifyItem(item) {
-        console.log(item)
+
+      modifyItem(script, row) {
+
       },
 
-      addItem(item, prop) {
+      addItem(script, column) {
 
-        let collection
-        let browser, parent, uri
-
-        collection = item[prop]
-
-        if (!collection) {
-          electron.ipcRenderer.send('send-error', {
-            user: 'ScriptEditor',
-            content: `'${prop}' is not exits in item.`
-          })
-          return
-        }
+        let browser
+        let parent, childURI
 
 
         parent = electron.remote.getCurrentWindow()
 
-        uri = parent.getURL()
-        uri = url.parse(uri)
+        childURI = parent.webContents.getURL()
+        childURI = getResolvedURI(childURI, `/macro/${column}/${btoa(script.path)}`)
 
-        uri.hash = '#/script-editor'
-        uri.slashes = true
+        column = script[column]
 
-        uri = url.format(uri)
-        
+
+        if (!column) {
+
+          electron.ipcRenderer.send('send-error', {
+            user: 'ScriptEditor',
+            content: `script data is not exits in item.`
+          })
+
+          return
+
+        }
+
         browser = new electron.remote.BrowserWindow({
-          width: 800,
-          height: 450,
+          width: 1024,
+          height: 600,
           modal: true,
           parent
         })
 
         browser.setMenu(null)
-        browser.loadURL(uri)
+        browser.loadURL(childURI)
 
         browser.on('closed', () => {
           browser = null
         })
 
       }
+
     }
   }
 </script>

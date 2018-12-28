@@ -11,8 +11,8 @@ router = new Router({
       component: require('@/components/engine/Engine').default
     },
     {
-      path: '/script-editor',
-      component: require('@/components/script-editor/ScriptEditor').default
+      path: '/macro/:group/:path',
+      component: require('@/components/macro/Macro').default
     },
     {
       path: '/project-manager',

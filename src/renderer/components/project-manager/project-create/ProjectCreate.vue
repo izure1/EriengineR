@@ -40,7 +40,9 @@
           directory: path.join(os.homedir(), 'Desktop'),
           id: this.getProjectUUID(),
           width: 1366,
-          height: 768
+          height: 768,
+          color: '#0075c8',
+          backgroundColor: '#ffffff'
         },
         setting: {
           template: null,

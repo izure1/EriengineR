@@ -6,16 +6,74 @@ import path from 'path'
 import {
   app,
   BrowserWindow,
-  ipcMain,
-  dialog
+  ipcMain
 } from 'electron'
 
 
-let mainWindow
-let winURL
+/* -------------------------------------------------------------------------------------- */
+
+
+/**
+ * 
+ * 
+ *  환경설정
+ *  현재 환경이 development 일 경우에 전역변수에 devmode를 활성화시킵니다.
+ *  아닐 경우, static 전역변수를 활성화시킵니다
+ * 
+ */
+
+
+let mainWindow, mainURL
 let variables
 
-app.on('ready', start)
+switch (process.env.NODE_ENV) {
+
+  case 'development':
+    global.__devmode = true
+    break;
+
+    /**
+     * Set `__static` path to static files in production
+     * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
+     */
+  default:
+    global.__devmode = false
+    global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+    break;
+
+}
+
+
+mainURL = global.__devmode ?
+
+  url.format({
+    protocol: 'http',
+    hostname: 'localhost',
+    pathname: '/',
+    port: 9080
+  }) :
+
+  url.format({
+    protocol: 'file',
+    slashes: true,
+    pathname: path.join(__dirname, 'index.html')
+  })
+
+
+// Main/Renderer 에서 공용으로 사용될 변수입니다
+// 이는 variables/ipc 을 이용하여 두 프로세스간 get/set 할 수 있습니다
+variables = {
+
+  project: {
+    directory: null,
+    information: {}
+  }
+
+}
+
+
+
+/* -------------------------------------------------------------------------------------- */
 
 
 /**
@@ -27,9 +85,11 @@ app.on('ready', start)
  * 
  */
 
-const HOME = os.homedir() // %appdata%
 
-import initor from './engine/init/initor'
+let HOME = os.homedir() // %appdata%
+
+
+import initor from './init/initor'
 import {
   watch
 } from 'melanke-watchjs'
@@ -42,29 +102,15 @@ async function start() {
 
   // 사용자 정보가 변경되면 자동으로 이를 감지하여 user.json 파일에 갱신합니다
   watch(variables.user, () => {
-    fs.writeJSONSync(variables.engine.user, variables.user)
+    fs.writeJSONSync(variables.engine.user, variables.user, {
+      spaces: 2
+    })
   }, 0, true)
 
 
   await runEngine()
 
 }
-
-
-
-/**
- * 
- * Start Eriengine
- * 
- */
-
-import ipcMenu from './engine/Menu/ipc'
-import ipcModal from './modal/ipc'
-import ipcProject from './project/ipc'
-import ipcTerminal from './terminal/ipc'
-import ipcVar from './variables/ipc'
-
-import electronDevtoolsInstaller from 'electron-devtools-installer';
 
 
 async function runEngine() {
@@ -92,43 +138,12 @@ async function runEngine() {
 
 }
 
-/**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
- */
-if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
-}
-
-winURL = process.env.NODE_ENV === 'development' ?
-
-  url.format({
-    protocol: 'http',
-    hostname: 'localhost',
-    pathname: '/',
-    port: 9080,
-    hash: '/'
-  }) :
-
-  url.format({
-    protocol: 'file',
-    slashes: true,
-    pathname: path.join(__dirname, 'index.html'),
-    hash: '/'
-  })
-
-variables = {
-  project: {
-    directory: null,
-    information: {}
-  }
-}
 
 
-function createWindow() {
-  /**
-   * Initial window options
-   */
+import getResolvedURI from '@static/js/getResolvedURI'
+
+async function createWindow() {
+
   mainWindow = new BrowserWindow({
     height: 670,
     width: 1000,
@@ -139,41 +154,84 @@ function createWindow() {
     }
   })
 
-  mainWindow.loadURL(winURL)
+  mainURL = getResolvedURI(mainURL)
+  mainWindow.loadURL(mainURL)
   mainWindow.setMenu(null)
   mainWindow.focus()
+
+
+  // 메인 윈도우 프레임에 변수를 할당합니다
+  mainWindow.variables = variables
+
+  mainWindow.on('project-open', () => {
+    ipcMain.emit('menu-enable')
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 
-  ipcModal(mainWindow)
-  ipcProject(mainWindow, openProject)
-  ipcVar(variables)
+  runIPC()
 
 }
 
 
-function openProject(projectDirectory) {
+// 앱이 준비되면 실행합니다
+app.on('ready', start)
 
-  try {
-    variables.project.directory = path.dirname(projectDirectory)
-    variables.project.information = fs.readJSONSync(projectDirectory)
-  } catch (e) {
-    dialog.showErrorBox(e.message, e.stack)
-    app.exit(1)
-  }
 
-  winURL = url.resolve(winURL, '#/engine')
 
-  mainWindow.setResizable(true)
-  mainWindow.loadURL(winURL)
-  mainWindow.maximize()
+/* -------------------------------------------------------------------------------------- */
 
-  ipcMenu(mainWindow)
-  ipcTerminal(mainWindow)
 
-  ipcMain.emit('menu-enable')
+/**
+ * 
+ *  Set EventListeners
+ * 
+ */
+
+
+import ipc_createProject from './project/createProject'
+import ipc_openProject from './project/openProject'
+
+import ipc_delete from './modal/delete'
+import ipc_deleteTrash from './modal/deleteTrash'
+import ipc_openModal from './modal/openModal'
+
+import ipc_getVariables from './variables/getVariables'
+import ipc_setVariables from './variables/setVariables'
+
+import ipc_catchError from './terminal/catchError'
+import ipc_sendError from './terminal/sendError'
+import ipc_sendOutput from './terminal/sendOutput'
+
+import ipc_enableMenu from './menu/enableMenu'
+import ipc_disableMenu from './menu/disableMenu'
+
+
+function runIPC() {
+
+  // Project
+  ipcMain.on('project-create', ipc_createProject.bind(mainWindow))
+  ipcMain.on('project-open', ipc_openProject.bind(mainWindow))
+
+  // Modal
+  ipcMain.on('modal-open-sync', ipc_openModal.bind(mainWindow))
+  ipcMain.on('modal-delete', ipc_delete.bind(mainWindow))
+  ipcMain.on('modal-delete-trash', ipc_deleteTrash.bind(mainWindow))
+
+  // Variables
+  ipcMain.on('var-get-sync', ipc_getVariables.bind(mainWindow))
+  ipcMain.on('var-set-sync', ipc_setVariables.bind(mainWindow))
+
+  // Terminal
+  ipcMain.on('send-error', ipc_sendError.bind(mainWindow))
+  ipcMain.on('send-output', ipc_sendOutput.bind(mainWindow))
+  ipc_catchError.call(mainWindow)
+
+  // Menu
+  ipcMain.on('menu-enable', ipc_enableMenu.bind(mainWindow))
+  ipcMain.on('menu-disable', ipc_disableMenu.bind(mainWindow))
 
 }
 

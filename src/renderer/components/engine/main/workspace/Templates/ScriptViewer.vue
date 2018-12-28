@@ -1,7 +1,7 @@
 <template>
   <div v-dragscroll:nochilddrag class="template-scriptviewer">
     <span class="template-scriptviewer-eof"></span>
-    <section class="script-box" v-for="script in data" :key="script.id">
+    <section class="script-box" v-for="script in getScriptData" :key="script.id">
       <div class="script-box-header">
         <span>{{ script.id }}</span>
         <a href="#" @click="dropScript(script)">⨉</a>
@@ -31,10 +31,18 @@
 </template>
 
 <script>
+  import fs from 'fs-extra'
+  import glob from 'glob'
+  import path from 'path'
+
   import {
     Script,
     ScriptContext
   } from './js/Script'
+
+  import {
+    ipcRenderer
+  } from 'electron'
 
   import {
     dragscroll
@@ -48,13 +56,66 @@
     directives: {
       dragscroll
     },
-    methods: {
-      setDefaultViewPosition() {
+    computed: {
 
+      getScriptData() {
+
+        let scripts
+        let failed
+
+        scripts = glob.sync('*.esscript', {
+          cwd: this.data,
+          nodir: true
+        })
+
+        // 데이터로 받은 스크립트 파일 경로로부터 스크립트 목록을 만듭니다
+        scripts = scripts.map(filename => {
+
+          let filepath
+          let filedata
+
+          try {
+
+            filepath = path.join(this.data, filename)
+            filedata = fs.readJSONSync(filepath)
+
+            Object.defineProperty(filedata, 'path', {
+              value: filepath
+            })
+
+          } catch (e) {
+            failed = e.toString()
+            return
+          }
+
+          return filedata
+
+        })
+
+        // 스크립트 파일이 없거나 문제가 있을 때 에러를 발생하고 작업을 중지합니다
+        if (failed) {
+
+          ipcRenderer.send('send-error', {
+            user: 'Script',
+            content: failed
+          })
+
+          return
+
+        }
+
+        return scripts
+
+      }
+
+    },
+    methods: {
+
+      setDefaultViewPosition() {
         this.$el.scrollTop = (this.$el.scrollHeight / 2) - 100
         this.$el.scrollLeft = (this.$el.scrollWidth / 2) - 100
-
       },
+
       setDraggableBox() {
 
         $('.script-box', this.$el).draggable({
@@ -64,6 +125,7 @@
         })
 
       },
+
       dropScript(script) {
 
         let isDrop
@@ -88,18 +150,16 @@
         }
 
       },
-      modifyScript(script) {
 
+      modifyScript(script) {
         this.$root.$emit('createWorkspaceTab', script.id, script.id, 'SCRIPT-EDITOR', {})
         this.$root.$emit('setDataForWorkspaceTab', script.id, script)
-
       }
+
     },
     mounted() {
-
       this.setDefaultViewPosition()
       this.setDraggableBox()
-
     },
     updated() {
       this.setDraggableBox()

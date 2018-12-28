@@ -10,19 +10,7 @@
     mounted() {
       let a = this
       this.$root.$emit('createWorkspaceTab', 'asdf', '테스트', 'SCRIPT-VIEWER', {})
-      this.$root.$emit('setDataForWorkspaceTab', 'asdf', [{
-          id: 'asdf1',
-          events: [],
-          conditions: [],
-          actions: []
-        },
-        {
-          id: 'asdf2',
-          events: [],
-          conditions: [],
-          actions: []
-        }
-      ])
+      this.$root.$emit('setDataForWorkspaceTab', 'asdf', 'D://')
     }
   }
 </script>
@@ -33,6 +21,11 @@
   @font-face {
     font-family: 'NanumBarunGothicUltraLight';
     src: url('~@/assets/fonts/NanumBarunGothicUltraLight.woff');
+  }
+
+  @font-face {
+    font-family: 'NanumGothic';
+    src: url('~@/assets/fonts/NanumGothic.woff');
   }
 
   ::-webkit-scrollbar {

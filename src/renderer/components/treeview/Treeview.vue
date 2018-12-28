@@ -9,8 +9,10 @@
       </div>
       <div v-if="contextmenu_info.open" class="template-treeview-contextmenu" :style="{left: `${contextmenu_info.x}px`, top: `${contextmenu_info.y}px`}">
         <ul>
-          <li v-for="item in contextmenu" :key="item.text" @click="callContextmenuItem($event, item.click, model.path)">{{
-            item.text }}</li>
+          <li v-for="item in contextmenu" :key="item.text" @click="callContextmenuItem($event, item.click, model.path)">
+            <hr v-if="item.separator">
+            <span v-else>{{ item.text }}</span>
+          </li>
         </ul>
       </div>
     </div>
@@ -64,8 +66,8 @@
                 this.$nextTick(() => {
                   t = this.$el.querySelector('input')
                   t.value = this.model.name
-                  t.select()
                   t.focus()
+                  t.setSelectionRange(0, t.value.lastIndexOf('.'))
                 })
               }
             },
@@ -76,6 +78,15 @@
                   name: path.basename(itempath),
                   path: itempath
                 })
+              }
+            },
+            {
+              separator: true
+            },
+            {
+              text: '탐색기에서 열기',
+              click(e, itempath) {
+                electron.shell.showItemInFolder(itempath)
               }
             }
           ]
@@ -249,13 +260,23 @@
       padding: 5px 0;
 
       >li {
-        height: 30px;
-        font-size: smaller;
-        line-height: 30px;
-        padding: 0 30px;
+        >span {
+          height: 25px;
+          font-size: smaller;
+          line-height: 25px;
+          padding: 0 25px;
+          display: block;
 
-        &:hover {
-          background-color: lightgray;
+          &:hover {
+            background-color: lightgray;
+          }
+        }
+
+        >hr {
+          height: 1px;
+          margin: 7px;
+          border: 0;
+          background-color: #aaa;
         }
       }
     }
