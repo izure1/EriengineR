@@ -42,7 +42,7 @@
       $(document).ready(function () {
         $('#aside-section').resizable({
           handles: 'e',
-          minWidth: 0
+          minWidth: 2
         })
       })
       

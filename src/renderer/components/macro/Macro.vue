@@ -10,8 +10,12 @@
       </div>
     </header>
     <main>
-      <div>
-        <macro-description :current="current" :macros="getCurrentMacroGroup" :path="path"></macro-description>
+      <div class="macro-description-wrap">
+        <macro-description v-if="current" :current="current" :macros="getCurrentMacroGroup"></macro-description>
+      </div>
+      <div class="macro-description-done">
+        <button @click="complete" :disabled="!current">완료</button>
+        <button @click="cancel">취소</button>
       </div>
     </main>
     <footer>
@@ -33,6 +37,7 @@
   import path from 'path'
   import fs from 'fs-extra'
   import glob from 'glob'
+  import electron from 'electron'
 
   import MacroDescription from './MacroDescription'
 
@@ -81,8 +86,7 @@
       return {
         macro,
         map,
-        current: null,
-        path: atob(this.$route.params.path)
+        current: null
       }
     },
     computed: {
@@ -116,9 +120,19 @@
 
     },
     methods: {
+
       onMacroSelected(e) {
         this.current = this.map.get(e.currentTarget.value)
+      },
+
+      complete(e) {
+
+      },
+
+      cancel(e) {
+        electron.remote.getCurrentWindow().close()
       }
+
     }
   }
 </script>
@@ -163,13 +177,34 @@
   }
 
   main {
+    display: flex;
     flex: 1 1;
+    flex-direction: column;
 
     >div {
-      width: 100%;
-      height: 100%;
       padding: 10px;
-      box-sizing: border-box;
+    }
+
+    >.macro-description-wrap {
+      flex: 1 1;
+    }
+
+    >.macro-description-done {
+      flex: 0 0;
+      text-align: right;
+
+      >button {
+        width: 120px;
+        height: 40px;
+        border: 0;
+        background-color: #efefef;
+        padding: 0;
+        cursor: pointer;
+
+        &:not([disabled]):hover {
+          background-color: white;
+        }
+      }
     }
   }
 

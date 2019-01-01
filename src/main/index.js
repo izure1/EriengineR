@@ -67,7 +67,10 @@ variables = {
   project: {
     directory: null,
     information: {}
-  }
+  },
+
+  macro: null,
+  script: null,
 
 }
 
@@ -208,6 +211,9 @@ import ipc_sendOutput from './terminal/sendOutput'
 import ipc_enableMenu from './menu/enableMenu'
 import ipc_disableMenu from './menu/disableMenu'
 
+import ipc_createMacro from './macro/createMacro'
+import ipc_clearMacro from './macro/clearMacro'
+
 
 function runIPC() {
 
@@ -232,6 +238,10 @@ function runIPC() {
   // Menu
   ipcMain.on('menu-enable', ipc_enableMenu.bind(mainWindow))
   ipcMain.on('menu-disable', ipc_disableMenu.bind(mainWindow))
+
+  // Script
+  ipcMain.on('macro-create', ipc_createMacro.bind(mainWindow))
+  ipcMain.on('macro-clear', ipc_clearMacro.bind(mainWindow))
 
 }
 

@@ -1,6 +1,13 @@
 <template>
   <div v-dragscroll:nochilddrag class="template-scriptviewer">
     <span class="template-scriptviewer-eof"></span>
+    <div class="template-scriptviewer-axis">
+      <div v-for="x in pos.x" :key="`pos_${x}`" :style="{left: `${x}px`}">
+        <div v-for="y in pos.y" :key="`pos_${y}`" :style="{top: `${y}px`}">
+          <span :style="{left: `${x}px`, top: `${y}px`}">{{ x }}, {{ y }}</span>
+        </div>
+      </div>
+    </div>
     <section class="script-box" v-for="script in getScriptData" :key="script.id">
       <div class="script-box-header">
         <span>{{ script.id }}</span>
@@ -53,6 +60,16 @@
 
   export default {
     props: ['data'],
+    data() {
+      return {
+        pos: {
+          grid: 1000,
+          max: 50000,
+          x: [],
+          y: []
+        }
+      }
+    },
     directives: {
       dragscroll
     },
@@ -154,11 +171,23 @@
       modifyScript(script) {
         this.$root.$emit('createWorkspaceTab', script.id, script.id, 'SCRIPT-EDITOR', {})
         this.$root.$emit('setDataForWorkspaceTab', script.id, script)
+      },
+
+      setAxisAlertor() {
+
+        for (let i = 0; i < this.pos.max; i += this.pos.grid) {
+          this.pos.x.push(i)
+          this.pos.y.push(i)
+        }
+
       }
 
     },
+    created() {
+      this.setAxisAlertor()
+    },
     mounted() {
-      this.setDefaultViewPosition()
+      //this.setDefaultViewPosition()
       this.setDraggableBox()
     },
     updated() {
@@ -169,8 +198,8 @@
 
 <style lang="scss" scoped>
   $maxPerspective: 600px;
-  $maxXAxis: 1000000px;
-  $maxYAxis: 1000000px;
+  $maxXAxis: 50000px;
+  $maxYAxis: 50000px;
 
   .template-scriptviewer {
     height: 100%;
@@ -191,13 +220,29 @@
       top: $maxYAxis;
       visibility: hidden;
     }
+
+    >.template-scriptviewer-axis {
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+
+      div {
+        position: absolute;
+      }
+
+      span {
+        font-size: x-small;
+        color: gray;
+        white-space: nowrap;
+      }
+    }
   }
 
   .script-box {
     width: 420px;
     position: absolute;
-    left: $maxXAxis / 2;
-    top: $maxYAxis / 2;
+    left: 200px;
+    top: 200px;
     background-color: white;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .15);
 

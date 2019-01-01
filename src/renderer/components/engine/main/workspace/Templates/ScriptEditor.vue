@@ -39,6 +39,10 @@
   import electron from 'electron'
 
   import getResolvedURI from '@static/js/getResolvedURI'
+  import createUUID from '@static/js/createUUID'
+  import {
+    create
+  } from 'domain';
 
   export default {
     props: ['data'],
@@ -57,7 +61,7 @@
         parent = electron.remote.getCurrentWindow()
 
         childURI = parent.webContents.getURL()
-        childURI = getResolvedURI(childURI, `/macro/${column}/${btoa(script.path)}`)
+        childURI = getResolvedURI(childURI, `/macro/${column}`)
 
         column = script[column]
 
@@ -73,18 +77,26 @@
 
         }
 
-        browser = new electron.remote.BrowserWindow({
-          width: 1024,
-          height: 600,
-          modal: true,
-          parent
-        })
 
-        browser.setMenu(null)
-        browser.loadURL(childURI)
+        // 새로운 매크로 라인을 생성하기 위해 설정합니다
+        // 앞으로 새로운 매크로는 해당 column 배열에 추가되며, 준비가 되면 창을 엽니다
+        electron.ipcRenderer.send('macro-create', column)
+        electron.ipcRenderer.once('macro-create', () => {
 
-        browser.on('closed', () => {
-          browser = null
+          browser = new electron.remote.BrowserWindow({
+            width: 1024,
+            height: 600,
+            modal: true,
+            parent
+          })
+
+          browser.setMenu(null)
+          browser.loadURL(childURI)
+
+          browser.on('closed', () => {
+            browser = null
+          })
+
         })
 
       }
@@ -156,10 +168,10 @@
         text-decoration: none;
         display: block;
         background-color: rgba(0, 0, 0, .3);
-        transition: transform 0.15s linear;
+        transition: background-color 0.15s linear;
 
         &:hover {
-          transform: rotateY(180deg);
+          background-color: rgba(0, 0, 0, .5);
         }
       }
     }

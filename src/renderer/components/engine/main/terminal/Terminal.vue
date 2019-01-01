@@ -98,7 +98,7 @@
 <style lang="scss" scoped>
   #terminal {
 
-    background-color: #e7e7e7;
+    background-color: #efefef;
     border-top: 1px solid #bfbfbf;
     display: flex;
     flex-direction: column;

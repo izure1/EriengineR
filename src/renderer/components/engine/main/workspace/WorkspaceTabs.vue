@@ -1,11 +1,14 @@
 <template>
   <ul class="workspace-tabs" @dragover.self="allowDropTab" @drop.self="dropTab(null)">
-    <li v-for="item in tabs" :key="item.id" :class="item.selected === true ? 'workspace-tabs-selected' : ''" draggable="true"
+    <li v-for="item in tabs" :key="item.id" :class="item.selected ? 'workspace-tabs-selected' : ''" draggable="true"
       @dragstart="startDragTab(item)" @dragover="allowDropTab" @drop="dropTab(item)">
       <a href="#">
         <p @mousedown="tabMousedown(item)">{{ item.name }}</p>
         <span @click="tabClose(item)">⨉</span>
+        <hr v-if="!item.selected">
       </a>
+      <span v-if="item.selected" class="workspace-tabs-smoothes left"></span>
+      <span v-if="item.selected" class="workspace-tabs-smoothes right"></span>
     </li>
   </ul>
 </template>
@@ -127,7 +130,7 @@
 
       }
     },
-    mounted() {
+    created() {
 
       this.$root.$on('createWorkspaceTab', (id, name, template = 'DEFAULT', events = {}) => {
         this.createTab(id, name, template, events)
@@ -138,6 +141,9 @@
 </script>
 
 <style lang="scss" scoped>
+  $barBackgroundColor: #e3e3e3;
+  $tabBackgroundColor: #eee;
+
   ul,
   li {
     padding: 0;
@@ -153,18 +159,56 @@
     list-style: none;
     position: relative;
     z-index: 0;
-    background-color: #d9d9d9;
+    background-color: $barBackgroundColor;
 
     >li {
       max-width: 200px;
       height: 100%;
+      position: relative;
       box-sizing: border-box;
       flex: 1 1 auto;
-      background-color: #d9d9d9;
-      border-right: 1px solid #e7e7e7;
 
       &.workspace-tabs-selected {
-        background-color: #e7e7e7;
+        background-color: $tabBackgroundColor;
+        z-index: 1;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      >.workspace-tabs-smoothes {
+        width: 10px;
+        height: 10px;
+        display: block;
+        position: absolute;
+        overflow: hidden;
+        background-color: $tabBackgroundColor;
+        z-index: 1;
+
+        &::after {
+          content: '';
+          width: 10px;
+          height: 10px;
+          display: block;
+          background-color: $barBackgroundColor;
+        }
+
+        &.left::after {
+          border-bottom-right-radius: 10px;
+        }
+
+        &.right::after {
+          border-bottom-left-radius: 10px;
+        }
+
+        &.left {
+          left: -10px;
+          top: 23px;
+        }
+
+        &.right {
+          right: -10px;
+          top: 23px;
+        }
       }
 
       >a {
@@ -174,6 +218,7 @@
         text-decoration: none;
         padding: 0 10px;
         display: flex;
+        position: relative;
 
         >p,
         >span {
@@ -184,7 +229,8 @@
         }
 
         >p {
-          font-size: smaller;
+          font-size: 9pt;
+          font-family: 'NanumGothic';
           flex: 1 1 auto;
           white-space: nowrap;
           overflow: hidden;
@@ -194,6 +240,17 @@
         >span {
           margin-left: 10px;
           flex: 0 0 auto;
+        }
+
+        >hr {
+          width: 1px;
+          height: 70%;
+          border: 0;
+          margin: 0;
+          background-color: rgba(0, 0, 0, .1);
+          position: absolute;
+          right: -1px;
+          top: 15%;
         }
       }
     }

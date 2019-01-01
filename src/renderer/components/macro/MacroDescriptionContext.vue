@@ -23,11 +23,7 @@
       VRuntimeTemplate
     },
     props: {
-      macro: Object,
-      // variables: {
-      //   type: Object,
-      //   default: {}
-      // }
+      macro: Object
     },
     data() {
       return {

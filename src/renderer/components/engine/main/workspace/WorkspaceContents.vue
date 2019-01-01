@@ -78,15 +78,15 @@
       closeContent(id) {
 
         let i
-        let t
+        let tab
 
         i = this.tabs.length
 
         while (i--) {
 
-          t = this.tabs[i]
+          tab = this.tabs[i]
 
-          if (t.id !== id) continue
+          if (tab.id !== id) continue
 
           this.tabs.splice(i, 1)
           break
@@ -97,13 +97,13 @@
 
       setData(id, data) {
 
-        for (let item of this.tabs) {
+        for (let tab of this.tabs) {
 
-          if (item.id !== id) {
+          if (tab.id !== id) {
             continue
           }
 
-          item.data = data
+          tab.data = data
 
         }
 
@@ -111,7 +111,7 @@
 
     },
 
-    mounted() {
+    created() {
 
       this.$root.$on('createWorkspaceTab-content', (id, template) => {
         this.createContent(id, template)
