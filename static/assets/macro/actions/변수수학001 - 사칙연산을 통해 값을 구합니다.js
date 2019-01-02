@@ -7,7 +7,7 @@ module.exports = {
 	variables: {
 		'항1': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'부호1': {
 			text: '＋',
@@ -32,7 +32,7 @@ module.exports = {
 		},
 		'항2': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'부호2': {
 			text: '＋',
@@ -58,7 +58,7 @@ module.exports = {
 		},
 		'항3': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'부호3': {
@@ -85,7 +85,7 @@ module.exports = {
 		},
 		'항4': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'부호4': {
@@ -112,7 +112,7 @@ module.exports = {
 		},
 		'항5': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'스코프': {
@@ -131,7 +131,7 @@ module.exports = {
 		},
 		'변수명': {
 			text: '연산값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		}

@@ -21,7 +21,7 @@
 		},
 		'변수명': {
 			text: '시간',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},

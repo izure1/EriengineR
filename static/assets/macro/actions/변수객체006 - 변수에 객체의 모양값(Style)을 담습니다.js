@@ -2,8 +2,8 @@
 	cid: '{9245552F-F667-446F-973D-663487228958}',
 	version: '1.0.0',
 	class: '변수/객체',
-	title: '변수에 객체의 모양값<small>(Style)</small>을 담습니다',
-	description: '{{스코프}}변수 {{변수명}}에 객체 {{객체명}}의 {{스타일명}} 모양값을 담습니다.',
+	title: '변수에 객체의 모양을 담습니다',
+	description: '{{스코프}}변수 {{변수명}}에 객체 {{객체명}}의 {{스타일명}} 모양을 담습니다.',
 	variables: {
 		'스코프': {
 			text: '지역',
@@ -21,13 +21,13 @@
 		},
 		'변수명': {
 			text: '객체 모양 변수',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'객체명': {
 			text: '객체명',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'스타일명': {

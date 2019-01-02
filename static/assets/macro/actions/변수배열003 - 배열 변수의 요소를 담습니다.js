@@ -25,12 +25,12 @@
 		},
 		'배열변수명': {
 			text: '배열',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'인덱스': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'스코프2': {
 			text: '지역',
@@ -48,13 +48,13 @@
 		},
 		'변수명': {
 			text: '요소값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'대체값': {
 			text: 'undefined',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

@@ -7,12 +7,12 @@
 	variables: {
 		'장소명': {
 			text: '(플레이)::집',
-			type: 'value',
+			type: 'text',
 			sample: 'scene_name_play'
 		},
 		'객체명': {
 			text: '객체명',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'객체종류': {

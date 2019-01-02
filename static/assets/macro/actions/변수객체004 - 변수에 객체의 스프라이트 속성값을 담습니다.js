@@ -21,13 +21,13 @@
 		},
 		'변수명': {
 			text: '객체 속성 변수',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'객체명': {
 			text: '객체명',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'속성': {

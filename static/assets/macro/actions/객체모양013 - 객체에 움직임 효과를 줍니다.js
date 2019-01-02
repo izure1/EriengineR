@@ -7,16 +7,16 @@
 	variables: {
 		'객체명': {
 			text: '주인공',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'효과시간': {
 			text: '1',
-			type: 'value'
+			type: 'text'
 		},
 		'효과횟수': {
 			text: '1',
-			type: 'value'
+			type: 'text'
 		},
 		'효과이름': {
 			text: '점프',
@@ -58,7 +58,7 @@
 		},
 		'변동폭': {
 			text: '50',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

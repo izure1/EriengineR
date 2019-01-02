@@ -22,7 +22,7 @@
 		},
 		'슬롯번호': {
 			text: '1',
-			type: 'value'
+			type: 'text'
 		}
 	},
 	fn: function (next, stop, e) {

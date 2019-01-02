@@ -7,12 +7,12 @@
 	variables: {
 		'선택지이름': {
 			text: '1번 선택지',
-			type: 'value',
+			type: 'text',
 			sample: 'select_name'
 		},
 		'선택지내용': {
 			text: '따라가지 않는다',
-			type: 'value'
+			type: 'text'
 		},
 		'선택지배경': {
 			text: 'ui-flag-bg.png',
@@ -22,17 +22,17 @@
 		},
 		'선택지색상': {
 			text: 'white',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'선택지글씨크기': {
 			text: '30',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'선택지글꼴': {
 			text: 'NanumBarunpen',
-			type: 'value',
+			type: 'text',
 			sample: 'font_name',
 			skip: true
 		}

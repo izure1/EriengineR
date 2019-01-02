@@ -41,12 +41,12 @@
 		},
 		'시간': {
 			text: 1,
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'백분율': {
 			text: '100',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

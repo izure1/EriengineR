@@ -29,7 +29,7 @@
 		},
 		'수치': {
 			text: '10',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'비교': {

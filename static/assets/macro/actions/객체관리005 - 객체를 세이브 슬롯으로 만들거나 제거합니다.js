@@ -7,12 +7,12 @@
 	variables: {
 		'객체명': {
 			text: '세이브슬롯_1',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'슬롯번호': {
 			text: '1',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '만듭니다',

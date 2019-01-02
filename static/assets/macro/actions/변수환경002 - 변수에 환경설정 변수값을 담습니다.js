@@ -21,13 +21,13 @@
 		},
 		'변수명': {
 			text: '환경설정값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'환경설정변수명': {
 			text: '배경음볼륨크기',
-			type: 'value',
+			type: 'text',
 			sample: 'environment_variable_name'
 		}
 	},

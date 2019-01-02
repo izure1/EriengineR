@@ -2,18 +2,18 @@
 	cid: '{3B7EBF05-A181-4EC0-83EB-82B6835DD4C1}',
 	version: '1.0.0',
 	class: '객체/속성',
-	title: '객체에 카테고리<small>(범주)</small>를 추가 또는 제거합니다',
+	title: '객체에 카테고리(범주)를 추가 또는 제거합니다',
 	description: '객체 {{객체명}}에 {{카테고리명}}(이)라는 카테고리<small>(범주)</small>명을 {{작업}}합니다.',
 	variables: {
 		'객체명': {
 			text: '*',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name',
 			skip: true
 		},
 		'카테고리명': {
 			text: '캐릭터',
-			type: 'value',
+			type: 'text',
 			sample: 'class_name',
 			skip: true
 		},

@@ -7,7 +7,7 @@
 	variables: {
 		'객체명': {
 			text: '*',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'타입': {
@@ -26,7 +26,7 @@
 		},
 		'우선순위': {
 			text: '1',
-			type: 'value'
+			type: 'text'
 		}
 	},
 	fn: function (next, stop, e) {

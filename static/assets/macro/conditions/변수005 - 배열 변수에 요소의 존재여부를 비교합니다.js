@@ -26,12 +26,12 @@
 		},
 		'변수명': {
 			text: '변수명',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'변수값': {
 			text: '변수값',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '존재할 경우',

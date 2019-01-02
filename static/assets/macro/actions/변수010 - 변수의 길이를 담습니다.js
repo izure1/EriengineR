@@ -21,7 +21,7 @@
 		},
 		'변수명': {
 			text: '숫자_변수값길이',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
@@ -44,7 +44,7 @@
 		},
 		'대상변수명': {
 			text: '주인공이름',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		}
 	},

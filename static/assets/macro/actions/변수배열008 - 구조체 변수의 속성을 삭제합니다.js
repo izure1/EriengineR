@@ -25,12 +25,12 @@
 		},
 		'구조체변수명': {
 			text: '목록',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'속성명': {
 			text: '속성명',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_object_key'
 		}
 	}, 

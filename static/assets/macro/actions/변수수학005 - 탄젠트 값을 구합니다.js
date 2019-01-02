@@ -7,7 +7,7 @@ module.exports = {
 	variables: {
 		'값': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'스코프': {
 			text: '지역',
@@ -25,7 +25,7 @@ module.exports = {
 		},
 		'변수명': {
 			text: '탄젠트값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		}

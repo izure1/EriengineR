@@ -7,13 +7,13 @@
 	variables: {
 		'사운드이름': {
 			text: '배경음',
-			type: 'value',
+			type: 'text',
 			sample: 'sound_name',
 			skip: true
 		},
 		'재생위치': {
 			text: 0,
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

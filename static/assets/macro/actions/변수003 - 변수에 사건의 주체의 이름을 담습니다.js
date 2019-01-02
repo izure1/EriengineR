@@ -21,7 +21,7 @@
 		},
 		'변수명': {
 			text: '문자열_주체명',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		}

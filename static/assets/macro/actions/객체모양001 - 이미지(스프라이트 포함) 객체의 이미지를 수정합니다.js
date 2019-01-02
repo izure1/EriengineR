@@ -2,12 +2,12 @@
 	cid: '{78F33567-318D-4FFF-8341-3211E9C650DB}',
 	version: '1.0.0',
 	class: '객체/모양',
-	title: '이미지<small>(스프라이트 포함)</small> 객체의 이미지를 수정합니다',
+	title: '이미지(스프라이트 포함) 객체의 이미지를 수정합니다',
 	description: '이미지 객체 {{객체명}}의 이미지를 {{이미지파일}}(으)로 {{시간}}초에 걸쳐서 수정합니다.',
 	variables: {
 		'객체명': {
 			text: '*',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'이미지파일': {
@@ -17,7 +17,7 @@
 		},
 		'시간': {
 			text: '1',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

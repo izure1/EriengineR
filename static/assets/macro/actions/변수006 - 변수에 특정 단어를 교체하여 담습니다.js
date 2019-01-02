@@ -21,7 +21,7 @@
 		},
 		'변수명': {
 			text: '문자열_교체된내용',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
@@ -31,11 +31,11 @@
 		},
 		'패턴': {
 			text: '코카콜라',
-			type: 'value'
+			type: 'text'
 		},
 		'치환값': {
 			text: '펩시',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '모두',

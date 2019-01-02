@@ -21,17 +21,17 @@
 		},
 		'변수명': {
 			text: '좌표',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'분자': {
 			text: '2',
-			type: 'value'
+			type: 'text'
 		},
 		'분모': {
 			text: '3',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'좌표종류': {
@@ -50,12 +50,12 @@
 		},
 		'카메라객체': {
 			text: '카메라',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'거리': {
 			text: '100',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

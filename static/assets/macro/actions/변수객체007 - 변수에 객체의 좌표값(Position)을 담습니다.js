@@ -2,7 +2,7 @@
 	cid: '{0F6B57A2-536B-4BF8-8D49-B78A8EFF151D}',
 	version: '1.0.0',
 	class: '변수/객체',
-	title: '변수에 객체의 좌표값<small>(Position)</small>을 담습니다',
+	title: '변수에 객체의 좌표값을 담습니다',
 	description: '{{스코프}}변수 {{변수명}}에 객체 {{객체명}}의 {{좌표명}} 좌표값을 담습니다.',
 	variables: {
 		'스코프': {
@@ -21,13 +21,13 @@
 		},
 		'변수명': {
 			text: '객체 위치 변수',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'객체명': {
 			text: '객체명',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'좌표명': {

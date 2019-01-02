@@ -1,7 +1,7 @@
 <template>
   <div class="macro-description-context">
     <v-runtime-template :template="getParsedMacroDescription"></v-runtime-template>
-    <section v-if="isNeedContextmenu" :style="{left: button.x + 'px', top: button.y + 'px' }">
+    <!-- <section v-if="isNeedContextmenu" :style="{left: button.x + 'px', top: button.y + 'px' }">
       <input type="text" placeholder="찾을 내용을 입력하세요" @blur="button = null">
       <ul v-if="lists.length">
         <li v-for="list in lists" :key="list">{{ list }}</li>
@@ -9,20 +9,22 @@
       <div class="empty" v-else>
         아무것도 없습니다
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 
 <script>
   import VRuntimeTemplate from 'v-runtime-template'
-
   import electron from 'electron'
+
+  import getResolvedURI from '@static/js/getResolvedURI'
 
   export default {
     components: {
       VRuntimeTemplate
     },
     props: {
+      current: Object,
       macro: Object
     },
     data() {
@@ -42,6 +44,15 @@
 
         variables = this.macro.variables
 
+
+        // 매크로를 수정할 경우, this.current.cid 값이 지정되어 있습니다.
+        // 이 값이 서로 일치할 경우, variables 값을 덮어씁니다
+        if (this.macro.cid === this.current.cid) {
+          variables = Object.assign({}, this.macro.variables, this.current.variables)
+        }
+
+
+        // 매크로의 설명문의 변수 부문을 variables 값에서 받아넣습니다
         description = this.macro.description
         description = description.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, match => {
 
@@ -64,9 +75,13 @@
 
         switch (this.macro.type) {
 
-          case 'value':
+          case 'radio':
             break;
 
+          case 'file':
+            break;
+
+          case 'text':
           default:
             break;
 
@@ -79,21 +94,38 @@
 
       openContextmenu(e, type) {
 
-        let clientRect
-        let macro
+        let current
+        let browser
+        let uri
+        
 
-        clientRect = e.currentTarget.getBoundingClientRect()
-        macro = this.macro
+        current = electron.remote.getCurrentWindow()
+        uri = getResolvedURI(current.webContents.getURL(), `/macro-input/text`)
 
-        this.button = {
-          x: clientRect.x,
-          y: clientRect.y + 25,
-          type
-        }
-
-        this.$nextTick(() => {
-          //this.$el.querySelector('input').focus()
+        browser = new electron.remote.BrowserWindow({
+          modal: true,
+          parent: current
         })
+
+        browser.loadURL(uri)
+        browser.setMenu(null)
+        browser.on('closed', () => browser = null)
+
+        // let clientRect
+        // let macro
+
+        // clientRect = e.currentTarget.getBoundingClientRect()
+        // macro = this.macro
+
+        // this.button = {
+        //   x: clientRect.x,
+        //   y: clientRect.y + 25,
+        //   type
+        // }
+
+        // this.$nextTick(() => {
+        //   //this.$el.querySelector('input').focus()
+        // })
 
       }
 

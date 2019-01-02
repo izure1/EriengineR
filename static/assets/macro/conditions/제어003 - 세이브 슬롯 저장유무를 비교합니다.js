@@ -8,7 +8,7 @@
 	variables: {
 		'슬롯번호': {
 			text: '1',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '저장되어 있을 경우',

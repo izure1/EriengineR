@@ -25,12 +25,12 @@
 		},
 		'변수명': {
 			text: '주인공이름',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'기본값': {
 			text: '홍길동',
-			type: 'value'
+			type: 'text'
 		}
 	},
 	fn: function (next, stop, e) {

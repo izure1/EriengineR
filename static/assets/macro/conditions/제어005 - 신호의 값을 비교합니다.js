@@ -8,7 +8,7 @@
 	variables: {
 		'값': {
 			text: 'null',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '일치',

@@ -7,12 +7,12 @@
 	variables: {
 		'변수명': {
 			text: '배경음볼륨크기',
-			type: 'value',
+			type: 'text',
 			sample: 'environment_variable_name'
 		},
 		'변수값': {
 			text: '100',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

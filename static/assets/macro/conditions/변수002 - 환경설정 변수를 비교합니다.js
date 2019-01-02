@@ -7,12 +7,12 @@
 	variables: {
 		'변수명': {
 			text: '대사출력속도',
-			type: 'value',
+			type: 'text',
 			sample: 'environment_variable_name'
 		},
 		'변수값': {
 			text: '변수값',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '일치',

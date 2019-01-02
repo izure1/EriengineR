@@ -18,6 +18,13 @@ router = new Router({
       }
     },
     {
+      path: '/macro-input/:type',
+      component: require('@/components/macro/MacroInput').default,
+      meta: {
+        title: '매크로 입력'
+      }
+    },
+    {
       path: '/project-manager',
       component: require('@/components/project-manager/ProjectManager').default,
       meta: {

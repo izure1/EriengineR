@@ -8,7 +8,7 @@
 	variables: {
 		'선택지이름': {
 			text: '1번 선택지',
-			type: 'value',
+			type: 'text',
 			sample: 'select_name'
 		},
 		'방식': {

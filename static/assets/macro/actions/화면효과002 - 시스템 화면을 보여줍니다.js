@@ -7,12 +7,12 @@
 	variables: {
 		'시간': {
 			text: '0.5',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'시스템화면명': {
 			text: '(시스템)::환경설정 화면',
-			type: 'value',
+			type: 'text',
 			sample: 'scene_name_system',
 			skip: true
 		}

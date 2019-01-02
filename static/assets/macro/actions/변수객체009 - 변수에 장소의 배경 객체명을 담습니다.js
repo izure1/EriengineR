@@ -21,13 +21,13 @@
 		},
 		'변수명': {
 			text: '배경명',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'장소': {
 			text: '(플레이)::집',
-			type: 'value',
+			type: 'text',
 			sample: 'scene_name_play scene_name_system',
 			skip: true
 		}

@@ -7,7 +7,7 @@
 	variables: {
 		'객체명': {
 			text: '나',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name',
 			skip: true
 		},
@@ -37,13 +37,13 @@
 		},
 		'출력속도v2': {
 			text: '대사출력속도',
-			type: 'value',
+			type: 'text',
 			sample: 'environment_variable_name',
 			skip: true
 		},
 		'출력대기v2': {
 			text: '대사출력대기시간',
-			type: 'value',
+			type: 'text',
 			sample: 'environment_variable_name',
 			skip: true
 		}

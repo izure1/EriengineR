@@ -7,7 +7,7 @@
 	variables: {
 		'객체명': {
 			text: '입력칸',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'방식': {

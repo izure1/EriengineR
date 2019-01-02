@@ -8,7 +8,7 @@
 	variables: {
 		'키값': {
 			text: '13',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'방식': {

@@ -7,7 +7,7 @@
 	variables: {
 		'객체명': {
 			text: '*',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		}
 	},

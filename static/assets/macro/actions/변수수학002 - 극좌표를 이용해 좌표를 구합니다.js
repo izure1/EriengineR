@@ -7,19 +7,19 @@ module.exports = {
 	variables: {
 		'x': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'y': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'각도': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'r': {
 			text: '5',
-			type: 'value'
+			type: 'text'
 		},
 		'좌표': {
 			text: 'ｘ',
@@ -50,7 +50,7 @@ module.exports = {
 		},
 		'변수명': {
 			text: '극좌표값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		}

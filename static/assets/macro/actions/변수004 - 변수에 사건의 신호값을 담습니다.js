@@ -21,13 +21,13 @@
 		},
 		'변수명': {
 			text: '신호값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'대체값': {
 			text: 'undefined',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

@@ -7,7 +7,7 @@
 	variables: {
 		'서버주소': {
 			text: 'http://yourserver.net',
-			type: 'value',
+			type: 'text',
 			sample: 'request_url'
 		},
 		'데이터': {
@@ -30,13 +30,13 @@
 		},
 		'요청명': {
 			text: '새로운 요청',
-			type: 'value',
+			type: 'text',
 			sample: 'request_name',
 			skip: true
 		},
 		'변수명': {
 			text: '받은 데이터',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},

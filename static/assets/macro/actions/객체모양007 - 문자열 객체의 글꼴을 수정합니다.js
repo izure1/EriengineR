@@ -7,13 +7,13 @@
 	variables: {
 		'객체명': {
 			text: '대사창',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name',
 			skip: true
 		},
 		'글꼴이름': {
 			text: '돋움',
-			type: 'value',
+			type: 'text',
 			sample: 'font_name'
 		}
 	},

@@ -7,11 +7,11 @@ module.exports = {
 	variables: {
 		'값': {
 			text: '2',
-			type: 'value'
+			type: 'text'
 		},
 		'제곱': {
 			text: '3',
-			type: 'value'
+			type: 'text'
 		},
 		'스코프': {
 			text: '지역',
@@ -29,7 +29,7 @@ module.exports = {
 		},
 		'변수명': {
 			text: '제곱값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		}

@@ -8,7 +8,7 @@
 	variables: {
 		'요청명': {
 			text: '새로운 요청',
-			type: 'value',
+			type: 'text',
 			sample: 'request_name'
 		},
 		'방식': {

@@ -8,7 +8,7 @@
 	variables: {
 		'장소값': {
 			text: '(플레이)',
-			type: 'value',
+			type: 'text',
 			sample: 'scene_name_play scene_name_system'
 		},
 		'방식': {

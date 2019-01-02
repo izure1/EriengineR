@@ -7,7 +7,7 @@
 	variables: {
 		'이름': {
 			text: '나',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'방식': {

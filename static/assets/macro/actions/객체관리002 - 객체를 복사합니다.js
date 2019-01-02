@@ -7,12 +7,12 @@
 	variables: {
 		'객체명': {
 			text: '객체명',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'원본객체명': {
 			text: '원본객체명',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 	},

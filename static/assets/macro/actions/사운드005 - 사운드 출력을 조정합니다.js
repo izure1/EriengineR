@@ -7,13 +7,13 @@
 	variables: {
 		'사운드타입': {
 			text: '효과음',
-			type: 'value',
+			type: 'text',
 			sample: 'sound_type',
 			skip: true
 		},
 		'출력': {
 			text: 100,
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

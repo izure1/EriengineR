@@ -8,7 +8,7 @@
 	variables: {
 		'사운드명': {
 			text: '효과음',
-			type: 'value',
+			type: 'text',
 			sample: 'sound_name'
 		},
 		'방식': {

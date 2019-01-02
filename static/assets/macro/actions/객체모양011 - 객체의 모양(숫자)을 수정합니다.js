@@ -2,12 +2,12 @@
 	cid: '{B1B9C557-D60C-4CDD-A383-C34F95C90CEE}',
 	version: '1.0.0',
 	class: '객체/모양',
-	title: '객체의 모양<small>(숫자)</small>을 수정합니다',
+	title: '객체의 모양(숫자)을 수정합니다',
 	description: '객체 {{객체명}}에 {{스타일명}}(이)란 모양을 {{시간}}초를 거쳐 {{스타일값}}(으)로 {{편의성}} 수정합니다. <br><b>+=α</b>, <b>-=α</b> 표현식을 사용해서, 현재 값에서 가산/감산할 수 있습니다.',
 	variables: {
 		'객체명': {
 			text: '*',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name',
 			skip: true
 		},
@@ -66,7 +66,7 @@
 		},
 		'시간': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'편의성': {
@@ -105,7 +105,7 @@
 		},
 		'스타일값': {
 			text: '100',
-			type: 'value'
+			type: 'text'
 		}
 	},
 	fn: function (next, stop, e) {

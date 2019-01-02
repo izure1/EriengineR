@@ -7,12 +7,12 @@
 	variables: {
 		'시작수': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'끝수': {
 			text: '100',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'스코프': {
@@ -31,7 +31,7 @@
 		},
 		'변수명': {
 			text: '랜덤값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		}

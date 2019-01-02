@@ -8,7 +8,7 @@
 	variables: {
 		'객체명': {
 			text: '홍길동',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'방식': {

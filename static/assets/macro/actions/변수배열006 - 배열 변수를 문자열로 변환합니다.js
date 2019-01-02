@@ -21,7 +21,7 @@
 		},
 		'변수명': {
 			text: '병합된문자열',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
@@ -45,7 +45,7 @@
 		},
 		'배열변수명': {
 			text: '문자열_목록',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'구분자': {

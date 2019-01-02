@@ -7,7 +7,7 @@
 	variables: {
 		'시간': {
 			text: '0.5',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

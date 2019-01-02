@@ -8,7 +8,7 @@
         </div>
       </div>
     </div>
-    <section class="script-box" v-for="script in getScriptData" :key="script.id">
+    <section :id="getScriptId(script)" class="script-box" v-for="script in getScriptData" :key="script.id" :style="{left: getScriptBoxPosition(script.position.x), top: getScriptBoxPosition(script.position.y)}">
       <div class="script-box-header">
         <span>{{ script.id }}</span>
         <a href="#" @click="dropScript(script)">⨉</a>
@@ -55,13 +55,17 @@
     dragscroll
   } from 'vue-dragscroll'
 
-  import $ from 'jquery'
-  import 'jquery-ui/ui/widgets/draggable'
+  import $ from 'jQuery'
+  import {
+    jsPlumb
+  } from 'jsplumb'
+
 
   export default {
     props: ['data'],
     data() {
       return {
+        jsPlumb: jsPlumb.getInstance(),
         pos: {
           grid: 1000,
           max: 50000,
@@ -128,17 +132,37 @@
     },
     methods: {
 
-      setDefaultViewPosition() {
-        this.$el.scrollTop = (this.$el.scrollHeight / 2) - 100
-        this.$el.scrollLeft = (this.$el.scrollWidth / 2) - 100
+      getScriptId(script) {
+        return `jsplumb_script-box-${script.id}`
+      },
+
+      getScriptBoxPosition(pos = 200) {
+        return `${pos}px`
       },
 
       setDraggableBox() {
 
-        $('.script-box', this.$el).draggable({
-          cursor: 'move',
-          handle: '.script-box-header',
-          grid: [20, 20]
+        let ids = this.getScriptData.map(script => this.getScriptId(script))
+
+        this.jsPlumb.reset()
+        this.jsPlumb.ready(() => {
+
+          this.jsPlumb.connect({
+            source: ids[0],
+            target: ids[1],
+            endpoint: 'Blank',
+            overlays: [
+              ['Arrow', {
+                id: 'arrow',
+                location: 1
+              }]
+            ]
+          })
+
+          this.jsPlumb.draggable(ids, {
+            grid: [20, 20]
+          })
+
         })
 
       },
@@ -187,7 +211,6 @@
       this.setAxisAlertor()
     },
     mounted() {
-      //this.setDefaultViewPosition()
       this.setDraggableBox()
     },
     updated() {
@@ -243,6 +266,8 @@
     position: absolute;
     left: 200px;
     top: 200px;
+    border-radius: 5px;
+    overflow: hidden;
     background-color: white;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, .15);
 
@@ -260,7 +285,7 @@
 
       >span {
         font-size: small;
-        color: gray;
+        color: black;
         line-height: 25px;
         float: left;
       }

@@ -21,13 +21,13 @@
 		},
 		'변수명': {
 			text: '대사로그',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'로그': {
 			text: '1',
-			type: 'value',
+			type: 'text',
 		},
 		'정보': {
 			text: '내용',
@@ -49,7 +49,7 @@
 		},
 		'대체값': {
 			text: 'null',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

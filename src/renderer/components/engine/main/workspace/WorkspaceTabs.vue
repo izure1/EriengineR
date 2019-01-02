@@ -244,13 +244,13 @@
 
         >hr {
           width: 1px;
-          height: 70%;
+          height: 60%;
           border: 0;
           margin: 0;
           background-color: rgba(0, 0, 0, .1);
           position: absolute;
           right: -1px;
-          top: 15%;
+          top: 20%;
         }
       }
     }

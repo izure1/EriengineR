@@ -3,6 +3,7 @@
     <header>
       <div>
         <select @change="onMacroSelected">
+          <option disabled selected>사용할 매크로를 선택하세요</option>
           <optgroup v-for="(macros, key) in getSortedMacroGroup" :key="key" :label="key">
             <option v-for="macro in macros" :key="macro.cid" :value="macro.cid">{{ macro.title }}</option>
           </optgroup>
@@ -11,16 +12,16 @@
     </header>
     <main>
       <div class="macro-description-wrap">
-        <macro-description v-if="current" :current="current" :macros="getCurrentMacroGroup"></macro-description>
+        <macro-description v-if="isMacroReady" :selected="selected" :current="current" :macros="getSelectedMacroGroup"></macro-description>
       </div>
       <div class="macro-description-done">
-        <button @click="complete" :disabled="!current">완료</button>
+        <button @click="complete" :disabled="!selected">완료</button>
         <button @click="cancel">취소</button>
       </div>
     </main>
     <footer>
       <div>
-        <dl v-if="current">
+        <dl v-if="selected">
           <dt>제공자</dt>
           <dd>{{ getMacroAuthor }}</dd>
           <dt>정보</dt>
@@ -86,13 +87,14 @@
       return {
         macro,
         map,
+        selected: null,
         current: null
       }
     },
     computed: {
 
       // events, conditions, actions 중 한 부류의 매크로들을 배열에 담아 반환합니다
-      getCurrentMacroGroup() {
+      getSelectedMacroGroup() {
 
         let group
 
@@ -105,24 +107,28 @@
 
       // 매크로내의 class 에 따라 그룹화하여 Object 형태로 반환합니다
       getSortedMacroGroup() {
-        return getSortedMacroGroup(this.getCurrentMacroGroup)
+        return getSortedMacroGroup(this.getSelectedMacroGroup)
       },
 
       // 매크로 작성자를 반환합니다
       getMacroAuthor() {
-        return this.current.author || 'admin@izure.org'
+        return this.selected.author || 'admin@izure.org'
       },
 
       // 매크로 도움말 URL 를 반환합니다
       getMacroURL() {
-        return this.current.url || 'http://cafe.naver.com/lvejs'
+        return this.selected.url || 'http://cafe.naver.com/lvejs'
+      },
+
+      isMacroReady() {
+        return this.current && this.selected
       }
 
     },
     methods: {
 
       onMacroSelected(e) {
-        this.current = this.map.get(e.currentTarget.value)
+        this.selected = this.map.get(e.currentTarget.value)
       },
 
       complete(e) {
@@ -132,6 +138,15 @@
       cancel(e) {
         electron.remote.getCurrentWindow().close()
       }
+
+    },
+    created() {
+
+      electron.ipcRenderer.send('macro-get')
+      electron.ipcRenderer.once('macro-get', (e, macro) => {
+        this.current = macro
+        console.log(this)
+      })
 
     }
   }

@@ -7,7 +7,7 @@
 	variables: {
 		'객체명': {
 			text: '이름창',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name',
 			skip: true
 		}

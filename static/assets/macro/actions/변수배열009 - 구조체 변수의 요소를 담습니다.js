@@ -25,12 +25,12 @@
 		},
 		'구조체변수명': {
 			text: '구조체',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'속성명': {
 			text: '속성명',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_object_key'
 		},
 		'스코프2': {
@@ -49,13 +49,13 @@
 		},
 		'변수명': {
 			text: '요소값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'대체값': {
 			text: 'undefined',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

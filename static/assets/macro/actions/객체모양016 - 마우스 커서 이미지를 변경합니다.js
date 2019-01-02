@@ -12,12 +12,12 @@
 		},
 		'x좌표': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'y좌표': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

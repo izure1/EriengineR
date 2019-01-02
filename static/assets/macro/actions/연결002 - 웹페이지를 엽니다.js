@@ -7,7 +7,7 @@
 	variables: {
 		'주소': {
 			text: 'https://google.com',
-			type: 'value',
+			type: 'text',
 			sample: 'request_url'
 		}
 	},

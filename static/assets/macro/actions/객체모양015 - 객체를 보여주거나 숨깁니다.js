@@ -7,12 +7,12 @@
 	variables: {
 		'객체명': {
 			text: '*',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'페이드시간': {
 			text: '0.5',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'작업': {

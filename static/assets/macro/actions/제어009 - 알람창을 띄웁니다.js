@@ -7,7 +7,7 @@
 	variables: {
 		'제목': {
 			text: '경고!',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'내용': {

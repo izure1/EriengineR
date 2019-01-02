@@ -7,7 +7,7 @@
 	variables: {
 		'대기시간': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

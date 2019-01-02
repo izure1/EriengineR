@@ -8,12 +8,12 @@
 	variables: {
 		'객체명': {
 			text: '나',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'카테고리명': {
 			text: '홍길동',
-			type: 'value',
+			type: 'text',
 			sample: 'class_name'
 		},
 		'방식': {

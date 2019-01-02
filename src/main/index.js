@@ -213,6 +213,7 @@ import ipc_disableMenu from './menu/disableMenu'
 
 import ipc_createMacro from './macro/createMacro'
 import ipc_clearMacro from './macro/clearMacro'
+import ipc_getMacro from './macro/getMacro'
 
 
 function runIPC() {
@@ -242,6 +243,7 @@ function runIPC() {
   // Script
   ipcMain.on('macro-create', ipc_createMacro.bind(mainWindow))
   ipcMain.on('macro-clear', ipc_clearMacro.bind(mainWindow))
+  ipcMain.on('macro-get', ipc_getMacro.bind(mainWindow))
 
 }
 

@@ -25,7 +25,7 @@
 		},
 		'배열변수명': {
 			text: '목록',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'삽입방향': {
@@ -44,7 +44,7 @@
 		},
 		'값': {
 			text: '값',
-			type: 'value'
+			type: 'text'
 		}
 	},
 	fn: function (next, stop, e) {

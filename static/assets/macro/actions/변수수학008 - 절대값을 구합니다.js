@@ -21,7 +21,7 @@ module.exports = {
 		},
 		'대상변수명': {
 			text: '결과값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'스코프2': {
@@ -40,7 +40,7 @@ module.exports = {
 		},
 		'변수명': {
 			text: '결과값',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		}

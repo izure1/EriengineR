@@ -10,9 +10,7 @@
     mounted() {
       let a = this
       this.$root.$emit('createWorkspaceTab', 'asdf', '테스트', 'SCRIPT-VIEWER')
-      this.$root.$emit('createWorkspaceTab', 'asdf1', '테스트1', 'SCRIPT-VIEWER')
       this.$root.$emit('setDataForWorkspaceTab', 'asdf', 'D:/')
-      this.$root.$emit('setDataForWorkspaceTab', 'asdf1', 'D:/test')
     }
   }
 </script>

@@ -12,7 +12,7 @@ export default function createMacro(e, column) {
 
   this.variables.macro = {
     lid,
-    variables,
+    variables: {},
     column
   }
 

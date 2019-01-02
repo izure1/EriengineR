@@ -7,7 +7,7 @@
 	variables: {
 		'객체명': {
 			text: '카메라',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'좌표': {
@@ -30,11 +30,11 @@
 		},
 		'값': {
 			text: '100',
-			type: 'value'
+			type: 'text'
 		},
 		'대상객체명': {
 			text: '주인공',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		}
 	},

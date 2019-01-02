@@ -7,18 +7,18 @@
 	variables: {
 		'장소명': {
 			text: '(플레이)',
-			type: 'value',
+			type: 'text',
 			sample: 'scene_name_play scene_name_system',
 			skip: true
 		},
 		'시간': {
 			text: '3',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'색상명': {
 			text: 'black',
-			type: 'value',
+			type: 'text',
 			skip: true,
 		},
 		'효과명': {

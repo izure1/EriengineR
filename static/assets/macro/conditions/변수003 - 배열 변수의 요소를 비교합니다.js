@@ -26,16 +26,16 @@
 		},
 		'변수명': {
 			text: '변수명',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'인덱스':{
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'변수값': {
 			text: 'undefined',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '일치',

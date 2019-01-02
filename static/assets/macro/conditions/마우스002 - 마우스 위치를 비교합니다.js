@@ -17,7 +17,7 @@
 		},
 		'좌표값': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '일치',

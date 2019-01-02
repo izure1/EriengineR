@@ -21,7 +21,7 @@
 		},
 		'변수명': {
 			text: '주인공이름',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		}
 	},

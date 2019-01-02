@@ -92,10 +92,7 @@
 
           browser.setMenu(null)
           browser.loadURL(childURI)
-
-          browser.on('closed', () => {
-            browser = null
-          })
+          browser.on('closed', () => browser = null)
 
         })
 

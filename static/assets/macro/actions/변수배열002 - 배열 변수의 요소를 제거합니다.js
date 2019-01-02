@@ -25,16 +25,16 @@
 		},
 		'변수명': {
 			text: '목록',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'오프셋': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'갯수': {
 			text: '1',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

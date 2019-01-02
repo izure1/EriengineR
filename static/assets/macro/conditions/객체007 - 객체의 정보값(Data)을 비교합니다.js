@@ -8,18 +8,18 @@
 	variables: {
 		'객체명': {
 			text: '나',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'정보명': {
 			text: '호감도',
-			type: 'value',
+			type: 'text',
 			sample: 'data_name',
 			skip: true
 		},
 		'정보값': {
 			text: 'undefined',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '일치',

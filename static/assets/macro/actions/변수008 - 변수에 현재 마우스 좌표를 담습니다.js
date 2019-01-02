@@ -21,7 +21,7 @@
 		},
 		'변수명': {
 			text: '마우스위치',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},

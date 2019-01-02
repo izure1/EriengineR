@@ -7,13 +7,13 @@
 	variables: {
 		'사운드타입': {
 			text: '효과음',
-			type: 'value',
+			type: 'text',
 			sample: 'sound_type',
 			skip: true
 		},
 		'사운드이름': {
 			text: '효과음',
-			type: 'value',
+			type: 'text',
 			sample: 'sound_name',
 			skip: true
 		},
@@ -24,7 +24,7 @@
 		},
 		'환경설정변수': {
 			text: '효과음크기비율',
-			type: 'value',
+			type: 'text',
 			sample: 'environment_variable_name'
 		},
 		'반복여부': {

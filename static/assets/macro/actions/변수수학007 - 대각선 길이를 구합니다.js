@@ -7,11 +7,11 @@ module.exports = {
 	variables: {
 		'x': {
 			text: '1',
-			type: 'value'
+			type: 'text'
 		},
 		'y': {
 			text: '1',
-			type: 'value'
+			type: 'text'
 		},
 		'스코프': {
 			text: '지역',
@@ -29,7 +29,7 @@ module.exports = {
 		},
 		'변수명': {
 			text: '루트',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		}

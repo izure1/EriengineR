@@ -7,12 +7,12 @@
 	variables: {
 		'객체명': {
 			text: '주체',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'대상객체명': {
 			text: '대상',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'작업': {

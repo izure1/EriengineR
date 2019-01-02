@@ -7,12 +7,12 @@
 	variables: {
 		'객체명': {
 			text: '나',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name'
 		},
 		'속성값': {
 			text: '안녕하세요',
-			type: 'value'
+			type: 'text'
 		},
 		'방식': {
 			text: '일치',

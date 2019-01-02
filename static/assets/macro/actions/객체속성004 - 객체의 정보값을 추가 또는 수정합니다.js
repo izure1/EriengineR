@@ -7,18 +7,18 @@
 	variables: {
 		'객체명': {
 			text: '*',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name',
 			skip: true
 		},
 		'정보명': {
 			text: '호감도',
-			type: 'value',
+			type: 'text',
 			sample: 'data_name'
 		},
 		'정보값': {
 			text: 'undefined',
-			type: 'value'
+			type: 'text'
 		}
 	},
 	fn: function (next, stop, e) {

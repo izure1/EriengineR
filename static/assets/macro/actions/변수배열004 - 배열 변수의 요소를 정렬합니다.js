@@ -25,7 +25,7 @@
 		},
 		'배열변수명': {
 			text: '배열',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'정렬방식': {

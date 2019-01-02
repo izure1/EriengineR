@@ -21,13 +21,13 @@
 		},
 		'변수명': {
 			text: '임의의 변수',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name',
 			skip: true
 		},
 		'변수값': {
 			text: 'undefined',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

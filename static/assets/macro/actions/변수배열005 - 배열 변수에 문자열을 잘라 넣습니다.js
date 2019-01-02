@@ -25,7 +25,7 @@
 		},
 		'배열변수명': {
 			text: '문자열_목록',
-			type: 'value',
+			type: 'text',
 			sample: 'variable_name'
 		},
 		'문자열': {
@@ -34,7 +34,7 @@
 		},
 		'값': {
 			text: '_',
-			type: 'value',
+			type: 'text',
 			skip: true
 		}
 	},

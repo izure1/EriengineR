@@ -8,7 +8,7 @@
 	variables: {
 		'신호명': {
 			text: '프롤로그 종료',
-			type: 'value',
+			type: 'text',
 			sample: 'cue_name'
 		},
 		'방식': {

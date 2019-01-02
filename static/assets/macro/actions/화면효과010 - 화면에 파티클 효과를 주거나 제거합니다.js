@@ -7,7 +7,7 @@
 	variables: {
 		'장소명': {
 			text: '(플레이)::집',
-			type: 'value',
+			type: 'text',
 			sample: 'scene_name_play'
 		},
 		'파티클효과명': {

@@ -7,18 +7,18 @@
 	variables: {
 		'사운드이름': {
 			text: '배경음',
-			type: 'value',
+			type: 'text',
 			sample: 'sound_name',
 			skip: true
 		},
 		'볼륨': {
 			text: 100,
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'변경기간': {
 			text: 3,
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'유지여부': {

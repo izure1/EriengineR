@@ -7,7 +7,7 @@
 	variables: {
 		'객체명': {
 			text: '*',
-			type: 'value',
+			type: 'text',
 			sample: 'character_name',
 			skip: true
 		},
@@ -32,12 +32,12 @@
 		},
 		'시간': {
 			text: '0',
-			type: 'value',
+			type: 'text',
 			skip: true
 		},
 		'좌표값': {
 			text: '0',
-			type: 'value'
+			type: 'text'
 		},
 		'편의성': {
 			text: '점점 매우 느리게',
