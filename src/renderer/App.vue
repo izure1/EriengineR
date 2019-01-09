@@ -8,9 +8,6 @@
   export default {
     name: 'eriengine',
     mounted() {
-      let a = this
-      this.$root.$emit('createWorkspaceTab', 'asdf', '테스트', 'SCRIPT-VIEWER')
-      this.$root.$emit('setDataForWorkspaceTab', 'asdf', 'D:/')
     }
   }
 </script>

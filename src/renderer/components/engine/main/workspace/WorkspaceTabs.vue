@@ -141,7 +141,7 @@
 </script>
 
 <style lang="scss" scoped>
-  $barBackgroundColor: #e3e3e3;
+  $barBackgroundColor: #ddd;
   $tabBackgroundColor: #eee;
 
   ul,

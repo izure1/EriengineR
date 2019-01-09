@@ -9,7 +9,8 @@
       </div>
       <div v-if="contextmenu_info.open" class="template-treeview-contextmenu" :style="{left: `${contextmenu_info.x}px`, top: `${contextmenu_info.y}px`}">
         <ul>
-          <li v-for="item in contextmenu" :key="item.text" @click="callContextmenuItem($event, item.click, model.path)">
+          <li v-for="item in contextmenu" :key="item.text" @click="callContextmenuItem($event, item.click, model.path, item.disabledOnTop)"
+            :class="{disabled: isDisabledItem(item.disabledOnTop)}">
             <hr v-if="item.separator">
             <span v-else>{{ item.text }}</span>
           </li>
@@ -32,6 +33,9 @@
   } from 'electron'
   import dirTree from 'directory-tree'
 
+  import CONTEXTMENU from './vars/CONTEXTMENU'
+
+
   export default {
     name: 'treeview',
     props: {
@@ -43,12 +47,15 @@
       model: {
         type: Object,
         default () {
+
           fs.watch(this.path, {
             recursive: true
           }, () => {
             this.model = dirTree(this.path, this.filter)
           })
+
           return dirTree(this.path, this.filter)
+
         }
       },
       configurable: {
@@ -58,38 +65,7 @@
       contextmenu: {
         type: Array,
         default () {
-          return [{
-              text: '이름 바꾸기',
-              click(e, before) {
-                let t
-                this.modifyMode = true
-                this.$nextTick(() => {
-                  t = this.$el.querySelector('input')
-                  t.value = this.model.name
-                  t.focus()
-                  t.setSelectionRange(0, t.value.lastIndexOf('.'))
-                })
-              }
-            },
-            {
-              text: '삭제',
-              click(e, itempath) {
-                electron.ipcRenderer.send('modal-delete-trash', {
-                  name: path.basename(itempath),
-                  path: itempath
-                })
-              }
-            },
-            {
-              separator: true
-            },
-            {
-              text: '탐색기에서 열기',
-              click(e, itempath) {
-                electron.shell.showItemInFolder(itempath)
-              }
-            }
-          ]
+          return []
         }
       },
       depth: {
@@ -124,6 +100,9 @@
       isFolder() {
         return this.model.children
       },
+      isTop() {
+        return this.top === this
+      },
       nextDepth() {
         return this.depth + 1
       }
@@ -140,9 +119,6 @@
         }
       },
       openContextmenu(e) {
-        if (this.top === this) {
-          return
-        }
         if (this.configurable) {
           this.contextmenu_info.open = true
           this.contextmenu_info.x = e.clientX
@@ -150,8 +126,19 @@
           e.currentTarget.focus()
         }
       },
-      callContextmenuItem(e, fn, itempath) {
+      callContextmenuItem(e, fn, itempath, disabled = false) {
+
+        if (disabled && this.isTop) {
+          return
+        }
+
         fn.call(this, e, itempath)
+
+        this.contextmenu_info.open = false
+        
+        e.preventDefault()
+        e.stopPropagation()
+        
       },
       modifyName(e, before) {
 
@@ -214,7 +201,28 @@
           }
         })
 
+      },
+      isDisabledItem(disabled = false) {
+
+        if (this.isTop) {
+          if (disabled) return true
+          else return false
+        }
+
+        return false
+
       }
+    },
+    created() {
+
+      if (!this.contextmenu.length) {
+        this.contextmenu = CONTEXTMENU
+      } else {
+        this.contextmenu = [...this.contextmenu, {
+          separator: true
+        }, ...CONTEXTMENU]
+      }
+
     },
     mounted() {
       this.$el.querySelectorAll('div.template-treeview-indent').forEach(t => {
@@ -260,16 +268,20 @@
       padding: 5px 0;
 
       >li {
+        &.disabled {
+          color: lightgray;
+        }
+
+        &:not(.disabled):hover {
+          background-color: lightgray;
+        }
+
         >span {
           height: 25px;
           font-size: smaller;
           line-height: 25px;
           padding: 0 25px;
           display: block;
-
-          &:hover {
-            background-color: lightgray;
-          }
         }
 
         >hr {

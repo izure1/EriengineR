@@ -21,12 +21,16 @@ class ScriptContext {
 
 class Script {
 
-  constructor() {
+  constructor(x = 200, y = 200) {
     this.id = createUUID()
     this.events = []
     this.conditions = []
     this.actions = []
     this.nexts = []
+    this.position = {
+      x,
+      y
+    }
     this.comment = ''
   }
 
