@@ -7,21 +7,24 @@
           <template-canvas v-else-if="item.template === 'CANVAS'" :data="item.data"></template-canvas>
           <template-script-viewer v-else-if="item.template === 'SCRIPT-VIEWER'" :data="item.data"></template-script-viewer>
           <template-script-editor v-else-if="item.template === 'SCRIPT-EDITOR'" :data="item.data"></template-script-editor>
+          <template-interface-viewer v-else-if="item.template === 'INTERFACE-VIEWER'" :data="item.data"></template-interface-viewer>
         </section>
       </li>
     </ul>
     <div v-if="isEmpty" class="workspace-contents-empty">
-      <div class="workspace-contents-emptylogo">
-        <img src="~@/assets/img/logo_eri_notab.png">
+      <div>
+        <div class="workspace-contents-emptylogo">
+          <img src="~@/assets/img/logo_eri_notab.png">
+        </div>
+        <dl>
+          <dt>새로운 프로젝트</dt>
+          <dd>Ctrl + N</dd>
+          <dt>프로젝트 불러오기</dt>
+          <dd>Ctrl + O</dd>
+          <dt>엔진 정보</dt>
+          <dd>Ctrl + I</dd>
+        </dl>
       </div>
-      <dl>
-        <dt>새로운 프로젝트</dt>
-        <dd>Ctrl + N</dd>
-        <dt>프로젝트 불러오기</dt>
-        <dd>Ctrl + O</dd>
-        <dt>엔진 정보</dt>
-        <dd>Ctrl + I</dd>
-      </dl>
     </div>
   </section>
 </template>
@@ -34,13 +37,15 @@
   import TemplateCanvas from './Templates/Canvas'
   import TemplateScriptViewer from './Templates/ScriptViewer'
   import TemplateScriptEditor from './Templates/ScriptEditor'
+  import TemplateInterfaceViewer from './Templates/InterfaceViewer'
 
   export default {
     components: {
       TemplateDefault,
       TemplateCanvas,
       TemplateScriptViewer,
-      TemplateScriptEditor
+      TemplateScriptEditor,
+      TemplateInterfaceViewer
     },
     data() {
       return {
@@ -143,7 +148,6 @@
   .workspace-contents {
     width: 100%;
     height: calc(100% - 33px);
-    display: table;
 
     >ul {
       width: 100%;
@@ -162,42 +166,47 @@
   }
 
   .workspace-contents-empty {
-    height: calc(100% - 33px);
-    display: table-cell;
-    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    display: table;
 
-    >dl {
-      $marginBetween: 10px 0 0;
+    >div {
+      display: table-cell;
+      vertical-align: middle;
 
-      text-shadow: 0 0 1px white;
-      color: gray;
-      top: 50%;
+      >dl {
+        $marginBetween: 10px 0 0;
 
-      >dt,
-      >dd {
-        width: 50%;
-        float: left;
-        margin: 0;
-      }
+        text-shadow: 0 0 1px white;
+        color: gray;
+        top: 50%;
 
-      >dt {
-        text-align: right;
-        padding-right: 10px;
-        box-sizing: border-box;
-      }
+        >dt,
+        >dd {
+          width: 50%;
+          float: left;
+          margin: 0;
+        }
 
-      >dd {
-        padding-left: 10px;
-        box-sizing: border-box;
-      }
+        >dt {
+          text-align: right;
+          padding-right: 10px;
+          box-sizing: border-box;
+        }
 
-      >dt:not(:nth-of-type(1)) {
-        margin: $marginBetween;
-        clear: both;
-      }
+        >dd {
+          padding-left: 10px;
+          box-sizing: border-box;
+        }
 
-      >dd:not(:nth-of-type(1)) {
-        margin: $marginBetween;
+        >dt:not(:nth-of-type(1)) {
+          margin: $marginBetween;
+          clear: both;
+        }
+
+        >dd:not(:nth-of-type(1)) {
+          margin: $marginBetween;
+        }
       }
     }
   }

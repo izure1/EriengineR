@@ -1,6 +1,6 @@
 <template>
   <div class="aside-section-tab">
-    <treeview :path="path" :filter="filter" :openItem="openItem" :contextmenu="contextmenu" :configurable="true"></treeview>
+    <treeview :path="path" :filter="filter" :openItem="openItem" :addContextmenu="contextmenu" :configurable="true"></treeview>
   </div>
 </template>
 
@@ -19,16 +19,6 @@
     components: {
       Treeview
     },
-    computed: {
-      contextmenu() {
-        return [{
-          text: '스크립트 뷰어에서 열기',
-          click(e, itempath) {
-            this.openItem(itempath)
-          }
-        }]
-      }
-    },
     data() {
       return {
         path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Scripts'),
@@ -36,6 +26,18 @@
           extensions: /\.esscript/
         }
       }
+    },
+    computed: {
+
+      contextmenu() {
+        return [{
+          text: '스크립트 편집',
+          click(e, itempath) {
+            this.openItem(itempath)
+          }
+        }]
+      }
+
     },
     methods: {
 

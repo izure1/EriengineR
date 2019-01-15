@@ -2,21 +2,16 @@
   <section>
     <header>
       <div>
-        <select @change="onMacroSelected">
-          <option disabled selected>사용할 매크로를 선택하세요</option>
-          <optgroup v-for="(macros, key) in getSortedMacroGroup" :key="key" :label="key">
-            <option v-for="macro in macros" :key="macro.cid" :value="macro.cid">{{ macro.title }}</option>
-          </optgroup>
-        </select>
+        <sui-dropdown placeholder="매크로를 검색하세요" search selection icon="search" v-model="selected" :options="getMacroList" style="width:100%"></sui-dropdown>
       </div>
     </header>
     <main>
       <div class="macro-description-wrap">
         <macro-description v-if="isMacroReady" :selected="selected" :current="current" :macros="getSelectedMacroGroup"></macro-description>
       </div>
-      <div class="macro-description-done">
-        <button @click="complete" :disabled="!selected">완료</button>
-        <button @click="cancel">취소</button>
+      <div class="macro-description-action">
+        <sui-button @click="complete" :disabled="!selected" size="big" icon="save">완료</sui-button>
+        <sui-button @click="cancel" size="big" icon="delete">취소</sui-button>
       </div>
     </main>
     <footer>
@@ -42,7 +37,7 @@
 
   import MacroDescription from './MacroDescription'
 
-  import getSortedMacroGroup from './js/getSortedMacroGroup'
+  import getMacroList from './js/getMacroList'
 
   let require
 
@@ -105,9 +100,8 @@
 
       },
 
-      // 매크로내의 class 에 따라 그룹화하여 Object 형태로 반환합니다
-      getSortedMacroGroup() {
-        return getSortedMacroGroup(this.getSelectedMacroGroup)
+      getMacroList() {
+        return getMacroList(this.getSelectedMacroGroup)
       },
 
       // 매크로 작성자를 반환합니다
@@ -126,10 +120,6 @@
 
     },
     methods: {
-
-      onMacroSelected(e) {
-        this.selected = this.map.get(e.currentTarget.value)
-      },
 
       complete(e) {
 
@@ -168,26 +158,6 @@
       height: 100%;
       padding: 10px;
       box-sizing: border-box;
-
-      >select {
-        width: 100%;
-        height: 100%;
-        font-size: medium;
-        padding: 0 10px;
-        box-sizing: border-box;
-        border: 0;
-        border-radius: 5px;
-        background-color: #efefef;
-
-        >optgroup {
-          font-size: medium;
-          color: #0075c8;
-        }
-
-        option {
-          font-size: medium;
-        }
-      }
     }
   }
 
@@ -204,22 +174,9 @@
       flex: 1 1;
     }
 
-    >.macro-description-done {
+    >.macro-description-action {
       flex: 0 0;
       text-align: right;
-
-      >button {
-        width: 120px;
-        height: 40px;
-        border: 0;
-        background-color: #efefef;
-        padding: 0;
-        cursor: pointer;
-
-        &:not([disabled]):hover {
-          background-color: white;
-        }
-      }
     }
   }
 

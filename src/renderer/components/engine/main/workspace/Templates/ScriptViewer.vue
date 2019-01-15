@@ -15,8 +15,12 @@
       @mouseleave="connection.target = null" :style="{left: `${script.position.x}px`, top: `${script.position.y}px`}">
       <div class="script-box-header">
         <span>{{ getScriptTitle(script.path) }}</span>
-        <a href="#" title="스크립트 삭제" @click="dropScript(script)" v-if="!connection.source">⨉</a>
-        <a href="#" title="스크립트 연결" @click="createConnection(script)" v-if="!connection.source">⇢</a>
+        <a href="#" title="스크립트 삭제" @click="dropScript(script)" v-if="!connection.source">
+          <sui-icon name="window close" size="small"></sui-icon>
+        </a>
+        <a href="#" title="스크립트 연결" @click="createConnection(script)" v-if="!connection.source">
+          <sui-icon name="linkify" size="small"></sui-icon>
+        </a>
       </div>
       <div class="script-box-container" @dblclick="modifyScript(script)" @click="createConnectionDone(script)">
         <div>
@@ -52,7 +56,6 @@
     dragscroll
   } from 'vue-dragscroll'
 
-  import $ from 'jQuery'
   import {
     jsPlumb
   } from 'jsplumb'
@@ -61,26 +64,26 @@
 
 
   // Methods
-  import cancelConnecting from './js/methods/ScriptViewer/cancelConnecting'
-  import createConnection from './js/methods/ScriptViewer/createConnection'
-  import deleteConnection from './js/methods/ScriptViewer/deleteConnection'
-  import createConnectionDone from './js/methods/ScriptViewer/createConnectionDone'
-  import createScript from './js/methods/ScriptViewer/createScript'
-  import dropScript from './js/methods/ScriptViewer/dropScript'
-  import focusScript from './js/methods/ScriptViewer/focusScript'
-  import getScriptId from './js/methods/ScriptViewer/getScriptId'
-  import getScriptData from './js/methods/ScriptViewer/getScriptData'
-  import getOriginScript from './js/methods/ScriptViewer/getOriginScript'
-  import getScriptTitle from './js/methods/ScriptViewer/getScriptTitle'
-  import modifyScript from './js/methods/ScriptViewer/modifyScript'
-  import saveScript from './js/methods/ScriptViewer/saveScript'
-  import setAxisAlertor from './js/methods/ScriptViewer/setAxisAlertor'
-  import setConnectBox from './js/methods/ScriptViewer/setConnectBox'
-  import setCursorInformation from './js/methods/ScriptViewer/setCursorInformation'
-  import setDraggableBox from './js/methods/ScriptViewer/setDraggableBox'
-  import setJsPlumbBox from './js/methods/ScriptViewer/setJsPlumbBox'
-  import setZAxis from './js/methods/ScriptViewer/setZAxis'
-  import watchDirectory from './js/methods/ScriptViewer/watchDirectory'
+  import cancelConnecting from './methods/ScriptViewer/cancelConnecting'
+  import createConnection from './methods/ScriptViewer/createConnection'
+  import deleteConnection from './methods/ScriptViewer/deleteConnection'
+  import createConnectionDone from './methods/ScriptViewer/createConnectionDone'
+  import createScript from './methods/ScriptViewer/createScript'
+  import dropScript from './methods/ScriptViewer/dropScript'
+  import focusScript from './methods/ScriptViewer/focusScript'
+  import getScriptId from './methods/ScriptViewer/getScriptId'
+  import getScriptData from './methods/ScriptViewer/getScriptData'
+  import getOriginScript from './methods/ScriptViewer/getOriginScript'
+  import getScriptTitle from './methods/ScriptViewer/getScriptTitle'
+  import modifyScript from './methods/ScriptViewer/modifyScript'
+  import saveScript from './methods/ScriptViewer/saveScript'
+  import setAxisAlertor from './methods/ScriptViewer/setAxisAlertor'
+  import setConnectBox from './methods/ScriptViewer/setConnectBox'
+  import setCursorInformation from './methods/ScriptViewer/setCursorInformation'
+  import setDraggableBox from './methods/ScriptViewer/setDraggableBox'
+  import setJsPlumbBox from './methods/ScriptViewer/setJsPlumbBox'
+  import setZAxis from './methods/ScriptViewer/setZAxis'
+  import watchDirectory from './methods/ScriptViewer/watchDirectory'
 
 
   export default {

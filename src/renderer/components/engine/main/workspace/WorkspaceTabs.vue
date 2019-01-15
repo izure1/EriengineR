@@ -231,6 +231,7 @@
         >p {
           font-size: 9pt;
           font-family: 'NanumGothic';
+          line-height: 33px;
           flex: 1 1 auto;
           white-space: nowrap;
           overflow: hidden;

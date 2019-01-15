@@ -1,7 +1,10 @@
 <template>
-  <div class="macro-description">
-    <macro-description-context v-for="macro in macros" :key="macro.cid" v-if="selected === macro" :macro="macro" :current="current"></macro-description-context>
-  </div>
+  <sui-segment class="macro-description">
+    <macro-description-context v-for="macro in macros" :key="macro.cid" v-if="selected.cid === macro.cid" :macro="macro" :current="current"></macro-description-context>
+  </sui-segment>
+  <!-- <div class="macro-description">
+    
+  </div> -->
 </template>
 
 <script>
@@ -19,15 +22,6 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .macro-description {
-    padding: 10px 20px;
-    background-color: #efefef;
-    box-sizing: border-box;
-    border-radius: 5px;
-  }
-</style>
 
 <style lang="scss">
   .macro-description a {

@@ -7,14 +7,14 @@
 <script>
   export default {
     name: 'eriengine',
-    mounted() {
-    }
+    mounted() {}
   }
 </script>
 
 <style lang="scss">
-  /* CSS */
+  @import '~semantic-ui-css/semantic.min.css';
 
+  /* COMMON CSS */
   @font-face {
     font-family: 'NanumBarunGothicUltraLight';
     src: url('~@/assets/fonts/NanumBarunGothicUltraLight.woff');

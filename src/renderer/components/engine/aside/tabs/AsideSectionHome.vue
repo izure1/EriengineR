@@ -34,6 +34,10 @@
   .aside-section-tab>div {
     min-width: 240px;
     padding: 20px;
+
+    >article:not(:nth-of-type(1)) {
+      margin-top: 20px;
+    }
   }
 
   p {

@@ -1,5 +1,8 @@
 import electron from 'electron'
 import path from 'path'
+import fs from 'fs-extra'
+
+import createDirectory from '@static/js/createDirectory'
 
 
 export default [{
@@ -25,6 +28,29 @@ export default [{
       })
     },
     disabledOnTop: true
+  },
+  {
+    separator: true
+  },
+  {
+    text: '새 폴더 만들기',
+    click(e, directory) {
+
+      let stat
+      let name
+
+      stat = fs.lstatSync(directory)
+
+      if (!stat.isDirectory()) {
+        directory = path.dirname(directory)
+      }
+
+      name = '새 폴더'
+      directory = path.join(directory, name)
+
+      createDirectory(directory)
+
+    }
   },
   {
     separator: true

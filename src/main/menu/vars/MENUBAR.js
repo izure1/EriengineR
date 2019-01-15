@@ -55,27 +55,6 @@ export default function () {
       ]
     },
     {
-      label: '화면',
-      submenu: [{
-          label: '플레이 화면',
-          submenu: [],
-          aftered: true
-        },
-        {
-          label: '시스템 화면',
-          submenu: [],
-          aftered: true
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: '새로운 화면 추가',
-          aftered: true
-        }
-      ]
-    },
-    {
       label: '관리',
       submenu: [{
           label: '키워드 관리',

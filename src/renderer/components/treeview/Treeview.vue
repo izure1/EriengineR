@@ -3,13 +3,14 @@
     <div :title="model.path" @click="toggle" @dblclick="openThis(model.path)" tabindex="-1" @contextmenu="openContextmenu"
       @blur="contextmenu_info.open = false" draggable="true" @dragstart="setDragItem" @dragover="allowDrop" @drop="dropItem">
       <div class="template-treeview-indent" :data-depth="depth">
-        <img src="~@/assets/img/ico_arrow_right.svg" v-if="isFolder" :class="{'template-treeview-open': open}">
+        <sui-icon :name="open ? 'folder outline open' : 'folder outline'" v-if="isFolder"></sui-icon>
+        <sui-icon name="chevron right" v-else></sui-icon>
         <p v-if="!modifyMode">{{ model.name }}</p>
         <input type="text" v-else @keydown.esc="modifyNameCancel" @keydown.enter="modifyName($event, model.path)" @blur="modifyName($event, model.path)">
       </div>
       <div v-if="contextmenu_info.open" class="template-treeview-contextmenu" :style="{left: `${contextmenu_info.x}px`, top: `${contextmenu_info.y}px`}">
         <ul>
-          <li v-for="item in contextmenu" :key="item.text" @click="callContextmenuItem($event, item.click, model.path, item.disabledOnTop)"
+          <li v-for="(item, index) in contextmenu" :key="index" @click="callContextmenuItem($event, item.click, model.path, item.disabledOnTop)"
             :class="{disabled: isDisabledItem(item.disabledOnTop)}">
             <hr v-if="item.separator">
             <span v-else>{{ item.text }}</span>
@@ -19,7 +20,7 @@
     </div>
     <ul v-show="open" v-if="isFolder">
       <treeview class="item" v-for="model in model.children" :path="path" :filter="filter" :model="model" :key="model.path"
-        :openItem="openItem" :configurable="configurable" :contextmenu="contextmenu" :top="top" :depth="nextDepth"></treeview>
+        :openItem="openItem" :configurable="configurable" :addContextmenu="addContextmenu" :top="top" :depth="nextDepth"></treeview>
     </ul>
   </li>
 </template>
@@ -62,7 +63,7 @@
         type: Boolean,
         default: false
       },
-      contextmenu: {
+      addContextmenu: {
         type: Array,
         default () {
           return []
@@ -89,6 +90,7 @@
       return {
         open: false,
         modifyMode: false,
+        contextmenu: CONTEXTMENU,
         contextmenu_info: {
           x: 0,
           y: 0,
@@ -135,10 +137,10 @@
         fn.call(this, e, itempath)
 
         this.contextmenu_info.open = false
-        
+
         e.preventDefault()
         e.stopPropagation()
-        
+
       },
       modifyName(e, before) {
 
@@ -215,18 +217,18 @@
     },
     created() {
 
-      if (!this.contextmenu.length) {
-        this.contextmenu = CONTEXTMENU
-      } else {
-        this.contextmenu = [...this.contextmenu, {
+      if (this.addContextmenu.length) {
+
+        this.contextmenu = [...this.addContextmenu, {
           separator: true
-        }, ...CONTEXTMENU]
+        }, ...this.contextmenu]
+
       }
 
     },
     mounted() {
       this.$el.querySelectorAll('div.template-treeview-indent').forEach(t => {
-        t.style.marginLeft = `${t.dataset.depth * 10 + 25}px`
+        t.style.marginLeft = `${t.dataset.depth * 10 + 15}px`
       })
     }
   }
@@ -300,37 +302,23 @@
 
     >p,
     >input {
-      width: 100%;
+      width: calc(100% - 40px);
       height: 18px;
       font-size: small;
       line-height: 20px;
       margin: 0;
+      display: inline-block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      vertical-align: middle;
     }
 
     >input {
-      width: calc(100% - 10px);
       padding: 0;
       border: 0;
       border-bottom: 1px solid #0075c8;
       outline: none;
-    }
-
-    >img {
-      width: 10px;
-      height: 10px;
-      position: absolute;
-      left: -18px;
-      bottom: 7px;
-      opacity: 0.3;
-      transition: transform 0.1s linear, opacity 0.1s linear;
-
-      &.template-treeview-open {
-        opacity: 1;
-        transform: rotate(45deg);
-      }
     }
   }
 </style>

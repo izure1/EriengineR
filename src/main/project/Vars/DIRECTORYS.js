@@ -1,6 +1,8 @@
 export default [
   'Assets',
   'Designs',
-  'Interfaces',
+  'Scenes',
+  'Scenes/플레이',
+  'Scenes/시스템',
   'Scripts'
 ]
