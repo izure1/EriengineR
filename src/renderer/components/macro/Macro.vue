@@ -2,7 +2,8 @@
   <section>
     <header>
       <div>
-        <sui-dropdown placeholder="매크로를 검색하세요" search selection icon="search" v-model="selected" :options="getMacroList" style="width:100%"></sui-dropdown>
+        <sui-dropdown placeholder="매크로를 검색하세요" search selection icon="search" v-model="selected" :options="getMacroList"
+          style="width:100%"></sui-dropdown>
       </div>
     </header>
     <main>
@@ -39,49 +40,14 @@
 
   import getMacroList from './js/getMacroList'
 
-  let require
-
-  let macroDirectory
-  let macro
-  let map
-
-
-  require = global.require
-
-  macroDirectory = path.join(__static, 'assets', 'macro')
-  map = new Map
-  macro = {}
-
-
-  // macro 폴더 내에 있는 모든 매크로를 불러옵니다
-  for (let dirname of fs.readdirSync(macroDirectory)) {
-
-    let dir
-
-    dir = path.join(macroDirectory, dirname, '**/*.js')
-    dir = glob.sync(dir)
-    dir = dir.map(f => {
-
-      f = require(f)
-      map.set(f.cid, f)
-
-      return f
-
-    })
-
-    macro[dirname] = dir
-
-  }
-
-
   export default {
     components: {
       MacroDescription
     },
     data() {
       return {
-        macro,
-        map,
+        macro: null,
+        map: null,
         selected: null,
         current: null
       }
@@ -121,6 +87,46 @@
     },
     methods: {
 
+      requireMacro() {
+
+        let require
+
+        let macroDirectory
+        let macro
+        let map
+
+        require = global.require
+
+        macroDirectory = path.join(__static, 'assets', 'macro')
+        map = new Map
+        macro = {}
+
+
+        // macro 폴더 내에 있는 모든 매크로를 불러옵니다
+        for (let dirname of fs.readdirSync(macroDirectory)) {
+
+          let dir
+
+          dir = path.join(macroDirectory, dirname, '**/*.js')
+          dir = glob.sync(dir)
+          dir = dir.map(f => {
+
+            f = require(f)
+            map.set(f.cid, f)
+
+            return f
+
+          })
+
+          macro[dirname] = dir
+
+        }
+
+        this.macro = macro
+        this.map = map
+
+      },
+
       complete(e) {
 
       },
@@ -131,6 +137,8 @@
 
     },
     created() {
+
+      this.requireMacro()
 
       electron.ipcRenderer.send('macro-get')
       electron.ipcRenderer.once('macro-get', (e, macro) => {

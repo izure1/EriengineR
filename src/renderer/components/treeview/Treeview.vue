@@ -4,7 +4,7 @@
       @blur="contextmenu_info.open = false" draggable="true" @dragstart="setDragItem" @dragover="allowDrop" @drop="dropItem">
       <div class="template-treeview-indent" :data-depth="depth">
         <sui-icon :name="open ? 'folder outline open' : 'folder outline'" v-if="isFolder"></sui-icon>
-        <sui-icon name="chevron right" v-else></sui-icon>
+        <sui-icon :name="getFileIcon(model.path)" v-else></sui-icon>
         <p v-if="!modifyMode">{{ model.name }}</p>
         <input type="text" v-else @keydown.esc="modifyNameCancel" @keydown.enter="modifyName($event, model.path)" @blur="modifyName($event, model.path)">
       </div>
@@ -20,7 +20,7 @@
     </div>
     <ul v-show="open" v-if="isFolder">
       <treeview class="item" v-for="model in model.children" :path="path" :filter="filter" :model="model" :key="model.path"
-        :openItem="openItem" :configurable="configurable" :addContextmenu="addContextmenu" :top="top" :depth="nextDepth"></treeview>
+        :openItem="openItem" :configurable="configurable" :contextmenu="contextmenu" :top="top" :depth="nextDepth"></treeview>
     </ul>
   </li>
 </template>
@@ -33,8 +33,6 @@
     ipcRenderer
   } from 'electron'
   import dirTree from 'directory-tree'
-
-  import CONTEXTMENU from './vars/CONTEXTMENU'
 
 
   export default {
@@ -63,7 +61,7 @@
         type: Boolean,
         default: false
       },
-      addContextmenu: {
+      contextmenu: {
         type: Array,
         default () {
           return []
@@ -90,7 +88,6 @@
       return {
         open: false,
         modifyMode: false,
-        contextmenu: CONTEXTMENU,
         contextmenu_info: {
           x: 0,
           y: 0,
@@ -130,16 +127,16 @@
       },
       callContextmenuItem(e, fn, itempath, disabled = false) {
 
+        e.preventDefault()
+        e.stopPropagation()
+
         if (disabled && this.isTop) {
           return
         }
 
-        fn.call(this, e, itempath)
+        fn.call(this.top.$parent, e, itempath, this)
 
         this.contextmenu_info.open = false
-
-        e.preventDefault()
-        e.stopPropagation()
 
       },
       modifyName(e, before) {
@@ -213,18 +210,38 @@
 
         return false
 
+      },
+      getFileIcon(itempath) {
+
+        let ext
+
+        ext = path.extname(itempath)
+        ext = ext.toLowerCase()
+
+        switch (ext) {
+
+          case '.woff':
+          case '.woff2':
+            return 'fonticons';
+
+          case '.png':
+          case '.jpg':
+          case '.jpeg':
+          case '.gif':
+            return 'file image';
+
+          case '.mp3':
+            return 'file audio';
+
+          case '.mp4':
+            return 'file video';
+
+          default:
+            return 'file';
+
+        }
+
       }
-    },
-    created() {
-
-      if (this.addContextmenu.length) {
-
-        this.contextmenu = [...this.addContextmenu, {
-          separator: true
-        }, ...this.contextmenu]
-
-      }
-
     },
     mounted() {
       this.$el.querySelectorAll('div.template-treeview-indent').forEach(t => {

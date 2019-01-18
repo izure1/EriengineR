@@ -38,7 +38,7 @@ switch (process.env.NODE_ENV) {
      */
   default:
     global.__devmode = false
-    global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+    global.__static = path.join(__dirname, 'static').replace(/\\/g, '\\\\')
     break;
 
 }
@@ -118,10 +118,6 @@ async function start() {
 
 async function runEngine() {
 
-  // Electron 에서 사용자의 Gesture를 입력받기전에 Audio가 재생되지 않는 WebPolicy 문제점을 해결하기 위한 임시방편
-  // Electron 에서 추후 이 기능을 지원한다면 아래 커맨드 라인은 삭제되어야 합니다
-  app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
-
   // 앱 실행
   createWindow()
 
@@ -178,6 +174,14 @@ async function createWindow() {
 
 }
 
+
+
+
+// Electron 에서 사용자의 Gesture를 입력받기전에 Audio가 재생되지 않는 WebPolicy 문제점을 해결하기 위한 임시방편
+// Electron 에서 추후 이 기능을 지원한다면 아래 커맨드 라인은 삭제되어야 합니다
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+// 앱을 크롬 inspect 와 연결하여 디버깅합니다
+app.commandLine.appendSwitch('inspect', '5858')
 
 // 앱이 준비되면 실행합니다
 app.on('ready', start)

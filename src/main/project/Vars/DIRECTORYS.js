@@ -1,5 +1,6 @@
 export default [
   'Assets',
+  'AssetSources',
   'Designs',
   'Scenes',
   'Scenes/플레이',

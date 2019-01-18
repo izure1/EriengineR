@@ -5,10 +5,6 @@ import {
   dialog
 } from 'electron'
 
-
-// PROJECT DIRECTORY\static\assets\default-workspace
-const DEFAULT_WORKSPACE = `${__static}/assets/default-workspace`
-
 export default {
 
   /**
@@ -19,6 +15,9 @@ export default {
    * 에리엔진의 기본 디렉토리를 초기화합니다. 이미 생성되었다면 무시합니다.
    */
   async init(directoryPath) {
+
+    // PROJECT DIRECTORY\static\assets\default-workspace
+    const DEFAULT_WORKSPACE = `${__static}/assets/default-workspace`
 
     let src
     let dist

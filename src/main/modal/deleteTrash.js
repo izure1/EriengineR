@@ -18,8 +18,13 @@ export default async function deleteTrash(e, msg) {
 
   })
 
+  let deleted = false
+
   if (btnIndex === 0) {
     await trash(msg.path)
+    deleted = true
   }
+
+  e.returnValue = deleted
 
 }

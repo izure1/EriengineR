@@ -54,7 +54,7 @@
   #app {
     width: 100%;
     height: 100%;
-    font-family: 'NanumBarunGothicUltraLight', 돋움, 굴림;
+    font-family: 'NanumBarunGothicUltraLight', 돋움, 굴림 !important;
     padding: 0;
     margin: 0;
   }

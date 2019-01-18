@@ -7,12 +7,12 @@ import createDirectory from '@static/js/createDirectory'
 
 export default [{
     text: '이름 바꾸기',
-    click(e, before) {
+    click(e, before, tree) {
       let t
-      this.modifyMode = true
-      this.$nextTick(() => {
-        t = this.$el.querySelector('input')
-        t.value = this.model.name
+      tree.modifyMode = true
+      tree.$nextTick(() => {
+        t = tree.$el.querySelector('input')
+        t.value = tree.model.name
         t.focus()
         t.setSelectionRange(0, t.value.lastIndexOf('.'))
       })

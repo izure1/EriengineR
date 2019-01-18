@@ -26,7 +26,7 @@ export default async function (e, options) {
   // 프로젝트 디렉토리를 생성합니다
   try {
 
-    // static/assets/project-template 디렉토리에 있는 샘플 디렉토리를 복사하고
+    // static/assets/projecTemplate 디렉토리에 있는 샘플 디렉토리를 복사하고
     // 프로젝트 정보를 담은 project.esproject 파일을 생성합니다
     await fs.copy(src, dist)
     await fs.writeJSON(esproject, options, {
@@ -38,6 +38,7 @@ export default async function (e, options) {
     // 서브 디렉토리 목록은 ./Vars/DIRECTORYS.js 에서 관리할 수 있습니다
 
     let directory
+    let ret
 
     for (let dirname of DIRECTORYS) {
 
@@ -58,9 +59,13 @@ export default async function (e, options) {
 
   }
 
-  e.sender.send('project-create', {
+
+  ret = {
     success,
     esproject
-  })
+  }
+
+  e.sender.send('project-create', ret)
+  e.returnValue = ret
 
 }

@@ -17,5 +17,6 @@ export default function createMacro(e, column) {
   }
 
   e.sender.send('macro-create')
+  e.returnValue = undefined
 
 }

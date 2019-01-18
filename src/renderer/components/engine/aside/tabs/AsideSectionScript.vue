@@ -1,6 +1,6 @@
 <template>
   <div class="aside-section-tab">
-    <treeview :path="path" :filter="filter" :openItem="openItem" :addContextmenu="contextmenu" :configurable="true"></treeview>
+    <treeview :path="path" :filter="filter" :openItem="openItem" :contextmenu="contextmenu" :configurable="true"></treeview>
   </div>
 </template>
 
@@ -14,6 +14,9 @@
     ipcRenderer,
     shell
   } from 'electron'
+
+  import CONTEXTMENU from '../vars/CONTEXTMENU'
+
 
   export default {
     components: {
@@ -30,12 +33,19 @@
     computed: {
 
       contextmenu() {
+
         return [{
-          text: '스크립트 편집',
-          click(e, itempath) {
-            this.openItem(itempath)
-          }
-        }]
+            text: '스크립트 편집',
+            click(e, itempath) {
+              this.openViewer(itempath)
+            }
+          },
+          {
+            separator: true
+          },
+          ...CONTEXTMENU
+        ]
+
       }
 
     },

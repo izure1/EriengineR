@@ -4,7 +4,7 @@ import {
 
 import del from 'del'
 
-export default async function _delete(e, msg) {
+export default async function _delete(e, msg, cb) {
 
   let btnIndex = dialog.showMessageBox(this, {
 
@@ -17,8 +17,16 @@ export default async function _delete(e, msg) {
 
   })
 
+
+  let deleted = false
+
   if (btnIndex === 0) {
-    await del(msg.path)
+    await del(msg.path, {
+      force: true
+    })
+    deleted = true
   }
+
+  e.returnValue = deleted
 
 }

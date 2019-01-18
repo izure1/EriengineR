@@ -1,6 +1,5 @@
 import path from 'path'
 import fs from 'fs-extra'
-import url from 'url'
 
 import {
   dialog,
@@ -33,5 +32,7 @@ export default function openProject(e, esproject) {
   this.maximize()
   
   this.emit('project-open')
+
+  e.returnValue = undefined
 
 }
