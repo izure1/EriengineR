@@ -14,6 +14,8 @@
 <style lang="scss">
   @import '~semantic-ui-css/semantic.min.css';
 
+  $test: #333;
+
   /* COMMON CSS */
   @font-face {
     font-family: 'NanumBarunGothicUltraLight';
@@ -49,6 +51,27 @@
     }
   }
 
+  body {
+    color: lightgray;
+  }
+
+  a {
+    color: inherit;
+
+    &:hover {
+      color: inherit;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: white;
+  }
+
   html,
   body,
   #app {
@@ -64,6 +87,12 @@
     font-size: inherit;
     font-family: inherit;
     color: inherit;
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+      background-color: rgba(255, 255, 255, .1);
+    }
   }
 
   .ui-resizable-e {

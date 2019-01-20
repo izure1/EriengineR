@@ -38,7 +38,6 @@ export default async function (e, options) {
     // 서브 디렉토리 목록은 ./Vars/DIRECTORYS.js 에서 관리할 수 있습니다
 
     let directory
-    let ret
 
     for (let dirname of DIRECTORYS) {
 
@@ -60,7 +59,7 @@ export default async function (e, options) {
   }
 
 
-  ret = {
+  let ret = {
     success,
     esproject
   }

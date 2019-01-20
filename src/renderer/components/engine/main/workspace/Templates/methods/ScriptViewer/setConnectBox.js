@@ -33,6 +33,12 @@ export default function (source, targets) {
         [0.5, 1],
         [0.75, 1]
       ],
+      paintStyle: {
+        stroke: 'orange'
+      },
+      endpointStyle: {
+        fill: 'rgba(255, 187, 0, .2)'
+      },
       overlays: [
         ['Arrow', {
           id: 'arrow',

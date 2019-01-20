@@ -217,8 +217,8 @@
     border: 2px solid transparent;
     border-radius: 5px;
     overflow: hidden;
-    background-color: white;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, .15);
+    background-color: #252525;
+    box-shadow: 0px 0px 3px black;
 
     &.ui-draggable-dragging {
       z-index: 1;
@@ -230,7 +230,7 @@
 
     .script-box-header {
       height: 25px;
-      background-color: #ccc;
+      background-color: #333;
       padding: 0 5px;
       box-sizing: border-box;
       clear: both;
@@ -238,13 +238,12 @@
 
       >span {
         font-size: small;
-        color: black;
         line-height: 25px;
         float: left;
       }
 
       >a {
-        color: white;
+        color: gray;
         line-height: 25px;
         text-decoration: none;
         display: block;
@@ -252,7 +251,7 @@
         padding: 2px 4px;
 
         &:hover {
-          color: gray;
+          color: lightgray;
         }
       }
     }
@@ -267,7 +266,6 @@
         h6 {
           font-size: large;
           font-weight: bold;
-          color: #0075c8;
           margin: 0;
         }
 

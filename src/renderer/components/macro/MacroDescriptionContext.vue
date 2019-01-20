@@ -1,15 +1,6 @@
 <template>
   <div class="macro-description-context">
     <v-runtime-template :template="getParsedMacroDescription"></v-runtime-template>
-    <!-- <section v-if="isNeedContextmenu" :style="{left: button.x + 'px', top: button.y + 'px' }">
-      <input type="text" placeholder="찾을 내용을 입력하세요" @blur="button = null">
-      <ul v-if="lists.length">
-        <li v-for="list in lists" :key="list">{{ list }}</li>
-      </ul>
-      <div class="empty" v-else>
-        아무것도 없습니다
-      </div>
-    </section> -->
   </div>
 </template>
 
@@ -97,7 +88,7 @@
         let current
         let browser
         let uri
-        
+
 
         current = electron.remote.getCurrentWindow()
         uri = getResolvedURI(current.webContents.getURL(), `/macro-input/text`)
@@ -111,22 +102,6 @@
         browser.setMenu(null)
         browser.on('closed', () => browser = null)
 
-        // let clientRect
-        // let macro
-
-        // clientRect = e.currentTarget.getBoundingClientRect()
-        // macro = this.macro
-
-        // this.button = {
-        //   x: clientRect.x,
-        //   y: clientRect.y + 25,
-        //   type
-        // }
-
-        // this.$nextTick(() => {
-        //   //this.$el.querySelector('input').focus()
-        // })
-
       }
 
     }
@@ -135,63 +110,17 @@
 
 <style lang="scss" scoped>
   .macro-description-context {
-
     >p {
       font-family: 'NanumGothic';
       line-height: 1.5;
       letter-spacing: -1px;
     }
+  }
+</style>
 
-    >section {
-      width: 200px;
-      max-height: 350px;
-      box-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
-      background-color: white;
-      position: fixed;
-      overflow: hidden;
-      overflow-y: scroll;
-
-      >input {
-        width: 100%;
-        height: 30px;
-        font-size: small;
-        border: 0;
-        outline: 0;
-        box-sizing: border-box;
-        padding: 0 10px;
-      }
-
-      >ul {
-        list-style: none;
-        padding: 10px 0;
-        margin: 0;
-
-        >li {
-          >a {
-            height: 30px;
-            color: inherit;
-            line-height: 30px;
-            display: block;
-            padding: 0 10px;
-            margin: 0;
-            text-decoration: none;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
-            &:hover {
-              background-color: #efefef;
-            }
-          }
-        }
-      }
-
-      >div.empty {
-        color: lightgray;
-        text-align: center;
-        margin: 20px 0;
-      }
-    }
-
+<style lang="scss">
+  .macro-description-context a {
+    color: lightgreen;
+    margin: 0 5px;
   }
 </style>

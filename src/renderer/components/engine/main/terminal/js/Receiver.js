@@ -16,7 +16,7 @@ class Receiver {
 
     out = document.createElement('p')
     out.classList.add(classes)
-    out.innerHTML = `<span style="color: black">[${timestamp} <span style="color: green">~${user}</span>]</span> ${content}`
+    out.innerHTML = `<span style="color: lightgray">[${timestamp} <span style="color: lightgreen">~${user}</span>]</span> ${content}`
 
 
     if (this.alertor) {

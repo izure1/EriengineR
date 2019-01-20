@@ -141,8 +141,8 @@
 </script>
 
 <style lang="scss" scoped>
-  $barBackgroundColor: #ddd;
-  $tabBackgroundColor: #eee;
+  $barBackgroundColor: #555;
+  $tabBackgroundColor: #333;
 
   ul,
   li {
@@ -213,7 +213,6 @@
 
       >a {
         height: 100%;
-        color: black;
         line-height: 33px;
         text-decoration: none;
         padding: 0 10px;
@@ -248,7 +247,7 @@
           height: 60%;
           border: 0;
           margin: 0;
-          background-color: rgba(0, 0, 0, .1);
+          background-color: rgba(255, 255, 255, .2);
           position: absolute;
           right: -1px;
           top: 20%;

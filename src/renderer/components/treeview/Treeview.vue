@@ -236,6 +236,12 @@
           case '.mp4':
             return 'file video';
 
+          case '.esscript':
+            return 'code'
+
+          case '.esinterface':
+            return 'eye'
+
           default:
             return 'file';
 
@@ -270,7 +276,7 @@
       outline: none;
 
       &:hover {
-        background-color: #efefef;
+        background-color: rgba(255, 255, 255, .1);
       }
     }
 
@@ -278,8 +284,8 @@
 
   .template-treeview-contextmenu {
     width: 300px;
-    background-color: #efefef;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+    background-color: #444;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, .3);
     position: fixed;
     z-index: 1;
 
@@ -288,11 +294,11 @@
 
       >li {
         &.disabled {
-          color: lightgray;
+          color: #555;
         }
 
         &:not(.disabled):hover {
-          background-color: lightgray;
+          background-color: rgba(255, 255, 255, .1);
         }
 
         >span {
@@ -307,7 +313,7 @@
           height: 1px;
           margin: 7px;
           border: 0;
-          background-color: #aaa;
+          background-color: #555;
         }
       }
     }

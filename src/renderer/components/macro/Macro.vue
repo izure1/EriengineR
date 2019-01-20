@@ -2,8 +2,7 @@
   <section>
     <header>
       <div>
-        <sui-dropdown placeholder="매크로를 검색하세요" search selection icon="search" v-model="selected" :options="getMacroList"
-          style="width:100%"></sui-dropdown>
+        <sui-dropdown placeholder="매크로를 검색하세요" search selection icon="search" v-model="selected" :options="getMacroList" class="macro-selector"></sui-dropdown>
       </div>
     </header>
     <main>
@@ -143,7 +142,6 @@
       electron.ipcRenderer.send('macro-get')
       electron.ipcRenderer.once('macro-get', (e, macro) => {
         this.current = macro
-        console.log(this)
       })
 
     }
@@ -155,7 +153,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #d9d9d9;
+    background-color: #555;
   }
 
   header {
@@ -166,6 +164,12 @@
       height: 100%;
       padding: 10px;
       box-sizing: border-box;
+    }
+
+    .macro-selector {
+      width: 100%;
+      color: lightgray !important;
+      background-color: #333 !important;
     }
   }
 
@@ -191,10 +195,9 @@
   footer {
     min-height: 150px;
     flex: 0 0;
-    background-color: #efefef;
+    background-color: #444;
 
     a {
-      color: inherit;
       text-decoration: none;
 
       &:hover {

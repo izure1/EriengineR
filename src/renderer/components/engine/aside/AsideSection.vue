@@ -53,7 +53,7 @@
 <style lang="scss" scoped>
   #aside-section {
     width: 260px;
-    background-color: white;
+    background-color: #444;
     overflow: auto;
     overflow-x: hidden;
     position: relative;

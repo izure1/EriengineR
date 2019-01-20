@@ -14,6 +14,7 @@
   import path from 'path'
   import fs from 'fs-extra'
   import del from 'del'
+  import glob from 'glob'
 
   import {
     ipcRenderer,
@@ -41,14 +42,9 @@
         // 삭제 기능을 수정합니다
         // 에셋을 삭제하면 원본 파일도 삭제되어야 합니다
         let newContextmenu
-        let delOption
 
 
-        delOption = {
-          force: true
-        }
-
-        newContextmenu = [...CONTEXTMENU]
+        newContextmenu = new CONTEXTMENU
         newContextmenu = newContextmenu.map(t => {
 
           if (t.text !== '삭제') {
@@ -64,23 +60,39 @@
 
             stat = fs.lstatSync(itempath)
 
+            // 디렉토리를 삭제하는 경우
             if (stat.isDirectory()) {
+
+              let assets
+
+              assets = await this.glob('**/*.*', {
+                cwd: itempath,
+                absolute: true
+              })
+              assets = await this.getAssetData(assets)
 
               deleted = ipcRenderer.sendSync('modal-delete', {
                 name: path.basename(itempath),
                 path: itempath
               })
 
+              // 디렉토리를 삭제하면 해당 디렉토리에 있던 모든 에셋의 정보를 기반으로
+              // 원본 에셋 파일까지 제거합니다
               if (deleted) {
-                await del(itempath, delOption)
+                for (let asset of assets) {
+                  await this.dropFile(asset)
+                }
               }
 
               return
 
             }
 
+
+            // 개별 파일을 삭제하는 경우
             try {
-              asset = await fs.readJSON(itempath)
+              asset = await this.getAssetData(itempath)
+              asset = asset[0]
             } catch (e) {
               dialog.showErrorBox(e.message, e.stack)
               return
@@ -98,9 +110,15 @@
               return
             }
 
-            await del(path.join(this.assetSources, asset.id + asset.ext), delOption)
+            if (!asset) {
+              return
+            }
+
+            await this.dropFile(asset)
 
           }
+
+          return t
 
         })
 
@@ -113,8 +131,9 @@
           {
             separator: true
           },
-          ...CONTEXTMENU
+          ...newContextmenu
         ]
+
       },
 
       assetSources() {
@@ -214,11 +233,10 @@
 
             try {
 
-              beforeFile = await fs.readJSON(asset)
+              beforeFile = await this.getAssetData(asset)
+              beforeFile = beforeFile[0]
 
-              await del(path.join(this.assetSources, beforeFile.id + beforeFile.ext), {
-                force: true
-              })
+              await this.dropFile(beforeFile)
 
             } catch (e) {
               errors.push(e)
@@ -260,6 +278,52 @@
         }
 
         this.uploadFileProgress = 0
+
+      },
+
+      async dropFile(asset) {
+
+        let file
+        let option
+
+        file = path.join(this.assetSources, asset.id + asset.ext)
+        option = {
+          force: true
+        }
+
+        await del(file, option)
+
+      },
+
+      async glob(pattern, option) {
+
+        return new Promise((resolve, reject) => {
+          glob(pattern, option, (err, files) => {
+            if (err) reject(err)
+            else resolve(files)
+          })
+        })
+
+      },
+
+      async getAssetData(assets) {
+
+        let ret = []
+
+        if (!Array.isArray(assets)) {
+          assets = [assets]
+        }
+
+        for (let i = 0, len = assets.length, asset; i < len; i++) {
+
+          asset = assets[i]
+          asset = await fs.readJSON(asset)
+
+          ret.push(asset)
+
+        }
+
+        return ret
 
       }
 

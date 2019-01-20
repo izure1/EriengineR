@@ -54,7 +54,7 @@
     width: 60px;
     height: 100%;
     list-style: none;
-    background-color: #e7e7e7;
+    background-color: #555;
     position: relative;
     z-index: 0;
   }
@@ -88,7 +88,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        background-color: white;
+        background-color: #444;
         z-index: -1;
 
         >div {
@@ -96,14 +96,13 @@
           height: 14px;
           position: absolute;
           right: 0;
-          background-color: white;
+          background-color: #444;
 
           &:nth-of-type(1) {
             top: -14px;
 
             &:after {
               border-bottom-right-radius: 7px;
-              background-color: #e7e7e7;
             }
           }
 
@@ -112,7 +111,6 @@
 
             &:after {
               border-top-right-radius: 7px;
-              background-color: #e7e7e7;
             }
           }
 
@@ -123,7 +121,7 @@
             position: absolute;
             top: 0;
             right: 0;
-            background-color: #e7e7e7;
+            background-color: #555;
             display: block;
           }
         }
@@ -134,12 +132,12 @@
         font-size: xx-large;
         font-weight: bold;
         font-family: 'sylarStencil';
-        color: white;
+        color: gray;
         line-height: 60px;
         text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
 
         &.tab-hovering {
-          color: gray;
+          color: white;
           text-shadow: none;
         }
       }

@@ -169,18 +169,12 @@
         width: calc(100% - 10px);
         height: 30px;
         text-shadow: 1px 1px 1px black;
-        background-color: transparent;
         border: 0;
         outline: none;
         transition: background-color 0.1s linear;
         padding: 0 10px;
         margin: 0;
         box-sizing: border-box;
-
-        &:focus,
-        &:hover {
-          background-color: rgba(255, 255, 255, .1);
-        }
       }
     }
   }

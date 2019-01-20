@@ -176,8 +176,6 @@
 
       >dl {
         $marginBetween: 10px 0 0;
-
-        text-shadow: 0 0 1px white;
         color: gray;
         top: 50%;
 

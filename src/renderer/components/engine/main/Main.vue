@@ -21,7 +21,7 @@
   main {
     width: 100%;
     height: 100%;
-    background-color: #eee;
+    background-color: #333;
     position: relative;
     z-index: 0;
   }

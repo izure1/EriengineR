@@ -79,7 +79,7 @@
 
           out.content = e.toString()
           out.content = JSON.stringify(out.content)
-          
+
           electron.ipcRenderer.send('send-error', out)
 
         } finally {
@@ -98,8 +98,8 @@
 <style lang="scss" scoped>
   #terminal {
 
-    background-color: #efefef;
-    border-top: 1px solid #bfbfbf;
+    background-color: #303030;
+    border-top: 1px solid gray;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -126,8 +126,8 @@
         }
 
         &.select {
-          color: black;
-          border-bottom: 1px solid #bfbfbf;
+          color: lightgray;
+          border-bottom: 1px solid gray;
 
           .terminal-alertor {
             display: none;
@@ -173,6 +173,6 @@
   }
 
   .terminal-container-errortext {
-    color: red;
+    color: darkorange;
   }
 </style>

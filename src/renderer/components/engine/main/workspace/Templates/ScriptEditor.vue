@@ -113,7 +113,6 @@
 
       >h6 {
         font-size: xx-large;
-        color: gray;
         margin: 10px 0;
       }
 

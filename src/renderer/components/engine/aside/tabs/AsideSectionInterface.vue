@@ -42,7 +42,7 @@
           {
             separator: true
           },
-          ...CONTEXTMENU
+          ...new CONTEXTMENU
         ]
       }
 
