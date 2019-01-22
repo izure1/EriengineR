@@ -5,7 +5,15 @@ export default function catchError(e) {
 
   process.on('uncaughtException', e => {
 
-    this.webContents.send('send-error', e.toString())
+    let {
+      message,
+      stack
+    } = e
+
+    this.webContents.send('send-error', {
+      message,
+      stack
+    })
 
   })
 

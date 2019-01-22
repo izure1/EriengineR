@@ -1,6 +1,6 @@
 <template>
   <div class="aside-section-tab">
-    <treeview :path="path" :filter="filter" :openItem="openItem" :configurable="true"></treeview>
+    <treeview :path="path" :filter="filter" :openItem="openItem" :contextmenu="contextmenu" :configurable="true"></treeview>
   </div>
 </template>
 
@@ -15,6 +15,9 @@
     shell
   } from 'electron'
 
+  import CONTEXTMENU from '../vars/CONTEXTMENU'
+
+
   export default {
     components: {
       Treeview
@@ -24,11 +27,15 @@
         path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Designs'),
         filter: {
           extensions: /\.esdesign/
-        },
-        openItem(p) {
-          shell.openExternal(p)
         }
       }
+    },
+    computed: {
+
+      contextmenu() {
+        return new CONTEXTMENU
+      }
+
     }
   }
 </script>

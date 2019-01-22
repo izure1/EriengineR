@@ -1,15 +1,19 @@
-import electron from 'electron'
+import {
+  ipcRenderer
+} from 'electron'
 
-import Receiver from './Receiver'
+export default function (tab) {
 
-export default function (el) {
-  let alertor
-  let receiver
+  ipcRenderer.on('send-output', (e, msg) => {
 
-  alertor = document.querySelector('.terminal-alertor-output')
-  receiver = new Receiver(el, alertor)
+    tab.count++
+    tab.contents.push({
+      timestamp: new Date().toLocaleString(),
+      user: 'Terminal',
+      message: msg.message,
+      stack: msg.stack
+    })
 
-  electron.ipcRenderer.on('send-output', (e, msg) => {
-    receiver.print(msg.user, msg.content, 'terminal-container-outtext')
   })
+
 };

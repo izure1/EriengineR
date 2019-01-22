@@ -66,18 +66,6 @@
         column = script[column]
 
 
-        if (!column) {
-
-          electron.ipcRenderer.send('send-error', {
-            user: 'ScriptEditor',
-            content: `script data is not exits in item.`
-          })
-
-          return
-
-        }
-
-
         // 새로운 매크로 라인을 생성하기 위해 설정합니다
         // 앞으로 새로운 매크로는 해당 column 배열에 추가되며, 준비가 되면 창을 엽니다
         electron.ipcRenderer.send('macro-create', column)

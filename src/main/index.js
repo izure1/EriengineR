@@ -64,6 +64,10 @@ mainURL = global.__devmode ?
 // 이는 variables/ipc 을 이용하여 두 프로세스간 get/set 할 수 있습니다
 variables = {
 
+  package: fs.readJSONSync('./package.json'),
+
+  engine: null,
+  user: null,
   project: {
     directory: null,
     information: {}
@@ -210,6 +214,7 @@ import ipc_setVariables from './variables/setVariables'
 
 import ipc_catchError from './terminal/catchError'
 import ipc_sendError from './terminal/sendError'
+import ipc_sendErrorBeep from './terminal/sendErrorBeep'
 import ipc_sendOutput from './terminal/sendOutput'
 
 import ipc_enableMenu from './menu/enableMenu'
@@ -237,6 +242,7 @@ function runIPC() {
 
   // Terminal
   ipcMain.on('send-error', ipc_sendError.bind(mainWindow))
+  ipcMain.on('send-error-beep', ipc_sendErrorBeep.bind(mainWindow))
   ipcMain.on('send-output', ipc_sendOutput.bind(mainWindow))
   ipc_catchError.call(mainWindow)
 

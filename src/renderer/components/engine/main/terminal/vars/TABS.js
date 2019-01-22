@@ -1,18 +1,24 @@
 export default function () {
-  return [{
-    title: '문제',
-    id: 'error',
-    useInput: false
-  },
-  {
-    title: '출력',
-    id: 'output',
-    useInput: false
-  },
-  {
-    title: '터미널',
-    id: 'terminal',
-    useInput: true
+
+  return {
+    error: {
+      title: '문제',
+      useInput: false,
+      count: 0,
+      contents: []
+    },
+    output: {
+      title: '출력',
+      useInput: false,
+      count: 0,
+      contents: []
+    },
+    terminal: {
+      title: '터미널',
+      useInput: true,
+      count: 0,
+      contents: []
+    }
   }
-  ]
+
 }

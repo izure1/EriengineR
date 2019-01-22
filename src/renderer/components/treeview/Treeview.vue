@@ -165,7 +165,7 @@
           this.modifyMode = false
 
           if (err) {
-            ipcRenderer.send('send-error', err.toString())
+            throw err
           }
 
         })
@@ -194,11 +194,7 @@
         after = this.model.path
         after = path.join(after, path.basename(before))
 
-        fs.rename(before, after, err => {
-          if (err) {
-            electron.ipcRenderer.send('send-error', err)
-          }
-        })
+        fs.rename(before, after)
 
       },
       isDisabledItem(disabled = false) {

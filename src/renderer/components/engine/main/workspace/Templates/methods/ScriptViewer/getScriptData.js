@@ -7,7 +7,6 @@ import fs from 'fs-extra'
 export default function () {
 
   let scripts
-  let failed
 
 
   scripts = glob.sync('*.esscript', {
@@ -21,35 +20,16 @@ export default function () {
     let filepath
     let filedata
 
-    try {
+    filepath = path.join(this.data.directory, filename)
+    filedata = fs.readJSONSync(filepath)
 
-      filepath = path.join(this.data.directory, filename)
-      filedata = fs.readJSONSync(filepath)
-
-      Object.defineProperty(filedata, 'path', {
-        value: filepath
-      })
-
-    } catch (e) {
-      failed = e.toString()
-      return {}
-    }
+    Object.defineProperty(filedata, 'path', {
+      value: filepath
+    })
 
     return filedata
 
   })
-
-  // 스크립트 파일이 없거나 문제가 있을 때 에러를 발생하고 작업을 중지합니다
-  if (failed) {
-
-    electron.ipcRenderer.send('send-error', {
-      user: 'Script',
-      content: failed
-    })
-
-    return
-
-  }
 
   return scripts
 

@@ -1,15 +1,35 @@
-import electron from 'electron'
+import {
+  ipcRenderer
+} from 'electron'
 
-import Receiver from './Receiver'
+export default function (tab) {
 
-export default function (el) {
-  let alertor
-  let receiver
+  ipcRenderer.on('send-error', (e, msg) => {
 
-  alertor = document.querySelector('.terminal-alertor-error')
-  receiver = new Receiver(el, alertor)
+    tab.count++
+    tab.contents.push({
+      timestamp: new Date().toLocaleString(),
+      user: 'Main',
+      message: msg.message,
+      stack: msg.stack
+    })
 
-  electron.ipcRenderer.on('send-error', (e, msg) => {
-    receiver.print(msg.user, msg.content, 'terminal-container-errortext')
+    ipcRenderer.send('send-error-beep')
+
   })
+
+  window.addEventListener('error', e => {
+
+    tab.count++
+    tab.contents.push({
+      timestamp: new Date().toLocaleString(),
+      user: 'Renderer',
+      message: e.error.message,
+      stack: e.error.stack
+    })
+
+    ipcRenderer.send('send-error-beep')
+
+  })
+
 };

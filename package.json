@@ -44,10 +44,10 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/ico.png"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/ico.png"
     },
     "linux": {
       "icon": "build/icons"

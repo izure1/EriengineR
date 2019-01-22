@@ -175,7 +175,15 @@ export default function () {
         },
         {
           label: '엔진 정보',
-          accelerator: 'CmdOrCtrl + I'
+          accelerator: 'CmdOrCtrl + I',
+          click(self, win) {
+            electron.dialog.showMessageBox({
+              type: 'info',
+              title: '에리엔진',
+              message: '에리엔진',
+              detail: `버전: ${win.variables.package.version}\n제작: ${win.variables.package.author}\n라이센스: ${win.variables.package.license}`
+            })
+          }
         },
         {
           label: '개발자 센터',

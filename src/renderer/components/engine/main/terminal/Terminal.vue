@@ -1,14 +1,27 @@
 <template>
   <section id="terminal">
     <section class="terminal-header">
-      <a v-for="(tab, index) in tabs" href="#" @click.self="selectTab" :key="index" :data-inputable="tab.useInput"
-        :data-unique="tab.id">{{ tab.title }} <span :class="'terminal-alertor terminal-alertor-' + tab.id"></span></a>
+      <a v-for="(tab, key) in tabs" href="#" @click.self="selectTab($event, tab)" :key="key" :data-inputable="tab.useInput"
+        :data-unique="key">{{ tab.title }} <span :class="'terminal-alertor terminal-alertor-' + key" v-if="tab.count">{{
+          tab.count }}</span></a>
     </section>
-    <section class="terminal-container">
-      <article v-for="(tab, index) in tabs" :key="index" v-show="currentTab === tab.id" :class="'terminal-container-' + tab.id"></article>
+    <section class="terminal-container" @click="focusInput">
+      <article v-for="(tab, key) in tabs" :key="key" v-if="currentTab === key">
+        <dl v-for="(content, index) in tab.contents" :key="index">
+          <dt>When</dt>
+          <dd>{{ content.timestamp }}</dd>
+          <dt>Where</dt>
+          <dd>{{ content.user }}</dd>
+          <dt>What</dt>
+          <dd>{{ content.message }}</dd>
+          <dt>Why</dt>
+          <dd>{{ content.stack }}</dd>
+        </dl>
+      </article>
     </section>
     <section class="terminal-footer">
-      <input @keydown="inputCommand" placeholder="명령어를 입력하세요" v-if="inputable">
+      <input @keydown.enter="inputCommand" placeholder="명령어를 입력하세요" v-if="inputable" @keydown.up="goCommandHistory($event, -1)"
+        @keydown.down="goCommandHistory($event, 1)">
       <input @keydown="inputCommand" readonly v-if="!inputable">
     </section>
   </section>
@@ -16,11 +29,9 @@
 
 <script>
   import electron from 'electron'
-  import $ from 'jquery'
 
   import TABS from './vars/TABS'
 
-  import init from './js/init'
   import setErrorReceiver from './js/setErrorReceiver'
   import setOutputReceiver from './js/setOutputReceiver'
 
@@ -29,11 +40,17 @@
       return {
         tabs: new TABS(),
         currentTab: null,
-        inputable: false
+        inputable: false,
+        command: {
+          index: -1,
+          history: []
+        }
       }
     },
     methods: {
-      selectTab(e) {
+
+      selectTab(e, tab) {
+
         let parent
         let inputable
         let currentTab
@@ -47,50 +64,90 @@
         }
 
         e.target.classList.add('select')
-        e.target.querySelector('.terminal-alertor').textContent = ''
+        tab.count = 0
 
         this.inputable = inputable
         this.currentTab = currentTab
+
       },
+
       inputCommand(e) {
+
         let out
+        let command
 
+        command = e.currentTarget.value
         out = {
-          user: 'Terminal',
-          content: null
+          message: null,
+          stack: null
         }
 
-        if (e.keyCode !== 13) {
-          return
-        }
-
-        if (!e.target.value) {
+        if (!command) {
           return
         }
 
         try {
 
-          out.content = eval(`(${e.target.value})`)
-          out.content = JSON.stringify(out.content)
+          out.message = eval(`(${command})`)
+          out.message = JSON.stringify(out.message)
+          out.stack = command
 
           electron.ipcRenderer.send('send-output', out)
 
         } catch (e) {
 
-          out.content = e.toString()
-          out.content = JSON.stringify(out.content)
-
-          electron.ipcRenderer.send('send-error', out)
+          throw e
 
         } finally {
-          e.target.value = ''
+
+          e.currentTarget.value = ''
+
+          this.command.history.push(command)
+
+          if (this.command.history.length > 200) {
+            this.command.history.shift()
+          }
+
+          this.command.index = this.command.history.length - 1
+
         }
+
+      },
+
+      goCommandHistory(e, i) {
+
+        let max
+        let min
+
+        max = this.command.history.length - 1
+        min = -1
+
+        this.command.index += i
+
+        if (this.command.index > max) {
+          this.command.index = max
+        }
+
+        if (this.command.index < min) {
+          this.command.index = min
+        }
+
+        if (this.command.index === -1) {
+          return
+        }
+
+        e.currentTarget.value = this.command.history[this.command.index]
+
+      },
+
+      focusInput() {
+        this.$el.querySelector('input:not(readonly)').focus()
       }
+
     },
     mounted() {
-      init()
-      setErrorReceiver(this.$el.querySelector('article.terminal-container-error'))
-      setOutputReceiver(this.$el.querySelector('article.terminal-container-output'))
+      setErrorReceiver(this.tabs.error)
+      setOutputReceiver(this.tabs.output)
     }
   }
 </script>
@@ -120,18 +177,23 @@
         padding: 0 20px;
 
         .terminal-alertor {
+          width: 15px;
+          height: 15px;
+          line-height: 15px;
           font-size: smaller;
           font-weight: bold;
-          color: red;
+          color: white;
+          background-color: gray;
+          text-align: center;
+          display: inline-block;
+          vertical-align: middle;
+          margin-left: 5px;
+          border-radius: 100px;
         }
 
         &.select {
           color: lightgray;
           border-bottom: 1px solid gray;
-
-          .terminal-alertor {
-            display: none;
-          }
         }
       }
     }
@@ -141,7 +203,28 @@
       overflow-y: scroll;
 
       article {
+        font-size: small;
+        font-family: consolas;
+        font-weight: bold;
         padding: 20px;
+
+        >dl {
+          >dt {
+            color: orange;
+          }
+
+          >dd {
+            color: lightgray !important;
+          }
+
+          &::before {
+            content: '';
+            height: 1px;
+            margin: 10px 0;
+            display: block;
+            background-color: gray;
+          }
+        }
       }
     }
 
@@ -162,17 +245,5 @@
       }
     }
 
-  }
-</style>
-<style>
-  .terminal-container-errortext,
-  .terminal-container-outtext {
-    font-size: small;
-    font-family: consolas;
-    font-weight: bold;
-  }
-
-  .terminal-container-errortext {
-    color: darkorange;
   }
 </style>
