@@ -2,7 +2,9 @@
   <section>
     <header>
       <div>
-        <sui-dropdown placeholder="매크로를 검색하세요" search selection icon="search" v-model="selected" :options="getMacroList" class="macro-selector"></sui-dropdown>
+        <v-select :items="getMacroList" :hint="selected ? `${selected.class}` : ''" v-model="selected" append-icon="search" dense
+          box dark autocomplete height="70" background-color="#444" color="orange" item-text="text" item-value="value"
+          label="매크로를 선택하세요" class="macro-selector"></v-select>
       </div>
     </header>
     <main>
@@ -10,8 +12,14 @@
         <macro-description v-if="isMacroReady" :selected="selected" :current="current" :macros="getSelectedMacroGroup"></macro-description>
       </div>
       <div class="macro-description-action">
-        <sui-button @click="complete" :disabled="!selected" size="big" icon="save">완료</sui-button>
-        <sui-button @click="cancel" size="big" icon="delete">취소</sui-button>
+        <v-btn @click="complete" :disabled="!selected" dark large>
+          <v-icon>save</v-icon>
+          저장
+        </v-btn>
+        <v-btn @click="cancel" dark large>
+          <v-icon>delete</v-icon>
+          취소
+        </v-btn>
       </div>
     </main>
     <footer>
@@ -156,30 +164,13 @@
     background-color: #555;
   }
 
-  header {
-    height: 60px;
-    flex: 0 0;
-
-    >div {
-      height: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-
-    .macro-selector {
-      width: 100%;
-      color: lightgray !important;
-      background-color: #333 !important;
-    }
-  }
-
   main {
     display: flex;
     flex: 1 1;
     flex-direction: column;
 
     >div {
-      padding: 10px;
+      padding: 10px 20px;
     }
 
     >.macro-description-wrap {
@@ -216,6 +207,16 @@
       >dd {
         margin: 0 10px;
       }
+    }
+  }
+</style>
+
+<style lang="scss">
+  .macro-selector {
+
+    input:hover,
+    input:focus {
+      background-color: initial;
     }
   }
 </style>

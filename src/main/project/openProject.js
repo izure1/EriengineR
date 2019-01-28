@@ -16,7 +16,8 @@ export default function openProject(e, esproject) {
   try {
 
     this.variables.project.directory = path.dirname(esproject)
-    this.variables.project.information = fs.readJSONSync(esproject)
+    this.variables.project.information_file = esproject
+    this.variables.project.information.set(fs.readJSONSync(esproject))
 
   } catch (e) {
 

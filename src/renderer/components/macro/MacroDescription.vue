@@ -1,7 +1,7 @@
 <template>
-  <sui-segment class="macro-description">
+  <section class="macro-description">
     <macro-description-context v-for="macro in macros" :key="macro.cid" v-if="selected.cid === macro.cid" :macro="macro" :current="current"></macro-description-context>
-  </sui-segment>
+  </section>
 </template>
 
 <script>
@@ -19,9 +19,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .macro-description {
-    background-color: #333 !important;
-  }
-</style>

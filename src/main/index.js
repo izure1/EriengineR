@@ -25,6 +25,7 @@ import {
 
 let mainWindow, mainURL
 let variables
+let pkg
 
 switch (process.env.NODE_ENV) {
 
@@ -60,21 +61,29 @@ mainURL = global.__devmode ?
   })
 
 
+pkg = require('find-package-json')
+pkg = pkg(__dirname).next()
+
+
+
+import Information from './project/Vars/Information'
+
 // Main/Renderer 에서 공용으로 사용될 변수입니다
 // 이는 variables/ipc 을 이용하여 두 프로세스간 get/set 할 수 있습니다
 variables = {
 
-  package: fs.readJSONSync('./package.json'),
+  package: pkg.value,
 
   engine: null,
   user: null,
   project: {
     directory: null,
-    information: {}
+    information_file: null,
+    information: new Information
   },
 
   macro: null,
-  script: null,
+  script: null
 
 }
 
@@ -97,23 +106,11 @@ let HOME = os.homedir() // %appdata%
 
 
 import initor from './init/initor'
-import {
-  watch
-} from 'melanke-watchjs'
 
 async function start() {
 
   variables.engine = await initor.init(HOME)
   variables.user = await initor.getUserData(variables.engine.user)
-
-
-  // 사용자 정보가 변경되면 자동으로 이를 감지하여 user.json 파일에 갱신합니다
-  watch(variables.user, () => {
-    fs.writeJSONSync(variables.engine.user, variables.user, {
-      spaces: 2
-    })
-  }, 0, true)
-
 
   await runEngine()
 
@@ -175,6 +172,7 @@ async function createWindow() {
   })
 
   runIPC()
+  runVariablesWatcher()
 
 }
 
@@ -224,6 +222,11 @@ import ipc_createMacro from './macro/createMacro'
 import ipc_clearMacro from './macro/clearMacro'
 import ipc_getMacro from './macro/getMacro'
 
+import ipc_addLanguage from './language/addLanguage'
+import ipc_removeLanguage from './language/removeLanguage'
+import ipc_modifyLanguage from './language/modifyLanguage'
+import ipc_getLanguage from './language/getLanguage'
+
 
 function runIPC() {
 
@@ -255,8 +258,33 @@ function runIPC() {
   ipcMain.on('macro-clear', ipc_clearMacro.bind(mainWindow))
   ipcMain.on('macro-get', ipc_getMacro.bind(mainWindow))
 
+  // Language
+  ipcMain.on('language-add', ipc_addLanguage.bind(mainWindow))
+  ipcMain.on('language-remove', ipc_removeLanguage.bind(mainWindow))
+  ipcMain.on('language-modify', ipc_modifyLanguage.bind(mainWindow))
+  ipcMain.on('language-get', ipc_getLanguage.bind(mainWindow))
+
 }
 
+
+
+
+import {
+  watch
+} from 'melanke-watchjs'
+
+function runVariablesWatcher() {
+
+  // 사용자 정보가 변경되면 자동으로 이를 감지하여 user.json 파일에 갱신합니다
+  watch(variables, 'user', () => {
+
+    fs.writeJSONSync(variables.engine.user, variables.user, {
+      spaces: 2
+    })
+
+  })
+
+}
 
 
 /**

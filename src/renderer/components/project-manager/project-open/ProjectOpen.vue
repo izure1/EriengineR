@@ -26,8 +26,7 @@
         filters: [{
           name: '에리엔진 프로젝트 파일',
           extensions: ['esproject']
-        }],
-        defaultPath: os.homedir()
+        }]
       })
 
       if (!projectDirectory) {

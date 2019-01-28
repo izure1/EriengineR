@@ -8,6 +8,7 @@
           <template-script-viewer v-else-if="item.template === 'SCRIPT-VIEWER'" :data="item.data"></template-script-viewer>
           <template-script-editor v-else-if="item.template === 'SCRIPT-EDITOR'" :data="item.data"></template-script-editor>
           <template-interface-viewer v-else-if="item.template === 'INTERFACE-VIEWER'" :data="item.data"></template-interface-viewer>
+          <template-language-manager v-else-if="item.template === 'LANGUAGE-MANAGER'" :data="item.data"></template-language-manager>
         </section>
       </li>
     </ul>
@@ -38,6 +39,7 @@
   import TemplateScriptViewer from './Templates/ScriptViewer'
   import TemplateScriptEditor from './Templates/ScriptEditor'
   import TemplateInterfaceViewer from './Templates/InterfaceViewer'
+  import TemplateLanguageManager from './Templates/LanguageManager'
 
   export default {
     components: {
@@ -45,7 +47,8 @@
       TemplateCanvas,
       TemplateScriptViewer,
       TemplateScriptEditor,
-      TemplateInterfaceViewer
+      TemplateInterfaceViewer,
+      TemplateLanguageManager
     },
     data() {
       return {

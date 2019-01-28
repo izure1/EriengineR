@@ -56,28 +56,6 @@
 
         return `<p>${description}</p>`
 
-      },
-
-      isNeedContextmenu() {
-
-        if (!this.button) {
-          return false
-        }
-
-        switch (this.macro.type) {
-
-          case 'radio':
-            break;
-
-          case 'file':
-            break;
-
-          case 'text':
-          default:
-            break;
-
-        }
-
       }
 
     },
@@ -95,7 +73,8 @@
 
         browser = new electron.remote.BrowserWindow({
           modal: true,
-          parent: current
+          parent: current,
+          height: 350
         })
 
         browser.loadURL(uri)
@@ -120,7 +99,8 @@
 
 <style lang="scss">
   .macro-description-context a {
-    color: lightgreen;
+    color: lightgreen !important;
+    text-decoration: none;
     margin: 0 5px;
   }
 </style>

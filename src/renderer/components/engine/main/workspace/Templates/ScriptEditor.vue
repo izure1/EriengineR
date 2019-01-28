@@ -1,7 +1,10 @@
 <template>
   <div class="template-scripteditor">
     <div>
-      <h6>사건</h6>
+      <h6>
+        사건
+        <v-icon color="white">hearing</v-icon>
+      </h6>
       <p>아래 내용이 발생했을 때 시작합니다</p>
       <ul v-if="data.events.length">
         <li v-for="(event, index) in data.events" :key="index">
@@ -11,7 +14,10 @@
       <a href="#" @click="addItem(data, 'events')" v-if="!data.events.length">+</a>
     </div>
     <div>
-      <h6>조건</h6>
+      <h6>
+        조건
+        <v-icon color="white">filter_list</v-icon>
+      </h6>
       <p>위 사건이 발생했지만, 아래 내용이 충족되어야 작동합니다. 원한다면 아무것도 넣지 않아도 됩니다</p>
       <ul v-if="data.conditions.length">
         <li v-for="(condition, index) in data.conditions" @dblclick="modifyItem(condition)" :key="index">
@@ -21,7 +27,10 @@
       <a href="#" @click="addItem(data, 'conditions')">+</a>
     </div>
     <div>
-      <h6>행동</h6>
+      <h6>
+        행동
+        <v-icon color="white">directions_run</v-icon>
+      </h6>
       <p>모든 조건이 만족하면 순서대로 실행됩니다</p>
       <ul v-if="data.actions.length">
         <li v-for="(action, index) in data.actions" @dblclick="modifyItem(action)" :key="index">

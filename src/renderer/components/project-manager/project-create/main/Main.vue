@@ -43,8 +43,8 @@
         </dd>
         <dt title="테마 색상과 게임 전반을 어우르는 색입니다. rgb, rgba, hash 등을 입력할 수 있습니다">배경 색상</dt>
         <dd>
-          <input type="text" placeholder="#ffffff" v-model="project.backgroundColor" class="project-setting-needed" :class="{invalid: !checkValidBackgroundColor}"
-            :style="{backgroundColor: project.backgroundColor}">
+          <input type="text" placeholder="#ffffff" v-model="project.backgroundColor" class="project-setting-needed"
+            :class="{invalid: !checkValidBackgroundColor}" :style="{backgroundColor: project.backgroundColor}">
         </dd>
       </dl>
     </div>
@@ -175,6 +175,11 @@
         padding: 0 10px;
         margin: 0;
         box-sizing: border-box;
+
+        &:hover,
+        &:focus {
+          background-color: rgba(255, 255, 255, .1);
+        }
       }
     }
   }

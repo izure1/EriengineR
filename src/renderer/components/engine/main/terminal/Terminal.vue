@@ -22,7 +22,6 @@
     <section class="terminal-footer">
       <input @keydown.enter="inputCommand" placeholder="명령어를 입력하세요" v-if="inputable" @keydown.up="goCommandHistory($event, -1)"
         @keydown.down="goCommandHistory($event, 1)">
-      <input @keydown="inputCommand" readonly v-if="!inputable">
     </section>
   </section>
 </template>
@@ -141,7 +140,13 @@
       },
 
       focusInput() {
+
+        if (!this.inputable) {
+          return
+        }
+
         this.$el.querySelector('input:not(readonly)').focus()
+
       }
 
     },
@@ -215,6 +220,7 @@
 
           >dd {
             color: lightgray !important;
+            margin: 5px 0 20px;
           }
 
           &::before {

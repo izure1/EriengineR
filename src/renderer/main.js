@@ -1,7 +1,7 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import store from './store/store'
 import router from './router/index'
-import SuiVue from 'semantic-ui-vue'
 
 import App from './App'
 import electron from 'electron'
@@ -21,11 +21,10 @@ Vue.config.errorHandler = function (e) {
     message,
     stack
   })
-  
+
 }
 
-// Sementic-ui-vue use
-Vue.use(SuiVue)
+Vue.use(Vuetify)
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,20 +1,44 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <router-view></router-view>
-  </div>
+  </v-app>
 </template>
 
 <script>
+  import electron from 'electron'
+
+
   export default {
     name: 'eriengine',
-    mounted() {}
+    methods: {
+
+      listenFromMain() {
+
+        let vue = this
+
+        // main 프로세스에서 renderer에 접근할 수 없기 때문에 해당 방법으로 vue 이벤트를 발생시킵니다
+        // 이는 사용자와 주로 소통하는 menu 등에서 사용됩니다
+
+        electron.ipcRenderer.on('vue-emit', function (e, argument) {
+
+          vue.$root.$emit(...argument)
+
+        })
+
+      }
+
+    },
+    created() {
+      this.listenFromMain()
+    }
   }
 </script>
 
 <style lang="scss">
-  @import '~semantic-ui-css/semantic.min.css';
-
   $test: #333;
+
+  @import '~material-design-icons-iconfont/dist/material-design-icons.css';
+  @import '~vuetify/dist/vuetify.min.css';
 
   /* COMMON CSS */
   @font-face {
@@ -51,15 +75,19 @@
     }
   }
 
-  body {
-    color: lightgray;
+  html {
+    overflow-y: auto;
   }
 
-  a {
-    color: inherit;
+  #app {
+    color: lightgray;
 
-    &:hover {
+    a {
       color: inherit;
+
+      &:hover {
+        color: inherit;
+      }
     }
   }
 
@@ -77,25 +105,35 @@
   #app {
     width: 100%;
     height: 100%;
-    font-family: 'NanumBarunGothicUltraLight', 돋움, 굴림 !important;
+    font-family: 'NanumBarunGothicUltraLight', 돋움, 굴림;
     padding: 0;
     margin: 0;
   }
 
-  input,
-  textarea {
-    font-size: inherit;
-    font-family: inherit;
-    color: inherit;
-    background-color: transparent;
+  // input,
+  // textarea {
+  //   font-size: inherit;
+  //   font-family: inherit;
+  //   color: inherit;
+  //   background-color: transparent;
 
-    &:hover,
-    &:focus {
-      background-color: rgba(255, 255, 255, .1);
-    }
-  }
+  //   &:hover,
+  //   &:focus {
+  //     background-color: rgba(255, 255, 255, .1);
+  //   }
+  // }
 
   .ui-resizable-e {
     right: 0;
+  }
+
+  .v-btn:not(.v-btn--icon) {
+    .v-icon {
+      margin-right: 0.4em;
+    }
+  }
+
+  .v-icon {
+    vertical-align: middle;
   }
 </style>

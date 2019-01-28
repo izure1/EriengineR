@@ -1,12 +1,12 @@
 import electron from 'electron'
 
+
 export default function () {
   return [{
       label: '파일',
       submenu: [{
           label: '저장',
           accelerator: 'CmdOrCtrl + S',
-          aftered: true,
           click() {
             electron.ipcMain.emit('save-project')
           }
@@ -16,18 +16,15 @@ export default function () {
         },
         {
           label: '내보내기',
-          aftered: true,
           submenu: [{
               label: '게임 빌드',
-              accelerator: 'CmdOrCtrl + B',
-              aftered: true
+              accelerator: 'CmdOrCtrl + B'
             },
             {
               type: 'separator'
             },
             {
-              label: '모듈 빌드',
-              aftered: true
+              label: '모듈 빌드'
             }
           ]
         },
@@ -45,20 +42,20 @@ export default function () {
     {
       label: '데이터',
       submenu: [{
-          label: '게임명 수정',
-          aftered: true
+          label: '게임명 수정'
         },
         {
-          label: '해상도 수정',
-          aftered: true
+          label: '해상도 수정'
         }
       ]
     },
     {
       label: '관리',
       submenu: [{
-          label: '키워드 관리',
-          aftered: true
+          label: '다국어 관리',
+          click(self, win) {
+            win.webContents.send('vue-emit', ['createWorkspaceTab', 'language-manager', `다국어 관리자`, 'LANGUAGE-MANAGER'])
+          }
         },
         {
           type: 'separator'
@@ -67,12 +64,10 @@ export default function () {
           label: '매크로 관리'
         },
         {
-          label: '모듈 관리',
-          aftered: true
+          label: '모듈 관리'
         },
         {
-          label: 'JS라이브러리 관리',
-          aftered: true
+          label: 'JS라이브러리 관리'
         }
       ]
     },
@@ -153,8 +148,7 @@ export default function () {
           type: 'separator'
         },
         {
-          label: '격자',
-          aftered: true
+          label: '격자'
         }
       ]
     },
@@ -167,8 +161,7 @@ export default function () {
           type: 'separator'
         },
         {
-          label: '게임 정보',
-          aftered: true
+          label: '게임 정보'
         },
         {
           type: 'separator'

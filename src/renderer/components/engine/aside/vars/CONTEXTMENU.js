@@ -2,7 +2,7 @@ import electron from 'electron'
 import path from 'path'
 import fs from 'fs-extra'
 
-import createDirectory from '@static/js/createDirectory'
+import createItem from '@static/js/createItem'
 
 
 export default function () {
@@ -39,7 +39,7 @@ export default function () {
       click(e, directory) {
 
         let stat
-        let name
+        let name, directorys
 
         stat = fs.lstatSync(directory)
 
@@ -48,9 +48,10 @@ export default function () {
         }
 
         name = '새 폴더'
-        directory = path.join(directory, name)
+        directorys = fs.readdirSync(directory)
 
-        createDirectory(directory)
+        name = createItem(directorys, name)
+        fs.mkdir(path.join(directory, name))
 
       }
     },
@@ -64,5 +65,5 @@ export default function () {
       }
     }
   ]
-  
+
 }

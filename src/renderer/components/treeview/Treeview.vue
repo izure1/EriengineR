@@ -3,8 +3,8 @@
     <div :title="model.path" @click="toggle" @dblclick="openThis(model.path)" tabindex="-1" @contextmenu="openContextmenu"
       @blur="contextmenu_info.open = false" draggable="true" @dragstart="setDragItem" @dragover="allowDrop" @drop="dropItem">
       <div class="template-treeview-indent" :data-depth="depth">
-        <sui-icon :name="open ? 'folder outline open' : 'folder outline'" v-if="isFolder"></sui-icon>
-        <sui-icon :name="getFileIcon(model.path)" v-else></sui-icon>
+        <v-icon v-if="isFolder" color="white">{{ open ? 'arrow_drop_down' : 'arrow_right' }}</v-icon>
+        <v-icon v-else color="white">{{ getFileIcon(model.path) }}</v-icon>
         <p v-if="!modifyMode">{{ model.name }}</p>
         <input type="text" v-else @keydown.esc="modifyNameCancel" @keydown.enter="modifyName($event, model.path)" @blur="modifyName($event, model.path)">
       </div>
@@ -32,7 +32,7 @@
   import electron, {
     ipcRenderer
   } from 'electron'
-  import dirTree from 'directory-tree'
+  import dirTree from './js/dirTree'
 
 
   export default {
@@ -46,6 +46,8 @@
       model: {
         type: Object,
         default () {
+
+          let tree
 
           fs.watch(this.path, {
             recursive: true
@@ -224,22 +226,22 @@
           case '.jpg':
           case '.jpeg':
           case '.gif':
-            return 'file image';
+            return 'image';
 
           case '.mp3':
-            return 'file audio';
+            return 'audiotrack';
 
           case '.mp4':
-            return 'file video';
+            return 'movie';
 
           case '.esscript':
             return 'code'
 
           case '.esinterface':
-            return 'eye'
+            return 'camera'
 
           default:
-            return 'file';
+            return 'attachment';
 
         }
 

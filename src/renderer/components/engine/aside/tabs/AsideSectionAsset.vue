@@ -3,7 +3,7 @@
     <treeview :path="path" :filter="filter" :openItem="openItem" :uploadFile="uploadFile" :contextmenu="contextmenu"
       :configurable="true" v-if="!uploadFileProgress"></treeview>
     <div class="asset-uploading" v-else>
-      <sui-progress progress state="active" indicating :percent="uploadFileProgress"></sui-progress>
+      <v-progress-circular rotate="-90" width="3" size="150" :value="uploadFileProgress" color="orange">{{ uploadFileProgress }}%</v-progress-circular>
     </div>
   </div>
 </template>
@@ -186,8 +186,7 @@
             name: '에셋 파일',
             extensions: ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'woff', 'woff2']
           }],
-          properties: ['openFile', 'multiSelections'],
-          defaultPath: os.homedir()
+          properties: ['openFile', 'multiSelections']
         })
 
         if (!files) {
@@ -336,7 +335,13 @@
 
   .aside-section-tab {
     .asset-uploading {
-      padding: 10px;
+      .v-progress-circular {
+        font-size: 20px;
+        letter-spacing: -1px;
+        text-align: center;
+        margin: 30px auto;
+        display: block;
+      }
     }
   }
 </style>

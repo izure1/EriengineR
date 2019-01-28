@@ -1,7 +1,6 @@
 <template>
   <section class="template-interfaceviewer">
     <section :id="getToolboxId" class="template-interfaceviewer-toolbox">
-      <sui-dropdown selection icon="search" search placeholder="asdf" :options="test" v-model="ff" style="width:100%"></sui-dropdown>
     </section>
     <section class="template-interfaceviewer-canvas">
       <canvas :id="getCanvasId"></canvas>
