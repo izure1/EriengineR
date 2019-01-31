@@ -214,6 +214,9 @@
         padding: 20px;
 
         >dl {
+          margin: 10px 0;
+          border-bottom: 1px dashed gray;
+
           >dt {
             color: orange;
           }
@@ -221,14 +224,6 @@
           >dd {
             color: lightgray !important;
             margin: 5px 0 20px;
-          }
-
-          &::before {
-            content: '';
-            height: 1px;
-            margin: 10px 0;
-            display: block;
-            background-color: gray;
           }
         }
       }

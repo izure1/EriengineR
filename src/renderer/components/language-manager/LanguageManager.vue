@@ -35,8 +35,17 @@
     </v-list>
     <v-dialog dark fullscreen v-model="languageRemove.dialog">
       <v-card>
-        <v-card-title>{{ languageRemove.language }} 삭제</v-card-title>
-        <v-card-text>정말로 {{ languageRemove.language }}(를)을 삭제하시겠습니까?</v-card-text>
+        <v-card-title>{{ languageRemove.language }} 제거</v-card-title>
+        <v-card-text>
+          <p>
+            정말로 <b>{{ languageRemove.language }}</b>(를)을 제거하시겠습니까?
+            <br>
+            이전에 작성한 모든 스크립트에서 해당 언어는 영구히 제거됩니다.
+          </p>
+          <p>
+            이 작업은 복구할 수 없습니다.
+          </p>
+        </v-card-text>
         <v-card-actions>
           <v-btn color="red" @click="languageRemove.dialog = false">
             <v-icon>cancel</v-icon>
@@ -74,12 +83,12 @@
 
         let languages, language
 
-        languages = await this.updateList()
+        languages = await this.getLanguages()
         language = createItem(this.languages, '새로운 언어')
 
         electron.ipcRenderer.send('language-add', language)
         electron.ipcRenderer.once('language-add', async () => {
-          this.languages = await this.updateList()
+          this.languages = await this.getLanguages()
         })
 
       },
@@ -94,7 +103,7 @@
         electron.ipcRenderer.send('language-remove', this.languageRemove.language)
         electron.ipcRenderer.once('language-remove', async () => {
           this.languageRemove.dialog = false
-          this.languages = await this.updateList()
+          this.languages = await this.getLanguages()
         })
 
       },
@@ -103,7 +112,7 @@
 
         electron.ipcRenderer.send('language-modify', origin, e.currentTarget.value)
         electron.ipcRenderer.once('language-modify', async (e, result) => {
-          this.languages = await this.updateList()
+          this.languages = await this.getLanguages()
         })
 
         this.languageModify = null
@@ -114,7 +123,7 @@
         this.languageModify = language
       },
 
-      updateList() {
+      getLanguages() {
 
         return new Promise((resolve, reject) => {
 
@@ -128,16 +137,10 @@
     },
     async created() {
 
-      this.languages = await this.updateList()
-
-    },
-
-    mounted() {
+      this.languages = await this.getLanguages()
 
       electron.ipcRenderer.on('language-update', async () => {
-
-        this.languages = await this.updateList()
-
+        this.languages = await this.getLanguages()
       })
 
     }
@@ -145,6 +148,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .v-list {
+    background-color: transparent !important;
+  }
+
   input {
     color: orange;
   }

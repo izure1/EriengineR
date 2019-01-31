@@ -1,6 +1,6 @@
 <template>
   <section>
-    <v-tabs dark slider-color="orange" fixed-tabs show-arrows="">
+    <v-tabs dark slider-color="orange" fixed-tabs show-arrows>
       <v-tab v-for="(language, index) in languages" :key="index">{{ language }}</v-tab>
       <v-tab-item v-for="(language, index) in languages" :key="index">
         <v-textarea dark placeholder="내용을 입력하세요. 다국어를 지원하고 싶다면 상단에서 언어를 관리하세요." no-resize full-width clearable
@@ -12,13 +12,17 @@
     </v-tabs>
     <v-dialog v-model="languageManageMode" dark fullscreen>
       <v-card>
-        <v-toolbar dark>
-          <v-btn icon @click="languageManageMode = false">
-            <v-icon>close</v-icon>
-          </v-btn>
-          <v-toolbar-title>다국어 관리자</v-toolbar-title>
-        </v-toolbar>
-        <language-manager></language-manager>
+        <v-card-title>
+          <v-toolbar dark fixed>
+            <v-btn icon @click="languageManageMode = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>다국어 관리자</v-toolbar-title>
+          </v-toolbar>
+        </v-card-title>
+        <v-card-text>
+          <language-manager></language-manager>
+        </v-card-text>
       </v-card>
     </v-dialog>
   </section>
@@ -39,12 +43,30 @@
         languageManageMode: false
       }
     },
-    created() {
+    methods: {
 
-      electron.ipcRenderer.send('language-get')
-      electron.ipcRenderer.once('language-get', (e, languages) => {
-        this.languages = languages
+      getLanguages() {
+
+        return new Promise((resolve, reject) => {
+
+          electron.ipcRenderer.send('language-get')
+          electron.ipcRenderer.once('language-get', (e, languages) => resolve(languages))
+
+        })
+
+      }
+
+    },
+    async created() {
+
+      this.languages = await this.getLanguages()
+
+      electron.ipcRenderer.on('language-update', async () => {
+        this.languages = await this.getLanguages()
       })
+
+
+      console.log(this.variable)
 
     }
   }

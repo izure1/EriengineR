@@ -48,7 +48,7 @@
         description = description.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, match => {
 
           match = match.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, '$1')
-          match = `<a href='#' @click="openContextmenu($event, '${match}')">${variables[match].text}</a>`
+          match = `<a href='#' @click="openInputField($event, '${match}')">${variables[match].text}</a>`
 
           return match
 
@@ -61,15 +61,17 @@
     },
     methods: {
 
-      openContextmenu(e, type) {
+      openInputField(e, name) {
 
         let current
-        let browser
-        let uri
+        let browser, uri
+        let variable
 
+
+        variable = this.macro.variables[name]
 
         current = electron.remote.getCurrentWindow()
-        uri = getResolvedURI(current.webContents.getURL(), `/macro-input/text`)
+        uri = getResolvedURI(current.webContents.getURL(), `/macro-input/${variable.type}`)
 
         browser = new electron.remote.BrowserWindow({
           modal: true,

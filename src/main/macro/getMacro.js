@@ -1,6 +1,10 @@
-export default function getMacro(e) {
+export default function (e) {
 
-  e.sender.send('macro-get', this.variables.macro)
-  e.returnValue = this.variables.macro
+  let returnValue
+
+  returnValue = this.variables.macro
+
+  e.sender.send('macro-get', returnValue)
+  e.returnValue = returnValue
 
 }

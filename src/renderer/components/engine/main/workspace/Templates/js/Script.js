@@ -4,16 +4,31 @@ import createUUID from '@static/js/createUUID'
 class ScriptContext {
 
   constructor() {
-    this.id = createUUID()
+
+    this.id = null
     this.cid = null
-    this.arguments = {}
-    this.position = {
-      x: 0,
-      y: 0
-    }
+    this.text = ''
+    this.variables = {}
+
   }
 
-  get text() {
+  from(option = {}) {
+    for (let p in option) this[p] = option[p]
+  }
+
+  getDescriptionFromMacro(macro) {
+
+    description = macro.description
+    description = description.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, match => {
+
+      match = match.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, '$1')
+      match = this.variables[match] || variables[match].text
+
+      return match
+
+    })
+
+    return description
 
   }
 

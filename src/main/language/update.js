@@ -1,12 +1,15 @@
 import fs from 'fs-extra'
+import electron from 'electron'
 
 
-export default function (e) {
+export default function () {
 
   fs.writeJSONSync(this.variables.project.information_file, this.variables.project.information, {
     spaces: 2
   })
 
-  e.sender.send('language-update')
+  for (let win of electron.BrowserWindow.getAllWindows()) {
+    win.webContents.send('language-update')
+  }
 
 }

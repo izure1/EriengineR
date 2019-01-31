@@ -15,7 +15,7 @@
     <div v-if="isEmpty" class="workspace-contents-empty">
       <div>
         <div class="workspace-contents-emptylogo">
-          <img src="~@/assets/img/logo_eri_notab.png">
+          <img src="~@/assets/img/ico_eri_256.png">
         </div>
         <dl>
           <dt>새로운 프로젝트</dt>
@@ -162,7 +162,7 @@
 
         >section {
           height: 100%;
-          overflow: scroll;
+          overflow: auto;
         }
       }
     }
@@ -214,5 +214,11 @@
 
   .workspace-contents-emptylogo {
     text-align: center;
+
+    >img {
+      width: 180px;
+      margin: 30px;
+      filter: grayscale(1)
+    }
   }
 </style>

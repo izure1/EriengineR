@@ -4,20 +4,20 @@ import createItem from '@static/js/createItem'
 export default function (languages, origin, after) {
 
   let offset
-  let ret
+  let returnValue
 
   offset = languages.indexOf(origin)
   after = createItem(languages, after)
 
-  ret = false
+  returnValue = false
 
   if (offset !== -1) {
 
     languages[offset] = after
-    ret = true
+    returnValue = true
 
   }
 
-  return ret
+  return returnValue
 
 }

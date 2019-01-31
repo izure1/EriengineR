@@ -5,6 +5,7 @@ import path from 'path'
 
 import {
   app,
+  dialog,
   BrowserWindow,
   ipcMain
 } from 'electron'
@@ -123,9 +124,7 @@ async function runEngine() {
   createWindow()
 
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-      app.quit()
-    }
+    app.quit()
   })
 
   app.on('activate', () => {
@@ -133,8 +132,6 @@ async function runEngine() {
       createWindow()
     }
   })
-
-  return
 
 }
 
@@ -218,9 +215,10 @@ import ipc_sendOutput from './terminal/sendOutput'
 import ipc_enableMenu from './menu/enableMenu'
 import ipc_disableMenu from './menu/disableMenu'
 
-import ipc_createMacro from './macro/createMacro'
-import ipc_clearMacro from './macro/clearMacro'
+import ipc_setMacro from './macro/setMacro'
 import ipc_getMacro from './macro/getMacro'
+import ipc_clearMacro from './macro/clearMacro'
+import ipc_getMacroList from './macro/getMacroList'
 
 import ipc_addLanguage from './language/addLanguage'
 import ipc_removeLanguage from './language/removeLanguage'
@@ -254,9 +252,10 @@ function runIPC() {
   ipcMain.on('menu-disable', ipc_disableMenu.bind(mainWindow))
 
   // Script
-  ipcMain.on('macro-create', ipc_createMacro.bind(mainWindow))
-  ipcMain.on('macro-clear', ipc_clearMacro.bind(mainWindow))
+  ipcMain.on('macro-set', ipc_setMacro.bind(mainWindow))
   ipcMain.on('macro-get', ipc_getMacro.bind(mainWindow))
+  ipcMain.on('macro-clear', ipc_clearMacro.bind(mainWindow))
+  ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow))
 
   // Language
   ipcMain.on('language-add', ipc_addLanguage.bind(mainWindow))

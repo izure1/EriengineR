@@ -2,17 +2,17 @@
   <section>
     <header>
       <div>
-        <v-select :items="getMacroList" :hint="selected ? `${selected.class}` : ''" v-model="selected" append-icon="search" dense
-          box dark autocomplete height="70" background-color="#444" color="orange" item-text="text" item-value="value"
+        <v-select :items="getMacroList" :hint="current ? `${current.class}` : ''" v-model="current" append-icon="search"
+          dense box dark autocomplete height="70" background-color="#444" color="orange" item-text="text" item-value="value"
           label="매크로를 선택하세요" class="macro-selector"></v-select>
       </div>
     </header>
     <main>
       <div class="macro-description-wrap">
-        <macro-description v-if="isMacroReady" :selected="selected" :current="current" :macros="getSelectedMacroGroup"></macro-description>
+        <macro-description v-if="current" :current="current" :macros="getMacroGroup" :variables="variables"></macro-description>
       </div>
       <div class="macro-description-action">
-        <v-btn @click="complete" :disabled="!selected" dark large>
+        <v-btn @click="complete" :disabled="!current" dark large>
           <v-icon>save</v-icon>
           저장
         </v-btn>
@@ -24,7 +24,7 @@
     </main>
     <footer>
       <div>
-        <dl v-if="selected">
+        <dl v-if="current">
           <dt>제공자</dt>
           <dd>{{ getMacroAuthor }}</dd>
           <dt>정보</dt>
@@ -54,17 +54,20 @@
     data() {
       return {
         macro: null,
-        map: null,
-        selected: null,
+        variables: null,
         current: null
       }
     },
     computed: {
 
       // events, conditions, actions 중 한 부류의 매크로들을 배열에 담아 반환합니다
-      getSelectedMacroGroup() {
+      getMacroGroup() {
 
         let group
+
+        if (!this.macro) {
+          return []
+        }
 
         group = this.$route.params.group
         group = this.macro[group]
@@ -74,65 +77,21 @@
       },
 
       getMacroList() {
-        return getMacroList(this.getSelectedMacroGroup)
+        return getMacroList(this.getMacroGroup)
       },
 
       // 매크로 작성자를 반환합니다
       getMacroAuthor() {
-        return this.selected.author || 'admin@izure.org'
+        return this.current.author || 'admin@izure.org'
       },
 
       // 매크로 도움말 URL 를 반환합니다
       getMacroURL() {
-        return this.selected.url || 'http://cafe.naver.com/lvejs'
-      },
-
-      isMacroReady() {
-        return this.current && this.selected
+        return this.current.url || 'http://cafe.naver.com/lvejs'
       }
 
     },
     methods: {
-
-      requireMacro() {
-
-        let require
-
-        let macroDirectory
-        let macro
-        let map
-
-        require = global.require
-
-        macroDirectory = path.join(__static, 'assets', 'macro')
-        map = new Map
-        macro = {}
-
-
-        // macro 폴더 내에 있는 모든 매크로를 불러옵니다
-        for (let dirname of fs.readdirSync(macroDirectory)) {
-
-          let dir
-
-          dir = path.join(macroDirectory, dirname, '**/*.js')
-          dir = glob.sync(dir)
-          dir = dir.map(f => {
-
-            f = require(f)
-            map.set(f.cid, f)
-
-            return f
-
-          })
-
-          macro[dirname] = dir
-
-        }
-
-        this.macro = macro
-        this.map = map
-
-      },
 
       complete(e) {
 
@@ -143,15 +102,10 @@
       }
 
     },
+
     created() {
-
-      this.requireMacro()
-
-      electron.ipcRenderer.send('macro-get')
-      electron.ipcRenderer.once('macro-get', (e, macro) => {
-        this.current = macro
-      })
-
+      this.macro = electron.ipcRenderer.sendSync('macro-get-list')
+      this.variables = electron.ipcRenderer.sendSync('macro-get')
     }
   }
 </script>
@@ -168,10 +122,6 @@
     display: flex;
     flex: 1 1;
     flex-direction: column;
-
-    >div {
-      padding: 10px 20px;
-    }
 
     >.macro-description-wrap {
       flex: 1 1;
