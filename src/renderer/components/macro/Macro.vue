@@ -9,7 +9,7 @@
     </header>
     <main>
       <div class="macro-description-wrap">
-        <macro-description v-if="current" :current="current" :macros="getMacroGroup" :variables="variables"></macro-description>
+        <macro-description v-if="current" :current="current" :macros="getMacroGroup"></macro-description>
       </div>
       <div class="macro-description-action">
         <v-btn @click="complete" :disabled="!current" dark large>
@@ -54,7 +54,6 @@
     data() {
       return {
         macro: null,
-        variables: null,
         current: null
       }
     },
@@ -105,7 +104,6 @@
 
     created() {
       this.macro = electron.ipcRenderer.sendSync('macro-get-list')
-      this.variables = electron.ipcRenderer.sendSync('macro-get')
     }
   }
 </script>

@@ -4,7 +4,7 @@
       <v-tab v-for="(language, index) in languages" :key="index">{{ language }}</v-tab>
       <v-tab-item v-for="(language, index) in languages" :key="index">
         <v-textarea dark placeholder="내용을 입력하세요. 다국어를 지원하고 싶다면 상단에서 언어를 관리하세요." no-resize full-width clearable
-          autofocus style="padding:10px"></v-textarea>
+          autofocus style="padding:10px" v-model="value[language]"></v-textarea>
       </v-tab-item>
       <v-btn dark icon @click="languageManageMode = true">
         <v-icon>menu</v-icon>
@@ -37,6 +37,7 @@
     components: {
       LanguageManager
     },
+    props: ['value'],
     data() {
       return {
         languages: [],
@@ -64,9 +65,6 @@
       electron.ipcRenderer.on('language-update', async () => {
         this.languages = await this.getLanguages()
       })
-
-
-      console.log(this.variable)
 
     }
   }

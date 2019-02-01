@@ -8,10 +8,10 @@
       <p>아래 내용이 발생했을 때 작동합니다</p>
       <ul v-if="data.events.length">
         <li v-for="(event, index) in data.events" :key="index">
-          <a href="#" @click="modifyMacro(data, event, 'events')">{{ event.text }}</a>
+          <a href="#" @click="modifyMacro(event, 'events')">{{ event.text }}</a>
         </li>
       </ul>
-      <a href="#" @click="createMacro(data, 'events')" v-if="!data.events.length">+</a>
+      <a href="#" @click="createMacro('events')" v-if="!data.events.length">+</a>
     </div>
     <div>
       <h6>
@@ -21,10 +21,10 @@
       <p>위 사건이 발생했지만, 아래 내용이 모두 충족되어야 합니다. 원한다면 아무것도 넣지 않아도 됩니다</p>
       <ul v-if="data.conditions.length">
         <li v-for="(condition, index) in data.conditions" @dblclick="modifyItem(condition)" :key="index">
-          <a href="#" @click="modifyMacro(data, condition, 'conditions')">{{ condition.text }}</a>
+          <a href="#" @click="modifyMacro(condition, 'conditions')">{{ condition.text }}</a>
         </li>
       </ul>
-      <a href="#" @click="createMacro(data, 'conditions')">+</a>
+      <a href="#" @click="createMacro('conditions')">+</a>
     </div>
     <div>
       <h6>
@@ -34,10 +34,10 @@
       <p>모든 조건이 만족하면 순서대로 실행됩니다</p>
       <ul v-if="data.actions.length">
         <li v-for="(action, index) in data.actions" @dblclick="modifyItem(action)" :key="index">
-          <a href="#" @click="modifyMacro(data, action, 'actions')">{{ action.text }}</a>
+          <a href="#" @click="modifyMacro(action, 'actions')">{{ action.text }}</a>
         </li>
       </ul>
-      <a href="#" @click="createMacro(data, 'actions')">+</a>
+      <a href="#" @click="createMacro('actions')">+</a>
     </div>
   </div>
 </template>
@@ -49,29 +49,26 @@
 
   import getResolvedURI from '@static/js/getResolvedURI'
   import createUUID from '@static/js/createUUID'
+  import {
+    ScriptContext
+  } from './js/Script'
 
 
   export default {
     props: ['data'],
     methods: {
 
-      modifyMacro(script, scriptContext, column) {
-        this.openMacroTab(script.path, scriptContext, column)
+      // 스크립트를 수정한다면 스크립트 컨텍스트 객체를 복사하고, 수정모드로 탭을 엽니다
+      modifyMacro(scriptContext, column) {
+        this.openMacroTab(new ScriptContext(scriptContext), column)
       },
 
-      createMacro(script, column) {
-
-        let scriptContext
-
-        scriptContext = {
-          cid: script.cid
-        }
-
-        this.openMacroTab(script.path, scriptContext, column)
-
+      // 스크립트를 추가한다면 새로운 스크립트 컨텍스트 객체를 생성하고, 생성모드로 탭을 엽니다
+      createMacro(column) {
+        this.openMacroTab(new ScriptContext, column)
       },
 
-      openMacroTab(scriptPath, scriptContext, column) {
+      openMacroTab(scriptContext, column) {
 
         let browser
         let parent, childURI
@@ -86,19 +83,39 @@
         // 스크립트의 경로와 해당 매크로의 저장된 내용을 저장해둡니다
         // 이는 이후 Macro 윈도우에서 가져와서 사용될 것입니다
 
-        electron.ipcRenderer.send('macro-set', scriptPath, scriptContext)
-        electron.ipcRenderer.once('macro-set', () => {
+        browser = new electron.remote.BrowserWindow({
+          width: 1024,
+          height: 600,
+          modal: true,
+          parent
+        })
 
-          browser = new electron.remote.BrowserWindow({
-            width: 1024,
-            height: 600,
-            modal: true,
-            parent
-          })
+        browser.setMenu(null)
+        browser.loadURL(childURI)
 
-          browser.setMenu(null)
-          browser.loadURL(childURI)
-          browser.on('closed', () => browser = null)
+
+        browser.on('closed', () => browser = null)
+
+        // 모달이 준비되면 매크로 데이터를 전송합니다
+        browser.on('macro-ready', () => {
+          browser.emit('macro-set', scriptContext)
+        })
+
+        // 모달 내에서 매크로가 수정되면 스크립트에 대입하고 저장합니다
+        // 이는 사용자가 저장 버튼을 눌렀을 때 적용됩니다
+        browser.on('macro-modify', modifiedContext => {
+
+          let contexts
+
+          contexts = data[column]
+          contexts = contexts.filter(context => context.id === scriptContext.id)
+
+          // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
+          if (contexts.length) {
+            contexts[0].from(modifiedContext)
+          } else {
+            contexts.push(modifiedContext)
+          }
 
         })
 

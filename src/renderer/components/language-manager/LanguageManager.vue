@@ -1,9 +1,10 @@
 <template>
   <section>
     <v-list two-line subheader dark>
-      <v-list-tile v-for="(language, index) in languages" :key="index">
+      <v-list-tile v-for="(language, index) in languages" :key="index" @click="setDefaultLanguage(language)">
         <v-list-tile-avatar>
-          <v-icon>language</v-icon>
+          <v-icon color="orange" v-if="isDefaultLanguage(language)">check_box</v-icon>
+          <v-icon color="white" v-else>check_box_outline_blank</v-icon>
         </v-list-tile-avatar>
         <v-list-tile-content>
           <v-list-tile-title>
@@ -11,7 +12,10 @@
             <input :value="language" v-else @blur="modifyLanguage($event, language)" @keydown.enter="modifyLanguage($event, language)"
               @keydown.esc="languageModify = null">
           </v-list-tile-title>
-          <v-list-tile-sub-title>{{ language }}를 관리합니다</v-list-tile-sub-title>
+          <v-list-tile-sub-title>
+            <span v-if="isDefaultLanguage(language)">현재 선택된 기본언어입니다</span>
+            <span v-else>클릭하면 {{ language }}를(을) 기본언어로 지정합니다</span>
+          </v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action>
           <v-btn icon title="이름을 수정합니다" @click="modifyLanguageConfirm(language)">
@@ -62,14 +66,16 @@
 </template>
 
 <script>
-  import electron from 'electron'
+  import {
+    ipcRenderer
+  } from 'electron'
   import createItem from '@static/js/createItem'
-
 
   export default {
     data() {
       return {
         languages: [],
+        languageDefault: null,
         languageModify: null,
         languageRemove: {
           dialog: false,
@@ -79,17 +85,21 @@
     },
     methods: {
 
-      async addLanguage() {
+      setDefaultLanguage(language) {
+        ipcRenderer.sendSync('language-set-default', language)
+      },
 
-        let languages, language
+      isDefaultLanguage(language) {
+        return language === this.languageDefault
+      },
 
-        languages = await this.getLanguages()
-        language = createItem(this.languages, '새로운 언어')
+      addLanguage() {
 
-        electron.ipcRenderer.send('language-add', language)
-        electron.ipcRenderer.once('language-add', async () => {
-          this.languages = await this.getLanguages()
-        })
+        let name
+
+        name = createItem(this.languages, '새로운 언어')
+
+        ipcRenderer.sendSync('language-add', name)
 
       },
 
@@ -100,20 +110,16 @@
 
       removeLanguage() {
 
-        electron.ipcRenderer.send('language-remove', this.languageRemove.language)
-        electron.ipcRenderer.once('language-remove', async () => {
-          this.languageRemove.dialog = false
-          this.languages = await this.getLanguages()
-        })
+        ipcRenderer.sendSync('language-remove', this.languageRemove.language)
+
+        this.languageRemove.dialog = false
+        this.languageRemove.language = null
 
       },
 
       modifyLanguage(e, origin) {
 
-        electron.ipcRenderer.send('language-modify', origin, e.currentTarget.value)
-        electron.ipcRenderer.once('language-modify', async (e, result) => {
-          this.languages = await this.getLanguages()
-        })
+        ipcRenderer.sendSync('language-modify', origin, e.currentTarget.value)
 
         this.languageModify = null
 
@@ -123,24 +129,18 @@
         this.languageModify = language
       },
 
-      getLanguages() {
-
-        return new Promise((resolve, reject) => {
-
-          electron.ipcRenderer.send('language-get')
-          electron.ipcRenderer.once('language-get', (e, languages) => resolve(languages))
-
-        })
-
-      }
-
     },
-    async created() {
 
-      this.languages = await this.getLanguages()
+    created() {
 
-      electron.ipcRenderer.on('language-update', async () => {
-        this.languages = await this.getLanguages()
+      this.languages = ipcRenderer.sendSync('language-get')
+      this.languageDefault = ipcRenderer.sendSync('language-get-default')
+
+      ipcRenderer.on('language-update', () => {
+
+        this.languages = ipcRenderer.sendSync('language-get')
+        this.languageDefault = ipcRenderer.sendSync('language-get-default')
+
       })
 
     }

@@ -3,12 +3,14 @@ import createUUID from '@static/js/createUUID'
 
 class ScriptContext {
 
-  constructor() {
+  constructor(option = {}) {
 
-    this.id = null
+    this.id = createUUID()
     this.cid = null
     this.text = ''
     this.variables = {}
+
+    for (let p in option) this[p] = option[p]
 
   }
 

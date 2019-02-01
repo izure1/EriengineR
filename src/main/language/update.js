@@ -4,7 +4,13 @@ import electron from 'electron'
 
 export default function () {
 
-  fs.writeJSONSync(this.variables.project.information_file, this.variables.project.information, {
+  let {
+    information,
+    information_file
+  } = this.variables.project
+
+
+  fs.writeJSONSync(information_file, information, {
     spaces: 2
   })
 

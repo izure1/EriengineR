@@ -1,10 +1,10 @@
 export default function (e, msg) {
 
-  let returnValue
+  let {
+    languages
+  } = this.variables.project.information
 
-  returnValue = this.variables.project.information.languages
-
-  e.sender.send('language-get', returnValue)
-  e.returnValue = returnValue
+  e.sender.send('language-get', languages)
+  e.returnValue = languages
 
 }

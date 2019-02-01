@@ -1,11 +1,11 @@
 <template>
   <section class="macro-input">
-    <macro-input-text v-if="type === 'text'"></macro-input-text>
-    <macro-input-radio v-if="type === 'radio'"></macro-input-radio>
-    <macro-input-file v-if="type === 'file'"></macro-input-file>
+    <macro-input-text v-if="type === 'text'" :value="value"></macro-input-text>
+    <macro-input-radio v-if="type === 'radio'" :value="value"></macro-input-radio>
+    <macro-input-file v-if="type === 'file'" :value="value"></macro-input-file>
     <v-divider dark></v-divider>
     <div class="macro-input-actions">
-      <v-btn dark>
+      <v-btn dark @click="done">
         <v-icon>save</v-icon>
         저장
       </v-btn>
@@ -33,13 +33,25 @@
     },
     data() {
       return {
-        type: this.$route.params.type
+        type: this.$route.params.type,
+        value: {}
       }
     },
     methods: {
+
+      done() {
+
+        let browser = electron.remote.getCurrentWindow()
+
+        browser.emit('macro-input-done', this.value)
+        browser.close()
+
+      },
+
       cancel() {
         electron.remote.getCurrentWindow().close()
       }
+
     }
   }
 </script>

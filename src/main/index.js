@@ -215,14 +215,13 @@ import ipc_sendOutput from './terminal/sendOutput'
 import ipc_enableMenu from './menu/enableMenu'
 import ipc_disableMenu from './menu/disableMenu'
 
-import ipc_setMacro from './macro/setMacro'
-import ipc_getMacro from './macro/getMacro'
-import ipc_clearMacro from './macro/clearMacro'
 import ipc_getMacroList from './macro/getMacroList'
 
 import ipc_addLanguage from './language/addLanguage'
 import ipc_removeLanguage from './language/removeLanguage'
 import ipc_modifyLanguage from './language/modifyLanguage'
+import ipc_setDefaultLanguage from './language/setDefaultLanguage'
+import ipc_getDefaultLanguage from './language/getDefaultLanguage'
 import ipc_getLanguage from './language/getLanguage'
 
 
@@ -252,9 +251,6 @@ function runIPC() {
   ipcMain.on('menu-disable', ipc_disableMenu.bind(mainWindow))
 
   // Script
-  ipcMain.on('macro-set', ipc_setMacro.bind(mainWindow))
-  ipcMain.on('macro-get', ipc_getMacro.bind(mainWindow))
-  ipcMain.on('macro-clear', ipc_clearMacro.bind(mainWindow))
   ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow))
 
   // Language
@@ -262,6 +258,8 @@ function runIPC() {
   ipcMain.on('language-remove', ipc_removeLanguage.bind(mainWindow))
   ipcMain.on('language-modify', ipc_modifyLanguage.bind(mainWindow))
   ipcMain.on('language-get', ipc_getLanguage.bind(mainWindow))
+  ipcMain.on('language-set-default', ipc_setDefaultLanguage.bind(mainWindow))
+  ipcMain.on('language-get-default', ipc_getDefaultLanguage.bind(mainWindow))
 
 }
 
