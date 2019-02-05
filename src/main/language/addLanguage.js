@@ -1,11 +1,9 @@
-import addLanguage from './add'
-import updateLanguage from './update'
+import add from './add'
 
 
 export default function (e, language) {
 
-  addLanguage.call(this, language)
-  updateLanguage.call(this)
+  add.call(this, language)
 
   e.sender.send('language-add')
   e.returnValue = null

@@ -69,14 +69,29 @@ pkg = pkg(__dirname).next()
 
 import Information from './project/Vars/Information'
 
-// Main/Renderer 에서 공용으로 사용될 변수입니다
-// 이는 variables/ipc 을 이용하여 두 프로세스간 get/set 할 수 있습니다
+
+/*
+ *  Main/Renderer 에서 공용으로 사용될 변수입니다
+ *
+ *  이는 variables/ipc 을 이용하여 두 프로세스간 get/set 할 수 있습니다
+ *  var-set-sync, var-get-sync IPC를 참고하세요
+ *
+ */
 variables = {
 
+  // package.json 정보가 담겨 있습니다
   package: pkg.value,
 
+  // 엔진 정보가 담깁니다
   engine: null,
+
+  // 사용자 정보가 담깁니다
   user: null,
+
+  // 해당 프로젝트의 정보를 담습니다.
+  // directory 속성은 현재 프로젝트의 루트 디렉토리의 경로가 담깁니다
+  // information_file 속성은 project.esscript 의 경로가 담깁니다
+  // information 속성은 project.esscript 의 내용이 담깁니다
   project: {
     directory: null,
     information_file: null,
@@ -144,8 +159,8 @@ async function createWindow() {
   mainWindow = new BrowserWindow({
     height: 670,
     width: 1000,
-    resizable: false,
     icon: path.join(__dirname, '../assets/image/ico.ico'),
+    frame: false,
     webPreferences: {
       webSecurity: false
     }
@@ -153,16 +168,17 @@ async function createWindow() {
 
   mainURL = getResolvedURI(mainURL)
   mainWindow.loadURL(mainURL)
-  mainWindow.setMenu(null)
   mainWindow.focus()
-
 
   // 메인 윈도우 프레임에 변수를 할당합니다
   mainWindow.variables = variables
 
+
+  // 메뉴를 비활성화 시키고 프로젝트를 열면 다시 활성화 시킵니다
   mainWindow.on('project-open', () => {
-    ipcMain.emit('menu-enable')
+    mainWindow.emit('menu-enable')
   })
+
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -212,9 +228,6 @@ import ipc_sendError from './terminal/sendError'
 import ipc_sendErrorBeep from './terminal/sendErrorBeep'
 import ipc_sendOutput from './terminal/sendOutput'
 
-import ipc_enableMenu from './menu/enableMenu'
-import ipc_disableMenu from './menu/disableMenu'
-
 import ipc_getMacroList from './macro/getMacroList'
 
 import ipc_addLanguage from './language/addLanguage'
@@ -223,43 +236,41 @@ import ipc_modifyLanguage from './language/modifyLanguage'
 import ipc_setDefaultLanguage from './language/setDefaultLanguage'
 import ipc_getDefaultLanguage from './language/getDefaultLanguage'
 import ipc_getLanguage from './language/getLanguage'
+import ipc_appendLanguage from './language/appendLanguage'
 
 
 function runIPC() {
 
   // Project
-  ipcMain.on('project-create', ipc_createProject.bind(mainWindow))
-  ipcMain.on('project-open', ipc_openProject.bind(mainWindow))
+  ipcMain.on('project-create', ipc_createProject.bind(mainWindow)) // 프로젝트를 생성하는데 사용합니다
+  ipcMain.on('project-open', ipc_openProject.bind(mainWindow)) // 프로젝트를 여는데 사용합니다
 
   // Modal
-  ipcMain.on('modal-open-sync', ipc_openModal.bind(mainWindow))
-  ipcMain.on('modal-delete', ipc_delete.bind(mainWindow))
-  ipcMain.on('modal-delete-trash', ipc_deleteTrash.bind(mainWindow))
+  ipcMain.on('modal-open-sync', ipc_openModal.bind(mainWindow)) // 새로운 모달창을 띄웁니다
+  ipcMain.on('modal-delete', ipc_delete.bind(mainWindow)) // 파일 영구 삭제 모달창을 띄웁니다. 휴지통에서 복구할 수 없습니다
+  ipcMain.on('modal-delete-trash', ipc_deleteTrash.bind(mainWindow)) // 파일 삭제 모달창을 띄웁니다. 휴지통에서 복구가 가능합니다
 
   // Variables
-  ipcMain.on('var-get-sync', ipc_getVariables.bind(mainWindow))
-  ipcMain.on('var-set-sync', ipc_setVariables.bind(mainWindow))
+  ipcMain.on('var-get-sync', ipc_getVariables.bind(mainWindow)) // Renderer 프로세스에서 Main 프로세스에 있는 variables 변수 내부 값을 참조할 수 있습니다
+  ipcMain.on('var-set-sync', ipc_setVariables.bind(mainWindow)) // Renderer 프로세스에서 Main 프로세스에 있는 variables 변수 내부 값을 수정할 수 있습니다
 
   // Terminal
-  ipcMain.on('send-error', ipc_sendError.bind(mainWindow))
-  ipcMain.on('send-error-beep', ipc_sendErrorBeep.bind(mainWindow))
-  ipcMain.on('send-output', ipc_sendOutput.bind(mainWindow))
+  ipcMain.on('send-error', ipc_sendError.bind(mainWindow)) // 에러 메세지를 출력시킵니다. 이는 에리엔진 터미널에 출력됩니다
+  ipcMain.on('send-error-beep', ipc_sendErrorBeep.bind(mainWindow)) // 에러음을 발생시킵니다
+  ipcMain.on('send-output', ipc_sendOutput.bind(mainWindow)) // 메세지를 출력시킵니다. 이는 에리엔진 터미널에 출력됩니다
   ipc_catchError.call(mainWindow)
 
-  // Menu
-  ipcMain.on('menu-enable', ipc_enableMenu.bind(mainWindow))
-  ipcMain.on('menu-disable', ipc_disableMenu.bind(mainWindow))
-
   // Script
-  ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow))
+  ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow)) // static\assets\macro 내부에 있는 모든 매크로 파일을 배열에 담아 반환합니다
 
-  // Language
-  ipcMain.on('language-add', ipc_addLanguage.bind(mainWindow))
-  ipcMain.on('language-remove', ipc_removeLanguage.bind(mainWindow))
-  ipcMain.on('language-modify', ipc_modifyLanguage.bind(mainWindow))
-  ipcMain.on('language-get', ipc_getLanguage.bind(mainWindow))
-  ipcMain.on('language-set-default', ipc_setDefaultLanguage.bind(mainWindow))
-  ipcMain.on('language-get-default', ipc_getDefaultLanguage.bind(mainWindow))
+  // Language, 다국어 관련
+  ipcMain.on('language-add', ipc_addLanguage.bind(mainWindow)) // 새로운 언어를 추가할 수 있습니다
+  ipcMain.on('language-remove', ipc_removeLanguage.bind(mainWindow)) // 특정 언어를 제거합니다
+  ipcMain.on('language-modify', ipc_modifyLanguage.bind(mainWindow)) // 특정 언어의 이름을 변경합니다
+  ipcMain.on('language-get', ipc_getLanguage.bind(mainWindow)) // 모든 다국어를 배열로 반환합니다
+  ipcMain.on('language-set-default', ipc_setDefaultLanguage.bind(mainWindow)) // 기본언어를 설정합니다
+  ipcMain.on('language-get-default', ipc_getDefaultLanguage.bind(mainWindow)) // 기본언어를 반환합니다
+  ipcMain.on('language-append', ipc_appendLanguage.bind(mainWindow)) // 언어에 문자열을 추가합니다
 
 }
 

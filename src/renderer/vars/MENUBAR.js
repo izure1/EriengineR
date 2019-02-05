@@ -1,4 +1,11 @@
-import electron from 'electron'
+import {
+  remote,
+  shell
+} from 'electron'
+
+const {
+  dialog
+} = remote
 
 
 export default function () {
@@ -8,7 +15,7 @@ export default function () {
           label: '저장',
           accelerator: 'CmdOrCtrl + S',
           click() {
-            electron.ipcMain.emit('save-project')
+            //electron.ipcMain.emit('save-project')
           }
         },
         {
@@ -76,13 +83,13 @@ export default function () {
       submenu: [{
           label: '엔진 가이드북',
           click() {
-            electron.shell.openExternal('https://cafe.naver.com/lvejs/book5086277')
+            shell.openExternal('https://cafe.naver.com/lvejs/book5086277')
           }
         },
         {
           label: '엔진 질문/답변',
           click() {
-            electron.shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=13&search.boardtype=Q')
+            shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=13&search.boardtype=Q')
           }
         },
         {
@@ -97,19 +104,19 @@ export default function () {
           submenu: [{
               label: '배경 이미지',
               click() {
-                electron.shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=8')
+                shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=8')
               }
             },
             {
               label: '캐릭터 이미지',
               click() {
-                electron.shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=9')
+                shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=9')
               }
             },
             {
               label: 'UI 이미지',
               click() {
-                electron.shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=10')
+                shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=10')
               }
             },
             {
@@ -118,13 +125,13 @@ export default function () {
             {
               label: '효과음',
               click() {
-                electron.shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=11')
+                shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=11')
               }
             },
             {
               label: '배경음',
               click() {
-                electron.shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=12')
+                shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=20&search.boardtype=L&userDisplay=15&search.headid=12')
               }
             },
             {
@@ -133,13 +140,13 @@ export default function () {
             {
               label: '매크로',
               click() {
-                electron.shell.openExternal('https://cafe.naver.com/lvejs?iframe_url=/ArticleList.nhn%3Fsearch.clubid=28675793%26search.menuid=26%26search.boardtype=L')
+                shell.openExternal('https://cafe.naver.com/lvejs?iframe_url=/ArticleList.nhn%3Fsearch.clubid=28675793%26search.menuid=26%26search.boardtype=L')
               }
             },
             {
               label: '모듈',
               click() {
-                electron.shell.openExternal('https://cafe.naver.com/lvejs?iframe_url=/ArticleList.nhn%3Fsearch.clubid=28675793%26search.menuid=39%26search.boardtype=L')
+                shell.openExternal('https://cafe.naver.com/lvejs?iframe_url=/ArticleList.nhn%3Fsearch.clubid=28675793%26search.menuid=39%26search.boardtype=L')
               }
             }
           ]
@@ -170,7 +177,7 @@ export default function () {
           label: '엔진 정보',
           accelerator: 'CmdOrCtrl + I',
           click(self, win) {
-            electron.dialog.showMessageBox({
+            dialog.showMessageBox({
               type: 'info',
               title: '에리엔진',
               message: '에리엔진',
@@ -181,7 +188,7 @@ export default function () {
         {
           label: '개발자 센터',
           click() {
-            electron.shell.openExternal('http://cafe.naver.com/lvejs')
+            shell.openExternal('http://cafe.naver.com/lvejs')
           }
         }
       ]

@@ -10,7 +10,7 @@
           <v-list-tile-title>
             <p v-if="languageModify !== language">{{ language }}</p>
             <input :value="language" v-else @blur="modifyLanguage($event, language)" @keydown.enter="modifyLanguage($event, language)"
-              @keydown.esc="languageModify = null">
+              @keydown.esc="languageModify = null" @click.stop>
           </v-list-tile-title>
           <v-list-tile-sub-title>
             <span v-if="isDefaultLanguage(language)">현재 선택된 기본언어입니다</span>
@@ -18,10 +18,10 @@
           </v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action>
-          <v-btn icon title="이름을 수정합니다" @click="modifyLanguageConfirm(language)">
+          <v-btn icon title="이름을 수정합니다" @click.stop="modifyLanguageConfirm(language)">
             <v-icon small>settings</v-icon>
           </v-btn>
-          <v-btn icon title="해당 언어를 삭제합니다" @click="removeLanguageConfirm(language)">
+          <v-btn icon title="해당 언어를 삭제합니다" @click.stop="removeLanguageConfirm(language)">
             <v-icon small>delete</v-icon>
           </v-btn>
         </v-list-tile-action>

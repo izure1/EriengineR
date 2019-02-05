@@ -1,10 +1,17 @@
 import createItem from '@static/js/createItem'
+import updateLanguage from './update'
+
+import get from './get'
+import rename from './rename'
 
 
-export default function (languages, origin, after) {
+export default function (origin, after) {
 
-  let offset
+  let languages
   let returnValue
+  let offset
+
+  languages = get.call(this)
 
   offset = languages.indexOf(origin)
   after = createItem(languages, after)
@@ -13,10 +20,12 @@ export default function (languages, origin, after) {
 
   if (offset !== -1) {
 
-    languages[offset] = after
     returnValue = true
+    rename.call(this, origin, after)
 
   }
+
+  updateLanguage.call(this)
 
   return returnValue
 

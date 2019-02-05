@@ -1,15 +1,21 @@
-export default function (language = []) {
+import updateLanguage from './update'
+import get from './get'
+import fs from 'fs-extra'
+import path from 'path'
 
-  let languages
 
-  if (!Array.isArray(language)) {
-    language = [language]
+export default function (language) {
+
+  let languages = get.call(this)
+
+  if (languages.indexOf(language) === -1) {
+
+    language = path.join(this.variables.project.directory, 'Languages', `${language}.json`)
+
+    fs.writeJSONSync(language, {})
+
   }
 
-  languages = this.variables.project.information.languages
-  languages = [...languages, ...language]
-  languages = new Set(languages)
-
-  this.variables.project.information.languages = Array.from(languages)
+  updateLanguage.call(this)
 
 }

@@ -31,9 +31,12 @@ export default function openProject(e, esproject) {
   this.setResizable(true)
   this.loadURL(winURL)
   this.maximize()
-  
-  this.emit('project-open')
 
-  e.returnValue = undefined
+  this.webContents.once('did-finish-load', () => {
+
+    this.emit('project-open')
+    e.returnValue = undefined
+
+  })
 
 }

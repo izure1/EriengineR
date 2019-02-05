@@ -1,4 +1,4 @@
-function appendItem(items, item, count = 0) {
+export default function appendItem(items, item, count = 0) {
 
   let newItem
 
@@ -18,5 +18,3 @@ function appendItem(items, item, count = 0) {
   }
 
 }
-
-export default appendItem

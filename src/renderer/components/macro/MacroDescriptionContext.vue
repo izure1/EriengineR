@@ -26,22 +26,18 @@
     },
     computed: {
 
-      getContextValue(){
-
-        let variables
-
-        variables = this.current.variables
-
-        if (this.scriptContext) {
-          variables = Object.assign({}, this.current.variables, this.scriptContext.variables)
-        }
-
-        return variables
-
+      language() {
+        return electron.ipcRenderer.sendSync('language-get-default')
       },
 
-      // 매크로 내부의 description 과, 물려받은 props.variables 을 기반으로
-      // 매크로 내용물을 HTML 코드로 만들어 반환합니다
+      /**
+       * 
+       * @description 
+       * 매크로 내부의 description 과, 물려받은 props.variables 을 기반으로
+       * 매크로 내용물을 HTML 코드로 만들어 반환합니다
+       * 
+       * @returns {String}  매크로 문자열을 HTML 형식으로 반환합니다
+       */
       getParsedMacroDescription() {
 
         let description
@@ -51,7 +47,8 @@
         description = description.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, match => {
 
           match = match.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, '$1')
-          match = `<a href='#' @click="openInputField($event, '${match}')">${this.getContextValue[match].text}</a>`
+          match =
+            `<a href='#' @click="openInputField($event, '${match}')">${this.getDescriptionVariable(match)}</a>`
 
           return match
 
@@ -65,6 +62,38 @@
 
     },
     methods: {
+
+      getDescriptionVariable(property) {
+
+        if (!this.scriptContext) {
+          return ''
+        }
+
+        let language, text
+        let macroVar, currentVar
+
+        macroVar = this.current.variables[property]
+        currentVar = this.scriptContext.variables[property]
+
+
+        // 스크립트 컨텍스트가 비어있을 경우, 매크로의 기본값을 반환합니다
+        if (!(property in currentVar)) {
+          return macroVar.text
+        }
+
+        // 다국어를 지원하는 변수가 아닐 경우, 텍스트를 반환합니다
+        if (typeof currentVar.text === 'string') {
+          return currentVar.text
+        }
+
+        // 현재 기본언어가 목록 안에 존재하지 않을 경우, 매크로의 기본값을 반환합니다
+        if (!(this.language in currentVar)) {
+          return macroVar.text
+        }
+
+        return currentVar[this.language]
+
+      },
 
       getDoneLists(variables) {
 
@@ -80,7 +109,7 @@
           returnValue[i] = false
 
           // 스킵이 가능한 변수거나, 매크로를 수정하는 단계라면 넘어갑니다
-          if (variable.skip || this.scriptContext.modifyMode) {
+          if (variable.skip) {
             returnValue[i] = true
           }
 
@@ -104,6 +133,8 @@
 
         browser = new electron.remote.BrowserWindow({
           modal: true,
+          darkTheme: true,
+          frame: false,
           parent: current,
           height: 350
         })
@@ -115,8 +146,7 @@
 
         // 입력이 끝나면 스크립트 컨텍스트 내부 변수를 수정합니다
         browser.on('macro-input-done', value => {
-          this.scriptContext.variables[name] = value
-          console.log(value, this.scriptContext, this.getContextValue, this)
+          this.scriptContext.variables[name].text = value
         })
 
       }

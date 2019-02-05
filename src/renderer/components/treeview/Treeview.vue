@@ -240,6 +240,9 @@
           case '.esinterface':
             return 'camera'
 
+          case '.json':
+            return 'language'
+
           default:
             return 'attachment';
 
@@ -263,6 +266,10 @@
 
   li {
     list-style: none;
+  }
+
+  .v-icon {
+    font-size: smaller;
   }
 
   .template-treeview-item {

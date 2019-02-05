@@ -55,27 +55,28 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "copy": "^0.3.2",
+    "del": "^3.0.0",
+    "directory-tree": "^2.1.0",
+    "find-package-json": "^1.1.0",
+    "fs-extra": "^7.0.1",
+    "glob": "^7.1.3",
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "jsplumb": "^2.8.8",
     "lve": "^3.1.0",
+    "material-design-icons-iconfont": "^4.0.4",
+    "melanke-watchjs": "^1.5.0",
+    "trash": "^4.3.0",
+    "v-runtime-template": "^1.5.2",
     "vue": "^2.5.22",
+    "vue-dragscroll": "^1.8.1",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.2",
-    "vue-dragscroll": "^1.8.1",
+    "vuetify": "^1.4.3",
     "vuex": "^3.1.0",
     "vuex-electron": "^1.0.3",
-    "vuetify": "^1.4.3",
-    "material-design-icons-iconfont": "^4.0.4",
-    "v-runtime-template": "^1.5.2",
-    "directory-tree": "^2.1.0",
-    "del": "^3.0.0",
-    "trash": "^4.3.0",
-    "copy": "^0.3.2",
-    "fs-extra": "^7.0.1",
-    "melanke-watchjs": "^1.5.0",
-    "glob": "^7.1.3",
-    "find-package-json": "^1.1.0"
+    "custom-electron-titlebar": "^3.0.0"
   },
   "devDependencies": {
     "ajv": "^6.5.5",
@@ -128,6 +129,8 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4",
     "webpack-hot-middleware": "^2.22.2",
-    "webpack-merge": "^4.1.3"
+    "webpack-merge": "^4.1.3",
+    "typescript": "^3.3.1",
+    "ts-loader": "^5.3.3"
   }
 }

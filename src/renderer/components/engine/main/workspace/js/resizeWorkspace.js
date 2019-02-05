@@ -15,7 +15,7 @@ export default function () {
     vh = document.documentElement.clientHeight
     wh = $workspace.height()
 
-    $workspace.resizable('option', 'maxHeight', --vh)
+    $workspace.resizable('option', 'maxHeight', vh - 63)
     $terminal.css('height', vh - wh)
 
   })

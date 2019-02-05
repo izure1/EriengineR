@@ -8,8 +8,7 @@ class Information {
     this.height = 0
     this.id = null
     this.name = null
-    this.languages = ['한국어']
-    this.defaultLanguage = 0
+    this.language = null
     this.ready = false
 
   }
@@ -17,37 +16,6 @@ class Information {
   set(option = {}) {
 
     for (let i in option) this[i] = option[i]
-
-  }
-
-  get language() {
-
-    let returnValue
-
-    returnValue = this.languages[this.defaultLanguage]
-
-    if (!returnValue) {
-      this.defaultLanguage = 0
-      returnValue = this.languages[0]
-    }
-
-    return returnValue
-
-  }
-
-  set language(name) {
-
-    let index
-
-    index = this.languages.indexOf(name)
-
-    if (index === -1) {
-      index = 0
-    }
-
-    this.defaultLanguage = index
-
-    return true
 
   }
 

@@ -87,6 +87,8 @@
           width: 1024,
           height: 600,
           modal: true,
+          darkTheme: true,
+          frame: false,
           parent
         })
 

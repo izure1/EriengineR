@@ -249,6 +249,10 @@
         display: block;
         float: right;
         padding: 2px 4px;
+
+        .v-icon {
+          margin: 0;
+        }
       }
     }
 

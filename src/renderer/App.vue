@@ -75,12 +75,14 @@
     }
   }
 
-  html {
-    overflow-y: auto;
+  html,
+  body {
+    overflow: hidden;
   }
 
   #app {
     color: lightgray;
+    overflow: hidden;
 
     a {
       color: inherit;
@@ -110,30 +112,27 @@
     margin: 0;
   }
 
-  // input,
-  // textarea {
-  //   font-size: inherit;
-  //   font-family: inherit;
-  //   color: inherit;
-  //   background-color: transparent;
-
-  //   &:hover,
-  //   &:focus {
-  //     background-color: rgba(255, 255, 255, .1);
-  //   }
-  // }
-
   .ui-resizable-e {
     right: 0;
   }
 
-  .v-btn:not(.v-btn--icon) {
+  .v-icon {
+    margin-right: 0.4em;
+  }
+
+  .v-btn.v-btn--icon {
     .v-icon {
-      margin-right: 0.4em;
+      margin-right: 0;
     }
   }
 
   .v-icon {
     vertical-align: middle;
+  }
+
+  .menubar-menu-container {
+    >li {
+      padding: 0 20px !important;
+    }
   }
 </style>

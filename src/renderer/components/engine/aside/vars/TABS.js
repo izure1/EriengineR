@@ -33,6 +33,13 @@ export default function () {
       icon: 'S',
       select: false,
       hover: false
+    },
+    {
+      alt: '다국어',
+      id: 'language',
+      icon: 'L',
+      select: false,
+      hover: false
     }
   ]
 }

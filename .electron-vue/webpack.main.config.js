@@ -3,7 +3,9 @@
 process.env.BABEL_ENV = 'main'
 
 const path = require('path')
-const { dependencies } = require('../package.json')
+const {
+  dependencies
+} = require('../package.json')
 const webpack = require('webpack')
 
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
@@ -16,8 +18,7 @@ let mainConfig = {
     ...Object.keys(dependencies || {})
   ],
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.js$/,
         use: 'babel-loader',
         exclude: /node_modules/
@@ -25,6 +26,10 @@ let mainConfig = {
       {
         test: /\.node$/,
         use: 'node-loader'
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader'
       }
     ]
   },
@@ -44,7 +49,7 @@ let mainConfig = {
     alias: {
       '@static': path.join(__dirname, '../static')
     },
-    extensions: ['.js', '.json', '.node']
+    extensions: ['.js', '.json', '.node', '.ts', '.tsx']
   },
   target: 'electron-main'
 }
