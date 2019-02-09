@@ -6,6 +6,8 @@
 </template>
 
 <script>
+  import electron from 'electron'
+
   import Aside from './aside/Aside'
   import Main from './main/Main'
 
@@ -13,6 +15,14 @@
     components: {
       Aside,
       Main
+    },
+    methods: {
+      enableMenu() {
+        electron.remote.getCurrentWindow().emit('menu-enable')
+      }
+    },
+    mounted() {
+      this.enableMenu()
     }
   }
 </script>

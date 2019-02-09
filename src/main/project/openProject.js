@@ -3,13 +3,14 @@ import fs from 'fs-extra'
 
 import {
   dialog,
-  app
+  app,
+  ipcMain
 } from 'electron'
 
 import getResolvedURI from '@static/js/getResolvedURI'
 
 
-export default function openProject(e, esproject) {
+export default async function openProject(e, esproject) {
 
   let winURL
 
@@ -31,12 +32,5 @@ export default function openProject(e, esproject) {
   this.setResizable(true)
   this.loadURL(winURL)
   this.maximize()
-
-  this.webContents.once('did-finish-load', () => {
-
-    this.emit('project-open')
-    e.returnValue = undefined
-
-  })
 
 }

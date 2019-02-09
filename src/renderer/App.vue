@@ -20,9 +20,7 @@
         // 이는 사용자와 주로 소통하는 menu 등에서 사용됩니다
 
         electron.ipcRenderer.on('vue-emit', function (e, argument) {
-
           vue.$root.$emit(...argument)
-
         })
 
       }
@@ -128,11 +126,5 @@
 
   .v-icon {
     vertical-align: middle;
-  }
-
-  .menubar-menu-container {
-    >li {
-      padding: 0 20px !important;
-    }
   }
 </style>

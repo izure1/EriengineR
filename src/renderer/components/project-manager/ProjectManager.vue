@@ -16,6 +16,8 @@
 </template>
 
 <script>
+  import electron from 'electron'
+
   import ProjectCreate from './project-create/ProjectCreate'
   import ProjectOpen from './project-open/ProjectOpen'
 
@@ -35,14 +37,21 @@
       }
     },
     methods: {
+      playLogoSound() {
+        audio_startup = new Audio(snd_startup)
+        audio_startup.play()
+      },
+      disableMenu() {
+        electron.remote.getCurrentWindow().emit('menu-disable')
+      },
       selectWorkspaceType(type) {
         this.workspaceType = type
         audio_startup.pause()
       }
     },
     mounted() {
-      audio_startup = new Audio(snd_startup)
-      audio_startup.play()
+      this.playLogoSound()
+      this.disableMenu()
     }
   }
 </script>

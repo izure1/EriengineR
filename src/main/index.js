@@ -7,7 +7,8 @@ import {
   app,
   dialog,
   BrowserWindow,
-  ipcMain
+  ipcMain,
+  Menu
 } from 'electron'
 
 
@@ -167,18 +168,13 @@ async function createWindow() {
   })
 
   mainURL = getResolvedURI(mainURL)
+  
+  Menu.setApplicationMenu(Menu.buildFromTemplate([]))
   mainWindow.loadURL(mainURL)
   mainWindow.focus()
 
   // 메인 윈도우 프레임에 변수를 할당합니다
   mainWindow.variables = variables
-
-
-  // 메뉴를 비활성화 시키고 프로젝트를 열면 다시 활성화 시킵니다
-  mainWindow.on('project-open', () => {
-    mainWindow.emit('menu-enable')
-  })
-
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -196,7 +192,7 @@ async function createWindow() {
 // Electron 에서 추후 이 기능을 지원한다면 아래 커맨드 라인은 삭제되어야 합니다
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 // 앱을 크롬 inspect 와 연결하여 디버깅합니다
-app.commandLine.appendSwitch('inspect', '5858')
+app.commandLine.appendSwitch('inspect', '5189')
 
 // 앱이 준비되면 실행합니다
 app.on('ready', start)
