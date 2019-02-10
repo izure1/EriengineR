@@ -10,6 +10,7 @@
 
   import getResolvedURI from '@static/js/getResolvedURI'
 
+
   export default {
     components: {
       VRuntimeTemplate
@@ -19,6 +20,8 @@
     },
     data() {
       return {
+        updated: performance.now(),
+        win: electron.remote.getCurrentWindow(),
         scriptContext: null,
         button: null,
         done: {}
@@ -41,6 +44,24 @@
       getParsedMacroDescription() {
 
         let description
+        let updated
+
+
+        /**
+         * 
+         * FIXME
+         * 
+         * v-runtime-template 을 업데이트합니다.
+         * 
+         * updated = this.updated 문장은 아무런 쓸모도 없는 것처럼 보이지만
+         * this.updated 의 get() 을 호출함으로써, 호출 메서드인 getparseMacroDescription 을 강제로 업데이트합니다.
+         * 
+         * 이는 v-runtime-template 와 Vue의 업데이트 문제점을 위한 임시 조치입니다.
+         * Vue가 개선되면 삭제해야 합니다.
+         * 
+         */
+        updated = this.updated
+
 
         // 매크로의 설명문의 변수 부문을 variables 값에서 받아넣습니다
         description = this.current.description
@@ -54,8 +75,6 @@
 
         })
 
-        //this.done = this.getDoneLists(variables)
-
         return `<p>${description}</p>`
 
       }
@@ -63,91 +82,113 @@
     },
     methods: {
 
+      deepCopy(obj) {
+        return JSON.parse(JSON.stringify(obj))
+      },
+
+      getCombineVariables(property) {
+
+        let variables = {}
+
+        for (let i in this.current.variables) {
+
+          variables[i] =
+
+            i in this.scriptContext.variables ?
+
+            this.deepCopy(this.scriptContext.variables[i]) :
+            this.deepCopy(this.current.variables[i])
+
+        }
+
+        return variables[property]
+
+      },
+
       getDescriptionVariable(property) {
 
         if (!this.scriptContext) {
           return ''
         }
 
-        let language, text
-        let macroVar, currentVar
+        let variable
+        let origin
 
-        macroVar = this.current.variables[property]
-        currentVar = this.scriptContext.variables[property]
+        variable = this.getCombineVariables(property)
 
-
-        // 스크립트 컨텍스트가 비어있을 경우, 매크로의 기본값을 반환합니다
-        if (!(property in currentVar)) {
-          return macroVar.text
-        }
+        /**
+         * 
+         * variable 설명
+         * 
+         * 기본적인 매크로 구조는 아래와 같습니다.
+         * 자세한 내용은 static/assets/macro/.../xxx.js 파일을 참고하시길 바랍니다.
+         * 
+         * {
+         *  cid: 'xxxxxxx...',
+         *  title: '매크로 제목',
+         *  description: '해당 매크로의 내용',
+         *  variables: {
+         *    '객체': {  // ---------------------->> variables 속성값 중, 매치되는 변수명(매개변수 property)의 속성값을 가져옵니다
+         *      text: '객체명',
+         *      ...
+         *    }
+         *  }
+         * 
+         * }
+         * 
+         */
 
         // 다국어를 지원하는 변수가 아닐 경우, 텍스트를 반환합니다
-        if (typeof currentVar.text === 'string') {
-          return currentVar.text
+        if (typeof variable.text === 'string') {
+          return variable.text
         }
 
         // 현재 기본언어가 목록 안에 존재하지 않을 경우, 매크로의 기본값을 반환합니다
-        if (!(this.language in currentVar)) {
-          return macroVar.text
+        if (!(this.language in variable.text)) {
+          return this.current.variables[property].text
         }
 
-        return currentVar[this.language]
-
-      },
-
-      getDoneLists(variables) {
-
-        let returnValue
-        let variable
-
-        returnValue = {}
-
-        for (let i in variables) {
-
-          variable = variables[i]
-
-          returnValue[i] = false
-
-          // 스킵이 가능한 변수거나, 매크로를 수정하는 단계라면 넘어갑니다
-          if (variable.skip) {
-            returnValue[i] = true
-          }
-
-        }
-
-        return returnValue
+        return variable.text[this.language] || ' '
 
       },
 
       openInputField(e, name) {
 
         let current
-        let browser, uri
+        let browser
         let variable
 
 
         variable = this.current.variables[name]
 
-        current = electron.remote.getCurrentWindow()
-        uri = getResolvedURI(current.webContents.getURL(), `/macro-input/${variable.type}`)
-
         browser = new electron.remote.BrowserWindow({
           modal: true,
           darkTheme: true,
           frame: false,
-          parent: current,
+          parent: this.win,
           height: 350
         })
 
-        browser.loadURL(uri)
+
+        browser.uri = getResolvedURI(this.win.webContents.getURL(), `/macro-input/${variable.type}`)
+        browser.loadURL(browser.uri)
         browser.setMenu(null)
 
         browser.on('closed', () => browser = null)
-
-        // 입력이 끝나면 스크립트 컨텍스트 내부 변수를 수정합니다
         browser.on('macro-input-done', value => {
-          this.scriptContext.variables[name].text = value
+          this.updateVariable(name, value)
         })
+
+      },
+
+      updateVariable(name, value) {
+
+        if (!(name in this.scriptContext.variables)) {
+          this.scriptContext.variables[name] = this.deepCopy(this.current.variables[name])
+        }
+
+        this.scriptContext.variables[name].text = value
+        this.updated = performance.now()
 
       }
 
@@ -155,14 +196,8 @@
 
     created() {
 
-      let browser
-
-      browser = electron.remote.getCurrentWindow()
-
-      browser.on('macro-set', (scriptContext) => {
-        this.scriptContext = scriptContext
-      })
-      browser.emit('macro-ready')
+      this.win.on('macro-set', scriptContext => this.scriptContext = scriptContext)
+      this.win.emit('macro-ready')
 
     }
 
