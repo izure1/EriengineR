@@ -22,14 +22,12 @@
     components: {
       Treeview
     },
-    data() {
-      return {
-        path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Scenes'),
-        filter: {
-          extensions: /\.esinterface/
-        }
+    data: () => ({
+      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Scenes'),
+      filter: {
+        extensions: /\.esinterface/
       }
-    },
+    }),
     computed: {
 
       contextmenu() {

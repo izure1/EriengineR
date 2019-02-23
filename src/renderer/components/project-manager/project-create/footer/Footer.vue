@@ -23,11 +23,9 @@
   import path from 'path'
 
   export default {
-    data() {
-      return {
-        creating: false
-      }
-    },
+    data: () => ({
+      creating: false
+    }),
     props: {
       project: Object,
       setting: Object

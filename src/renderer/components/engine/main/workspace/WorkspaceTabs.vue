@@ -20,13 +20,11 @@
   import WorkspaceTab from './js/WorkspaceTab'
 
   export default {
-    data() {
-      return {
-        // Workspace에 열려있는 탭의 목록을 관리하는 배열입니다.
-        tabs: [],
-        draggingTab: null
-      }
-    },
+    data: () => ({
+      // Workspace에 열려있는 탭의 목록을 관리하는 배열입니다.
+      tabs: [],
+      draggingTab: null
+    }),
     methods: {
       /**
        * @description Workspace에서 새로운 탭을 열도록 도와줍니다.

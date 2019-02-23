@@ -1,27 +1,27 @@
 <template>
   <section>
     <v-list two-line subheader dark>
-      <v-list-tile v-for="(language, index) in languages" :key="index" @click="setDefaultLanguage(language)">
+      <v-list-tile v-for="(language, index) in languages" :key="index" @click="setDefaultLanguage(language.id)">
         <v-list-tile-avatar>
-          <v-icon color="orange" v-if="isDefaultLanguage(language)">check_box</v-icon>
+          <v-icon color="orange" v-if="isDefaultLanguage(language.id)">check_box</v-icon>
           <v-icon color="white" v-else>check_box_outline_blank</v-icon>
         </v-list-tile-avatar>
         <v-list-tile-content>
           <v-list-tile-title>
-            <p v-if="languageModify !== language">{{ language }}</p>
-            <input :value="language" v-else @blur="modifyLanguage($event, language)" @keydown.enter="modifyLanguage($event, language)"
+            <p v-if="languageModify !== language.id">{{ language.name }}</p>
+            <input :value="language.name" v-else @blur="modifyLanguage($event, language.name)" @keydown.enter="modifyLanguage($event, language.name)"
               @keydown.esc="languageModify = null" @click.stop>
           </v-list-tile-title>
           <v-list-tile-sub-title>
-            <span v-if="isDefaultLanguage(language)">현재 선택된 기본언어입니다</span>
-            <span v-else>클릭하면 {{ language }}를(을) 기본언어로 지정합니다</span>
+            <span v-if="isDefaultLanguage(language.id)">현재 선택된 기본언어입니다</span>
+            <span v-else>클릭하면 {{ language.name }}를(을) 기본언어로 지정합니다</span>
           </v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action>
-          <v-btn icon title="이름을 수정합니다" @click.stop="modifyLanguageConfirm(language)">
+          <v-btn icon title="이름을 수정합니다" @click.stop="modifyLanguageConfirm(language.id)">
             <v-icon small>settings</v-icon>
           </v-btn>
-          <v-btn icon title="해당 언어를 삭제합니다" @click.stop="removeLanguageConfirm(language)">
+          <v-btn icon title="해당 언어를 삭제합니다" @click.stop="removeLanguageConfirm(language.name)">
             <v-icon small>delete</v-icon>
           </v-btn>
         </v-list-tile-action>
@@ -72,40 +72,38 @@
   import createItem from '@static/js/createItem'
 
   export default {
-    data() {
-      return {
-        languages: [],
-        languageDefault: null,
-        languageModify: null,
-        languageRemove: {
-          dialog: false,
-          language: null
-        }
+    data: () => ({
+      languages: [],
+      languageDefault: null,
+      languageModify: null,
+      languageRemove: {
+        dialog: false,
+        language: null
       }
-    },
+    }),
     methods: {
 
-      setDefaultLanguage(language) {
-        ipcRenderer.sendSync('language-set-default', language)
+      setDefaultLanguage(id) {
+        ipcRenderer.sendSync('language-set-default', id)
       },
 
-      isDefaultLanguage(language) {
-        return language === this.languageDefault
+      isDefaultLanguage(id) {
+        return id === this.languageDefault
       },
 
       addLanguage() {
 
         let name
 
-        name = createItem(this.languages, '새로운 언어')
+        name = createItem(this.languages.map(language => language.name), '새로운 언어')
 
         ipcRenderer.sendSync('language-add', name)
 
       },
 
-      removeLanguageConfirm(language) {
+      removeLanguageConfirm(name) {
         this.languageRemove.dialog = true
-        this.languageRemove.language = language
+        this.languageRemove.language = name
       },
 
       removeLanguage() {
@@ -125,8 +123,8 @@
 
       },
 
-      modifyLanguageConfirm(language) {
-        this.languageModify = language
+      modifyLanguageConfirm(id) {
+        this.languageModify = id
       },
 
     },

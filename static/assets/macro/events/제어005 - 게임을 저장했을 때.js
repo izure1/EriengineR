@@ -5,6 +5,7 @@
 	class: '제어',
 	title: '게임을 저장했을 때',
 	description: '게임을 저장했을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('gamesave', start);
 	}

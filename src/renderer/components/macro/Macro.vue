@@ -2,17 +2,17 @@
   <section>
     <header>
       <div>
-        <v-select :items="getMacroList" :hint="current ? `${current.class}` : ''" v-model="current" append-icon="search"
+        <v-select :items="getMacroList" :hint="macro ? `${macro.class}` : ''" v-model="macro" append-icon="search"
           dense box dark autocomplete height="70" background-color="#444" color="orange" item-text="text" item-value="value"
           label="매크로를 선택하세요" class="macro-selector"></v-select>
       </div>
     </header>
     <main>
       <div class="macro-description-wrap">
-        <macro-description v-if="current" :current="current" :macros="getMacroGroup"></macro-description>
+        <macro-description v-if="macro" :macro="macro" :macros="getMacroGroup"></macro-description>
       </div>
       <div class="macro-description-action">
-        <v-btn @click="complete" :disabled="!current" dark large>
+        <v-btn @click="complete" :disabled="!isSavable" dark large>
           <v-icon>save</v-icon>
           저장
         </v-btn>
@@ -24,7 +24,7 @@
     </main>
     <footer>
       <div>
-        <dl v-if="current">
+        <dl v-if="macro">
           <dt>제공자</dt>
           <dd>{{ getMacroAuthor }}</dd>
           <dt>정보</dt>
@@ -51,12 +51,12 @@
     components: {
       MacroDescription
     },
-    data() {
-      return {
-        macro: null,
-        current: null
-      }
-    },
+    data: () => ({
+      win: electron.remote.getCurrentWindow(),
+      modifiedMacro: null,
+      macros: null,
+      macro: null
+    }),
     computed: {
 
       // events, conditions, actions 중 한 부류의 매크로들을 배열에 담아 반환합니다
@@ -64,12 +64,12 @@
 
         let group
 
-        if (!this.macro) {
+        if (!this.macros) {
           return []
         }
 
         group = this.$route.params.group
-        group = this.macro[group]
+        group = this.macros[group]
 
         return group
 
@@ -79,31 +79,42 @@
         return getMacroList(this.getMacroGroup)
       },
 
+      isSavable() {
+        return this.macro && this.modifiedMacro
+      },
+
       // 매크로 작성자를 반환합니다
       getMacroAuthor() {
-        return this.current.author || 'admin@izure.org'
+        return this.macro.author || 'admin@izure.org'
       },
 
       // 매크로 도움말 URL 를 반환합니다
       getMacroURL() {
-        return this.current.url || 'http://cafe.naver.com/lvejs'
+        return this.macro.url || 'http://cafe.naver.com/lvejs'
       }
 
     },
     methods: {
 
       complete(e) {
-
+        this.win.emit('macro-saved', this.modifiedMacro)
+        this.win.close()
       },
 
       cancel(e) {
-        electron.remote.getCurrentWindow().close()
+        this.win.close()
       }
 
     },
 
     created() {
-      this.macro = electron.ipcRenderer.sendSync('macro-get-list')
+
+      this.macros = electron.ipcRenderer.sendSync('macro-get-list')
+
+      this.win.on('macro-savable', macro => {
+        this.modifiedMacro = macro
+      })
+
     }
   }
 </script>

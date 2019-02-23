@@ -1,12 +1,12 @@
 import createUUID from '@static/js/createUUID'
 
 
-class ScriptContext {
+class Macro {
 
   constructor(option = {}) {
 
     this.id = createUUID()
-    this.cid = null
+    this.macro = null
     this.text = ''
     this.variables = {}
 
@@ -56,5 +56,5 @@ class Script {
 
 export {
   Script,
-  ScriptContext
+  Macro
 }

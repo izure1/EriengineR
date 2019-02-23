@@ -49,8 +49,9 @@
 
   import getResolvedURI from '@static/js/getResolvedURI'
   import createUUID from '@static/js/createUUID'
+
   import {
-    ScriptContext
+    Macro
   } from './js/Script'
 
 
@@ -59,16 +60,16 @@
     methods: {
 
       // 스크립트를 수정한다면 스크립트 컨텍스트 객체를 복사하고, 수정모드로 탭을 엽니다
-      modifyMacro(scriptContext, column) {
-        this.openMacroTab(new ScriptContext(scriptContext), column)
+      modifyMacro(context, column) {
+        this.openMacroTab(new Macro(context), column)
       },
 
       // 스크립트를 추가한다면 새로운 스크립트 컨텍스트 객체를 생성하고, 생성모드로 탭을 엽니다
       createMacro(column) {
-        this.openMacroTab(new ScriptContext, column)
+        this.openMacroTab(new Macro(), column)
       },
 
-      openMacroTab(scriptContext, column) {
+      openMacroTab(macro, column) {
 
         let browser
         let parent, childURI
@@ -89,7 +90,10 @@
           modal: true,
           darkTheme: true,
           frame: false,
-          parent
+          parent,
+          webPreferences: {
+            webSecurity: false
+          }
         })
 
         browser.setMenu(null)
@@ -100,24 +104,28 @@
 
         // 모달이 준비되면 매크로 데이터를 전송합니다
         browser.on('macro-ready', () => {
-          browser.emit('macro-set', scriptContext)
+          browser.emit('macro-set', macro)
         })
 
         // 모달 내에서 매크로가 수정되면 스크립트에 대입하고 저장합니다
         // 이는 사용자가 저장 버튼을 눌렀을 때 적용됩니다
-        browser.on('macro-modify', modifiedContext => {
+        browser.on('macro-saved', modifiedMacro => {
 
           let contexts
 
-          contexts = data[column]
-          contexts = contexts.filter(context => context.id === scriptContext.id)
+          contexts = this.data[column]
+          contexts = contexts.filter(context => context.id === macro.id)
 
           // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
           if (contexts.length) {
-            contexts[0].from(modifiedContext)
-          } else {
-            contexts.push(modifiedContext)
+            contexts[0].from(modifiedMacro)
           }
+          // 존재하지 않는다면 생성모드이므로, 해당 스크립트에 추가합니다
+          else {
+            this.data[column].push(modifiedMacro)
+          }
+
+          console.log('done', modifiedMacro, contexts, this)
 
         })
 
@@ -150,17 +158,17 @@
         padding-left: 20px;
 
         >li {
-          margin: 10px 0;
+          margin: 3px 0;
 
           >a {
-            font-size: 13pt;
-            color: gray;
+            font-size: 12px;
+            color: orange !important;
             text-decoration: none;
             display: inline-block;
+            transition: color 0.15s linear;
 
             &:hover {
-              font-weight: bold;
-              color: black;
+              color: lightgreen !important;
             }
           }
 

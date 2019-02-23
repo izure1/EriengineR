@@ -25,6 +25,10 @@ router = new Router({
       }
     },
     {
+      path: '/modal',
+      component: require('@/modalWindow/components/ModalWindow.vue').default
+    },
+    {
       path: '/project-manager',
       component: require('@/components/project-manager/ProjectManager').default,
       meta: {

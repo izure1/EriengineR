@@ -5,6 +5,7 @@
 	class: '마우스',
 	title: '마우스를 눌렀을 때',
 	description: '마우스를 눌렀을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.eventManager.on('mousedown', start);
 	}

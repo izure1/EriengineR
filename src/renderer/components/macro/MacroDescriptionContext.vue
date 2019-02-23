@@ -1,5 +1,5 @@
 <template>
-  <div class="macro-description-context">
+  <div class="macro-description-context" v-if="isReady">
     <v-runtime-template :template="getParsedMacroDescription"></v-runtime-template>
   </div>
 </template>
@@ -7,6 +7,7 @@
 <script>
   import VRuntimeTemplate from 'v-runtime-template'
   import electron from 'electron'
+  import ModalWindow from '@/modalWindow/ModalWindow'
 
   import getResolvedURI from '@static/js/getResolvedURI'
 
@@ -16,18 +17,20 @@
       VRuntimeTemplate
     },
     props: {
-      current: Object
+      macro: Object // 현재 선택된 매크로의 원본입니다
     },
-    data() {
-      return {
-        updated: performance.now(),
-        win: electron.remote.getCurrentWindow(),
-        scriptContext: null,
-        button: null,
-        done: {}
-      }
-    },
+    data: () => ({
+      updated: performance.now(),
+      win: electron.remote.getCurrentWindow(),
+      current: null, // 현재 수정 중인 매크로 파일 정보입니다
+      button: null,
+      done: {}
+    }),
     computed: {
+
+      isReady() {
+        return this.current && this.macro
+      },
 
       language() {
         return electron.ipcRenderer.sendSync('language-get-default')
@@ -64,12 +67,12 @@
 
 
         // 매크로의 설명문의 변수 부문을 variables 값에서 받아넣습니다
-        description = this.current.description
+        description = this.macro.description
         description = description.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, match => {
 
           match = match.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, '$1')
           match =
-            `<a href='#' @click="openInputField($event, '${match}')">${this.getDescriptionVariable(match)}</a>`
+            `<a href='#' @click="openInputField($event, '${match}')" :class="{done: isDone('${match}')}">${this.getDescriptionVariable(match)}</a>`
 
           return match
 
@@ -86,35 +89,41 @@
         return JSON.parse(JSON.stringify(obj))
       },
 
-      getCombineVariables(property) {
+      isDone(name) {
+        return !!this.getCombineVariable(name).skip
+      },
+
+      getCombineVariable(property) {
+
+        return property in this.current.variables ?
+
+          this.deepCopy(this.current.variables[property]) :
+          this.deepCopy(this.macro.variables[property])
+
+      },
+
+      getCombineVariables() {
 
         let variables = {}
 
-        for (let i in this.current.variables) {
-
-          variables[i] =
-
-            i in this.scriptContext.variables ?
-
-            this.deepCopy(this.scriptContext.variables[i]) :
-            this.deepCopy(this.current.variables[i])
-
+        for (let i in this.macro.variables) {
+          variables[i] = this.getCombineVariable(i)
         }
 
-        return variables[property]
+        return variables
 
       },
 
       getDescriptionVariable(property) {
 
-        if (!this.scriptContext) {
+        if (!this.macro) {
           return ''
         }
 
         let variable
         let origin
 
-        variable = this.getCombineVariables(property)
+        variable = this.getCombineVariable(property)
 
         /**
          * 
@@ -139,13 +148,13 @@
          */
 
         // 다국어를 지원하는 변수가 아닐 경우, 텍스트를 반환합니다
-        if (typeof variable.text === 'string') {
+        if (typeof variable.text !== 'object') {
           return variable.text
         }
 
         // 현재 기본언어가 목록 안에 존재하지 않을 경우, 매크로의 기본값을 반환합니다
         if (!(this.language in variable.text)) {
-          return this.current.variables[property].text
+          return this.macro.variables[property].text
         }
 
         return variable.text[this.language] || ' '
@@ -156,39 +165,60 @@
 
         let current
         let browser
-        let variable
 
-
-        variable = this.current.variables[name]
-
-        browser = new electron.remote.BrowserWindow({
+        browser = new ModalWindow({
           modal: true,
-          darkTheme: true,
-          frame: false,
           parent: this.win,
+          width: 800,
           height: 350
         })
 
+        browser.createWindow('/components/macro/MacroInput', {
+          type: this.macro.variables[name].type,
+          variable: this.getCombineVariable(name)
+        })
 
-        browser.uri = getResolvedURI(this.win.webContents.getURL(), `/macro-input/${variable.type}`)
-        browser.loadURL(browser.uri)
-        browser.setMenu(null)
-
-        browser.on('closed', () => browser = null)
-        browser.on('macro-input-done', value => {
+        browser.done(value => {
           this.updateVariable(name, value)
+          this.checkSavable()
         })
 
       },
 
       updateVariable(name, value) {
 
-        if (!(name in this.scriptContext.variables)) {
-          this.scriptContext.variables[name] = this.deepCopy(this.current.variables[name])
+        if (!(name in this.current.variables)) {
+          this.current.variables[name] = this.deepCopy(this.macro.variables[name])
         }
 
-        this.scriptContext.variables[name].text = value
+        this.current.variables[name] = this.deepCopy(value)
+        this.current.variables[name].skip = true
+
         this.updated = performance.now()
+
+      },
+
+      /**
+       * @description
+       * 모든 매크로의 변수를 입력해서 저장 가능한 상태가 되었다면 작성 완료 이벤트(macro-modified)를 보냅니다.
+       * 이는 ScriptEditor.vue 로 전송됩니다.
+       */
+      checkSavable() {
+
+        let results
+
+        results = Object.keys(this.macro.variables)
+        results = results.map(name => !!this.getCombineVariable(name).skip)
+
+        if (!results.includes(false)) {
+
+          this.current.macro = this.macro.cid
+          this.current.text = this.macro.description
+          this.current.variables = this.getCombineVariables()
+
+          this.win.emit('macro-savable', this.current)
+
+        }
 
       }
 
@@ -196,7 +226,10 @@
 
     created() {
 
-      this.win.on('macro-set', scriptContext => this.scriptContext = scriptContext)
+      this.win.on('macro-set', current => {
+        this.current = current
+        this.checkSavable()
+      })
       this.win.emit('macro-ready')
 
     }
@@ -216,8 +249,12 @@
 
 <style lang="scss">
   .macro-description-context a {
-    color: lightgreen !important;
+    color: gray !important;
     text-decoration: none;
     margin: 0 5px;
+
+    &.done {
+      color: lightgreen !important;
+    }
   }
 </style>

@@ -21,24 +21,22 @@
 
   export default {
     components: {},
-    data() {
-      return {
-        uuid: createUUID(),
-        jsPlumb: jsPlumb.getInstance(),
-        ff: null,
-        test: [{
-            key: 'test',
-            text: 'asdf',
-            value: 'test'
-          },
-          {
-            key: 'asdf',
-            text: 'fuck',
-            value: 'fuck'
-          }
-        ]
-      }
-    },
+    data: () => ({
+      uuid: createUUID(),
+      jsPlumb: jsPlumb.getInstance(),
+      ff: null,
+      test: [{
+          key: 'test',
+          text: 'asdf',
+          value: 'test'
+        },
+        {
+          key: 'asdf',
+          text: 'fuck',
+          value: 'fuck'
+        }
+      ]
+    }),
     computed: {
       getCanvasId,
       getToolboxId

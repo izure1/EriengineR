@@ -5,6 +5,7 @@
 	class: '마우스',
 	title: '마우스를 움직였을 때',
 	description: '마우스를 움직였을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.eventManager.on('mousemove', start);
 	}

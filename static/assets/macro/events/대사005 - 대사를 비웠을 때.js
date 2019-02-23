@@ -4,6 +4,7 @@ module.exports = {
   class: '대사',
   title: '대사를 비웠을 때',
   description: '대사를 비웠을 때 작동합니다.',
+	variables: {},
   fn: function (start) {
     Eri.process.on('dialogclear', start);
   }

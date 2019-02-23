@@ -5,6 +5,7 @@
 	class: '제어',
 	title: '신호가 발생하면',
 	description: '신호가 발생했을 때 작동합니다',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('cue', start);
 	}

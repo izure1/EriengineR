@@ -5,6 +5,7 @@
 	class: '제어',
 	title: '저장된 게임을 불러왔을 때',
 	description: '저장된 게임을 불러왔을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('gameload', start);
 	}

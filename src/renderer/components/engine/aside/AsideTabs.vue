@@ -36,11 +36,9 @@
         this.$root.$emit('showAsideTab', this.tabs[key].id)
       }
     },
-    data() {
-      return {
-        tabs: new TABS()
-      }
-    }
+    data: () => ({
+      tabs: new TABS()
+    })
   }
 </script>
 

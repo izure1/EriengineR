@@ -4,6 +4,7 @@ module.exports = {
 	class: '모바일',
 	title: '애플리케이션이 멈췄을 때',
 	description: '애플리케이션이 멈췄을 때 작동합니다. 전화가 왔거나, 홈으로 나갔을 경우가 해당됩니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('device_pause', start);
 	}

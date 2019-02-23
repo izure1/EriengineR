@@ -5,6 +5,7 @@
 	class: '마우스',
 	title: '마우스 휠을 굴렸을 때',
 	description: '마우스 휠을 굴렸을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.eventManager.on('mousewheel', start);
 	}

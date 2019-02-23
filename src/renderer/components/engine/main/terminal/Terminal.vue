@@ -35,17 +35,15 @@
   import setOutputReceiver from './js/setOutputReceiver'
 
   export default {
-    data() {
-      return {
-        tabs: new TABS(),
-        currentTab: null,
-        inputable: false,
-        command: {
-          index: -1,
-          history: []
-        }
+    data: () => ({
+      tabs: new TABS(),
+      currentTab: null,
+      inputable: false,
+      command: {
+        index: -1,
+        history: []
       }
-    },
+    }),
     methods: {
 
       selectTab(e, tab) {

@@ -4,6 +4,7 @@
 	class: '제스쳐',
 	title: '화면을 드래그하는 중일 때',
 	description: '화면을 드래그하는 중일 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		lve.on('drag', e => {
 			const name = e.target === null ? null : e.target.name;

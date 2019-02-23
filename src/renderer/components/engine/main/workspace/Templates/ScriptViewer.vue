@@ -88,30 +88,28 @@
 
   export default {
     props: ['data'],
-    data() {
-      return {
-        uuid: createUUID(),
-        jsPlumb: jsPlumb.getInstance(),
-        scripts: [],
-        pos: {
-          grid: 1000,
-          max: 15000,
-          x: [],
-          y: []
-        },
-        persp: {
-          value: 1,
-          max: 1,
-          min: 0.3
-        },
-        connection: {
-          x: 0,
-          y: 0,
-          source: null,
-          target: null
-        }
+    data: () => ({
+      uuid: createUUID(),
+      jsPlumb: jsPlumb.getInstance(),
+      scripts: [],
+      pos: {
+        grid: 1000,
+        max: 15000,
+        x: [],
+        y: []
+      },
+      persp: {
+        value: 1,
+        max: 1,
+        min: 0.3
+      },
+      connection: {
+        x: 0,
+        y: 0,
+        source: null,
+        target: null
       }
-    },
+    }),
     directives: {
       dragscroll
     },

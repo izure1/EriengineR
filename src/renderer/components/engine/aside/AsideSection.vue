@@ -31,11 +31,9 @@
       AsideSectionScript,
       AsideSectionLanguage
     },
-    data(){
-      return {
-        tabId: 'home'
-      }
-    },
+    data: () => ({
+      tabId: 'home'
+    }),
     mounted(e) {
 
       this.$root.$on('showAsideTab', tabId => {
@@ -48,7 +46,7 @@
           minWidth: 2
         })
       })
-      
+
     }
   }
 </script>

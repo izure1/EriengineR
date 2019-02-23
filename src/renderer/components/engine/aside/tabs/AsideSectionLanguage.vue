@@ -20,25 +20,22 @@
     components: {
       Treeview
     },
-    data() {
-      return {
-        path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Languages'),
-        filter: {
-          extensions: /\.json/
-        }
+    data: () => ({
+      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Languages'),
+      filter: {
+        extensions: /\.json/
       }
-    },
+    }),
     computed: {
 
       contextmenu() {
 
         return [{
-            text: '다국어 관리자',
-            click(e, itempath) {
-              this.$root.$emit('createWorkspaceTab', 'language-manager', `다국어 관리자`, 'LANGUAGE-MANAGER')
-            }
+          text: '다국어 관리자',
+          click(e, itempath) {
+            this.$root.$emit('createWorkspaceTab', 'language-manager', `다국어 관리자`, 'LANGUAGE-MANAGER')
           }
-        ]
+        }]
 
       }
 

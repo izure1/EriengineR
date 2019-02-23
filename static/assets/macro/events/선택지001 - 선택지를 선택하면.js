@@ -5,6 +5,7 @@
 	class: '선택지',
 	title: '선택지를 선택하면',
 	description: '선택지를 선택하면 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('select', start);
 	}

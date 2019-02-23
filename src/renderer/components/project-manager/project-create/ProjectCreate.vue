@@ -26,6 +26,7 @@
   import os from 'os'
   import path from 'path'
   import createUUID from '@static/js/createUUID'
+  
 
   export default {
     components: {
@@ -33,28 +34,21 @@
       Main,
       Footer
     },
-    data() {
-      return {
-        project: {
-          name: '새로운 프로젝트',
-          directory: path.join(os.homedir(), 'Desktop'),
-          id: this.getProjectUUID(),
-          width: 1366,
-          height: 768,
-          color: '#0075c8',
-          backgroundColor: '#ffffff'
-        },
-        setting: {
-          template: null,
-          ready: false
-        }
+    data: () => ({
+      project: {
+        name: '새로운 프로젝트',
+        directory: path.join(os.homedir(), 'Desktop'),
+        id: `org.izure.eriengine.p_${createUUID().split('-').pop()}`,
+        width: 1366,
+        height: 768,
+        color: '#0075c8',
+        backgroundColor: '#ffffff'
+      },
+      setting: {
+        template: null,
+        ready: false
       }
-    },
-    methods: {
-      getProjectUUID() {
-        return `org.izure.eriengine.p_${createUUID().split('-').pop()}`
-      }
-    }
+    })
   }
 </script>
 

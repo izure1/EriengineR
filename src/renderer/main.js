@@ -72,6 +72,8 @@ Vue.config.errorHandler = function (e) {
     stack
   })
 
+  throw e
+
 }
 
 Vue.use(Vuetify)

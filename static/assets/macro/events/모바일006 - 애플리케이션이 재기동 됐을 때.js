@@ -4,6 +4,7 @@ module.exports = {
 	class: '모바일',
 	title: '애플리케이션이 재기동 됐을 때',
 	description: '멈췄던 애플리케이션이 재기동 됐을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('device_resume', start);
 	}

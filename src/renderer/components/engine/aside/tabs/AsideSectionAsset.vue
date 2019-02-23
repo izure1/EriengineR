@@ -3,7 +3,8 @@
     <treeview :path="path" :filter="filter" :openItem="openItem" :uploadFile="uploadFile" :contextmenu="contextmenu"
       :configurable="true" v-if="!uploadFileProgress"></treeview>
     <div class="asset-uploading" v-else>
-      <v-progress-circular rotate="-90" width="3" size="150" :value="uploadFileProgress" color="orange">{{ uploadFileProgress }}%</v-progress-circular>
+      <v-progress-circular rotate="-90" width="3" size="150" :value="uploadFileProgress" color="orange">{{
+        uploadFileProgress }}%</v-progress-circular>
     </div>
   </div>
 </template>
@@ -29,12 +30,10 @@
     components: {
       Treeview
     },
-    data() {
-      return {
-        path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Assets'),
-        uploadFileProgress: 0
-      }
-    },
+    data: () => ({
+      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Assets'),
+      uploadFileProgress: 0
+    }),
     computed: {
 
       contextmenu() {

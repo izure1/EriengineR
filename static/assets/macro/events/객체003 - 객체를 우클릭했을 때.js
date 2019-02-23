@@ -4,6 +4,7 @@
 	class: '객체',
 	title: '객체를 우클릭했을 때',
 	description: '객체를 우클릭했을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		lve.on('contextmenu', e => {
 			const target = ScriptManager.getSavableData(e.target);

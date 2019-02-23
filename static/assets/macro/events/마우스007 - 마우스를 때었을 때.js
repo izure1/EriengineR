@@ -5,6 +5,7 @@
 	class: '마우스',
 	title: '마우스를 때었을 때',
 	description: '마우스를 때었을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.eventManager.on('mouseup', start);
 	}

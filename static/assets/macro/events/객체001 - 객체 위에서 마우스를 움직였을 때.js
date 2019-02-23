@@ -4,6 +4,7 @@
 	class: '객체',
 	title: '객체 위에서 마우스를 움직였을 때',
 	description: '객체 위에서 마우스를 움직였을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		lve.on('mousemove', e => {
 			const target = ScriptManager.getSavableData(e.target);

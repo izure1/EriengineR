@@ -31,27 +31,31 @@
       ProjectCreate,
       ProjectOpen
     },
-    data() {
-      return {
-        workspaceType: null
-      }
-    },
+    data: () => ({
+      workspaceType: null
+    }),
     methods: {
+
       playLogoSound() {
         audio_startup = new Audio(snd_startup)
         audio_startup.play()
       },
+
       disableMenu() {
         electron.remote.getCurrentWindow().emit('menu-disable')
       },
+
       selectWorkspaceType(type) {
         this.workspaceType = type
         audio_startup.pause()
       }
+
     },
     mounted() {
+
       this.playLogoSound()
       this.disableMenu()
+
     }
   }
 </script>

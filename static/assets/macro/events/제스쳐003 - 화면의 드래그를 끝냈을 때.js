@@ -4,6 +4,7 @@
 	class: '제스쳐',
 	title: '화면의 드래그를 끝냈을 때',
 	description: '화면의 드래그를 끝냈을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		lve.on('dragend', e => {
 			const name = e.target === null ? null : e.target.name;

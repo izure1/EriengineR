@@ -4,6 +4,7 @@ module.exports = {
   class: '대사',
   title: '대사가 출력이 끝났을 때',
   description: '대사가 출력이 끝났을 때 작동합니다. <br>이는 대사가 모두 출력되고 정상적으로 종료되었을 때 작동을 보장합니다. <br>대사를 넘겼을 때는 작동하지 않습니다.',
+	variables: {},
   fn: function (start) {
     Eri.process.on('dialogprintend', start);
   }

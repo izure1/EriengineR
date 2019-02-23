@@ -12,7 +12,9 @@ export default function (origin, after) {
   after = path.join(directory, `${after}.json`)
 
   if (fs.existsSync(origin)) {
-    fs.renameSync(origin, after)
+    try {
+      fs.renameSync(origin, after)
+    } catch (e) {}
   }
 
 }

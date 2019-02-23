@@ -170,6 +170,8 @@ async function createWindow() {
   mainURL = getResolvedURI(mainURL)
   
   Menu.setApplicationMenu(Menu.buildFromTemplate([]))
+
+  mainWindow.webContents.openDevTools()
   mainWindow.loadURL(mainURL)
   mainWindow.focus()
 

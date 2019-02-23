@@ -5,13 +5,14 @@ import get from './get'
 import rename from './rename'
 
 
-export default function (origin, after) {
+export default async function (origin, after) {
 
   let languages
   let returnValue
   let offset
 
-  languages = get.call(this)
+  languages = await get.call(this)
+  languages = languages.map(language => language.name)
 
   offset = languages.indexOf(origin)
   after = createItem(languages, after)

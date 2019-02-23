@@ -86,17 +86,15 @@
         }
       }
     },
-    data() {
-      return {
-        open: false,
-        modifyMode: false,
-        contextmenu_info: {
-          x: 0,
-          y: 0,
-          open: false
-        }
+    data: () => ({
+      open: false,
+      modifyMode: false,
+      contextmenu_info: {
+        x: 0,
+        y: 0,
+        open: false
       }
-    },
+    }),
     computed: {
       isFolder() {
         return this.model.children

@@ -1,9 +1,9 @@
 import updateLanguage from './update'
 
 
-export default function (e, name) {
+export default function (e, id) {
 
-  this.variables.project.information.language = name
+  this.variables.project.information.language = id
   
   updateLanguage.call(this)
 

@@ -5,6 +5,7 @@
 	class: '사운드',
 	title: '사운드가 재생되면',
 	description: '사운드가 재생될 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('soundplay', start);
 	}

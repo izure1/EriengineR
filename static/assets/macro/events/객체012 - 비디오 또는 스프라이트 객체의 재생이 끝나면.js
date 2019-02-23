@@ -5,6 +5,7 @@
 	class: '객체',
 	title: '비디오 또는 스프라이트 객체의 재생이 끝나면',
 	description: '객체의 재생이 끝났을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		lve.on('ended', e => {
 			const target = ScriptManager.getSavableData(e.target);

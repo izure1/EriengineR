@@ -5,6 +5,7 @@
 	class: '키보드',
 	title: '키보드를 땠을 때',
 	description: '아무 키나 땠을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.eventManager.on('keyup', start);
 	}

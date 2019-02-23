@@ -1,10 +1,10 @@
 <template>
   <section>
     <v-tabs dark slider-color="orange" fixed-tabs show-arrows>
-      <v-tab v-for="(language, index) in languages" :key="index">{{ language }}</v-tab>
+      <v-tab v-for="(language, index) in languages" :key="index">{{ language.name }}</v-tab>
       <v-tab-item v-for="(language, index) in languages" :key="index">
         <v-textarea dark placeholder="내용을 입력하세요. 다국어를 지원하고 싶다면 상단에서 언어를 관리하세요." no-resize full-width clearable
-          autofocus style="padding:10px" v-model="value[language]"></v-textarea>
+          autofocus style="padding:10px" v-model="languageText[language.id]" @change="modalReturn"></v-textarea>
       </v-tab-item>
       <v-btn dark icon @click="languageManageMode = true">
         <v-icon>menu</v-icon>
@@ -34,30 +34,50 @@
 
 
   export default {
+
     components: {
       LanguageManager
     },
-    props: ['value'],
-    data() {
-      return {
-        languages: [],
-        languageManageMode: false
-      }
-    },
+
+    props: ['variable'],
+
+    data: () => ({
+      languages: [],
+      languageText: {},
+      languageManageMode: false
+    }),
+
     methods: {
+
+      modalReturn() {
+        this.variable.text = this.languageText
+        this.$emit('modalReturn', this.variable)
+      },
 
       getLanguages() {
 
         return new Promise((resolve, reject) => {
 
           electron.ipcRenderer.send('language-get')
-          electron.ipcRenderer.once('language-get', (e, languages) => resolve(languages))
+          electron.ipcRenderer.once('language-get', (e, languages) => {
+            resolve(languages)
+            this.setDefaultValue(languages)
+          })
 
         })
+
+      },
+
+      setDefaultValue(languages) {
+
+        for (let language of languages) {
+          this.languageText[language.id] = this.variable.text[language.id] || this.variable.text || ''
+        }
 
       }
 
     },
+
     async created() {
 
       this.languages = await this.getLanguages()

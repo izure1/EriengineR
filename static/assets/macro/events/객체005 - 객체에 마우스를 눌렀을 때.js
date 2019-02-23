@@ -4,6 +4,7 @@
 	class: '객체',
 	title: '객체에 마우스를 눌렀을 때',
 	description: '객체에 마우스를 눌렀을 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		lve.on('mousedown', e => {
 			const target = ScriptManager.getSavableData(e.target);

@@ -81,6 +81,9 @@
   #app {
     color: lightgray;
     overflow: hidden;
+    position: relative;
+    top: -30px;
+    transform: translateY(30px);
 
     a {
       color: inherit;

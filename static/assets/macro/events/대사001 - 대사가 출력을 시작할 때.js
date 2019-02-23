@@ -4,6 +4,7 @@ module.exports = {
 	class: '대사',
 	title: '대사가 출력을 시작할 때',
 	description: '대사가 출력을 시작할 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('dialogprintstart', start);
 	}

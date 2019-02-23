@@ -25,11 +25,9 @@
       project: Object,
       setting: Object
     },
-    data() {
-      return {
-        samples
-      }
-    }
+    data: () => ({
+      samples
+    })
   }
 </script>
 

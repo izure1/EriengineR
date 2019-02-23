@@ -5,6 +5,7 @@
 	class: '사운드',
 	title: '사운드의 재생이 끝나면',
 	description: '사운드의 재생이 끝났을 때 작동합니다.',
+	variables: {},
 	fn: function (start) {
 		Eri.process.on('soundend', start);
 	}

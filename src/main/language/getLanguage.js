@@ -1,11 +1,11 @@
 import get from './get'
 
 
-export default function (e, msg) {
+export default async function (e, msg) {
 
   let languages
 
-  languages = get.call(this)
+  languages = await get.call(this)
 
   e.sender.send('language-get', languages)
   e.returnValue = languages

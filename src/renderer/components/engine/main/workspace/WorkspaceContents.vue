@@ -50,11 +50,9 @@
       TemplateInterfaceViewer,
       TemplateLanguageManager
     },
-    data() {
-      return {
-        tabs: []
-      }
-    },
+    data: () => ({
+      tabs: []
+    }),
     computed: {
       isEmpty() {
         return !this.tabs.length

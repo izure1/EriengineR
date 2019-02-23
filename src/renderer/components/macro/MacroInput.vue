@@ -1,8 +1,8 @@
 <template>
   <section class="macro-input">
-    <macro-input-text v-if="type === 'text'" :value="value"></macro-input-text>
-    <macro-input-radio v-if="type === 'radio'" :value="value"></macro-input-radio>
-    <macro-input-file v-if="type === 'file'" :value="value"></macro-input-file>
+    <macro-input-text v-if="modalData.type === 'text'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-text>
+    <macro-input-radio v-if="modalData.type === 'radio'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-radio>
+    <macro-input-file v-if="modalData.type === 'file'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-file>
     <v-divider dark></v-divider>
     <div class="macro-input-actions">
       <v-btn dark @click="done">
@@ -31,25 +31,27 @@
       MacroInputRadio,
       MacroInputFile
     },
-    data() {
-      return {
-        type: this.$route.params.type,
-        value: {}
-      }
+
+    props: {
+      modalData: Object
     },
+
+    data: () => ({
+      win: electron.remote.getCurrentWindow()
+    }),
+
     methods: {
 
+      modalReturn(val) {
+        this.modalData.variable = VRDisplay
+      },
+
       done() {
-
-        let browser = electron.remote.getCurrentWindow()
-
-        browser.emit('macro-input-done', this.value)
-        browser.close()
-
+        this.win.emit('modal-return', this.modalData.variable)
       },
 
       cancel() {
-        electron.remote.getCurrentWindow().close()
+        this.win.close()
       }
 
     }
