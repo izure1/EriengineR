@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import getMouseOffset from '@static/js/getMouseOffset'
 import {
   Script
-} from '../../js/Script'
+} from '@static/js/class/Script'
 
 
 export default function (e) {

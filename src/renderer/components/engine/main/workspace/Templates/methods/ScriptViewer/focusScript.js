@@ -1,6 +1,6 @@
 import {
   Script
-} from '../../js/Script'
+} from '@static/js/class/Script'
 
 
 export default function (script = new Script) {

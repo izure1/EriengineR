@@ -8,7 +8,10 @@
       <p>아래 내용이 발생했을 때 작동합니다</p>
       <ul v-if="data.events.length">
         <li v-for="(event, index) in data.events" :key="index">
-          <a href="#" @click="modifyMacro(event, 'events')">{{ event.text }}</a>
+          <v-btn icon small @click="deleteContext(event.id, 'events')">
+            <v-icon color="grey">delete_outline</v-icon>
+          </v-btn>
+          <a href="#" @click="modifyMacro(event.id, 'events')">{{ event.text }}</a>
         </li>
       </ul>
       <a href="#" @click="createMacro('events')" v-if="!data.events.length">+</a>
@@ -21,7 +24,10 @@
       <p>위 사건이 발생했지만, 아래 내용이 모두 충족되어야 합니다. 원한다면 아무것도 넣지 않아도 됩니다</p>
       <ul v-if="data.conditions.length">
         <li v-for="(condition, index) in data.conditions" @dblclick="modifyItem(condition)" :key="index">
-          <a href="#" @click="modifyMacro(condition, 'conditions')">{{ condition.text }}</a>
+          <v-btn icon small @click="deleteContext(condition.id, 'conditions')">
+            <v-icon color="grey">delete_outline</v-icon>
+          </v-btn>
+          <a href="#" @click="modifyMacro(condition.id, 'conditions')">{{ condition.text }}</a>
         </li>
       </ul>
       <a href="#" @click="createMacro('conditions')">+</a>
@@ -34,7 +40,10 @@
       <p>모든 조건이 만족하면 순서대로 실행됩니다</p>
       <ul v-if="data.actions.length">
         <li v-for="(action, index) in data.actions" @dblclick="modifyItem(action)" :key="index">
-          <a href="#" @click="modifyMacro(action, 'actions')">{{ action.text }}</a>
+          <v-btn icon small @click="deleteContext(action.id, 'actions')">
+            <v-icon color="grey">delete_outline</v-icon>
+          </v-btn>
+          <a href="#" @click="modifyMacro(action.id, 'actions')">{{ action.text }}</a>
         </li>
       </ul>
       <a href="#" @click="createMacro('actions')">+</a>
@@ -52,24 +61,58 @@
 
   import {
     Macro
-  } from './js/Script'
+  } from '@static/js/class/Script'
 
 
   export default {
     props: ['data'],
+    data: () => ({
+      current: null
+    }),
     methods: {
 
+      deleteContext(id, column){
+        
+        let contexts
+        let offset
+
+        contexts = this.data[column]
+        offset = this.getMacroOffset(contexts, id)
+
+        contexts.splice(offset, 1)
+
+      },
+
       // 스크립트를 수정한다면 스크립트 컨텍스트 객체를 복사하고, 수정모드로 탭을 엽니다
-      modifyMacro(context, column) {
-        this.openMacroTab(new Macro(context), column)
+      modifyMacro(id, column) {
+        this.current = id
+        this.openMacroTab(column)
       },
 
       // 스크립트를 추가한다면 새로운 스크립트 컨텍스트 객체를 생성하고, 생성모드로 탭을 엽니다
       createMacro(column) {
-        this.openMacroTab(new Macro(), column)
+        this.current = null
+        this.openMacroTab(column)
       },
 
-      openMacroTab(macro, column) {
+      getMacroOffset(contexts, id) {
+
+        let offset = -1
+
+        for (let i = 0, len = contexts.length; i < len; i++) {
+
+          if (contexts[i].id === id) {
+            offset = i
+            break
+          }
+
+        }
+
+        return offset
+
+      },
+
+      openMacroTab(column) {
 
         let browser
         let parent, childURI
@@ -102,30 +145,24 @@
 
         browser.on('closed', () => browser = null)
 
-        // 모달이 준비되면 매크로 데이터를 전송합니다
-        browser.on('macro-ready', () => {
-          browser.emit('macro-set', macro)
-        })
-
         // 모달 내에서 매크로가 수정되면 스크립트에 대입하고 저장합니다
         // 이는 사용자가 저장 버튼을 눌렀을 때 적용됩니다
         browser.on('macro-saved', modifiedMacro => {
 
           let contexts
+          let offset
 
           contexts = this.data[column]
-          contexts = contexts.filter(context => context.id === macro.id)
+          offset = this.getMacroOffset(contexts, modifiedMacro.id)
 
           // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
-          if (contexts.length) {
-            contexts[0].from(modifiedMacro)
+          if (offset !== -1) {
+            contexts[offset] = modifiedMacro
           }
           // 존재하지 않는다면 생성모드이므로, 해당 스크립트에 추가합니다
           else {
-            this.data[column].push(modifiedMacro)
+            contexts.push(modifiedMacro)
           }
-
-          console.log('done', modifiedMacro, contexts, this)
 
         })
 
@@ -155,32 +192,22 @@
 
       >ul {
         list-style: none;
-        padding-left: 20px;
+        padding: 0;
 
         >li {
-          margin: 3px 0;
+          margin: 0;
 
           >a {
-            font-size: 12px;
-            color: orange !important;
+            font-size: 13px;
+            letter-spacing: -1px;
+            word-spacing: 1px;
             text-decoration: none;
             display: inline-block;
             transition: color 0.15s linear;
-
-            &:hover {
-              color: lightgreen !important;
-            }
           }
 
-          &::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            display: inline-block;
-            background: url('~@/assets/img/ico_arrow_right.svg') no-repeat;
-            background-size: cover;
-            margin-right: 10px;
-            opacity: 0.4;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
           }
         }
       }
@@ -195,6 +222,7 @@
         line-height: 35px;
         text-decoration: none;
         display: block;
+        margin-top: 15px;
         background-color: rgba(0, 0, 0, .3);
         transition: transform 0.15s ease-in-out;
 

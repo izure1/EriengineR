@@ -2,14 +2,14 @@
   <section>
     <header>
       <div>
-        <v-select :items="getMacroList" :hint="macro ? `${macro.class}` : ''" v-model="macro" append-icon="search"
-          dense box dark autocomplete height="70" background-color="#444" color="orange" item-text="text" item-value="value"
-          label="매크로를 선택하세요" class="macro-selector"></v-select>
+        <v-autocomplete :items="getMacroList" :hint="macro ? `${macro.class}` : ''" v-model="macro" append-icon="search"
+          dense box dark height="70" background-color="#444" color="orange" item-text="text" item-value="value"
+          label="매크로를 선택하세요" class="macro-selector" @change="sendMacroCopy"></v-autocomplete>
       </div>
     </header>
     <main>
       <div class="macro-description-wrap">
-        <macro-description v-if="macro" :macro="macro" :macros="getMacroGroup"></macro-description>
+        <macro-description v-if="macro" :macro="macro" :current="current" :macros="getMacroGroup"></macro-description>
       </div>
       <div class="macro-description-action">
         <v-btn @click="complete" :disabled="!isSavable" dark large>
@@ -46,6 +46,9 @@
   import MacroDescription from './MacroDescription'
 
   import getMacroList from './js/getMacroList'
+  import {
+    Macro
+  } from '@static/js/class/Script'
 
   export default {
     components: {
@@ -55,7 +58,8 @@
       win: electron.remote.getCurrentWindow(),
       modifiedMacro: null,
       macros: null,
-      macro: null
+      macro: null,
+      current: null
     }),
     computed: {
 
@@ -96,6 +100,10 @@
     },
     methods: {
 
+      sendMacroCopy(macro) {
+        this.current = new Macro().fromMacro(macro)
+      },
+
       complete(e) {
         this.win.emit('macro-saved', this.modifiedMacro)
         this.win.close()
@@ -109,8 +117,12 @@
 
     created() {
 
+      // static/assets/macro 디렉토리로부터 모든 매크로 정보를 받아옵니다
+      // FIXME: 사용자의 에리엔진 디렉토리에 복사된 매크로 폴더로부터 정보를 받아와야 합니다. 그래야 사용자가 직접 작성한 매크로 정보까지 불러옴
       this.macros = electron.ipcRenderer.sendSync('macro-get-list')
 
+      // MacroDescriptionContext 에서 checkSavable 메서드가 발생되었을 때, 결과값을 수신받습니다.
+      // 매크로의 모든 변수가 입력되어 저장이 가능한 상태라면, 매개변수로 매크로 데이터를, 그렇지 않을 경우 null 을 수신받습니다.
       this.win.on('macro-savable', macro => {
         this.modifiedMacro = macro
       })

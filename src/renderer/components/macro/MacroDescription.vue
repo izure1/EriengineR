@@ -1,6 +1,6 @@
 <template>
   <section class="macro-description">
-    <macro-description-context v-for="item in macros" :key="item.cid" v-if="macro.cid === item.cid" :macro="macro"></macro-description-context>
+    <macro-description-context v-for="item in macros" :key="item.cid" v-if="macro.cid === item.cid" :macro="macro" :current="current"></macro-description-context>
   </section>
 </template>
 
@@ -14,6 +14,7 @@
     props: {
       macros: Array,
       macro: Object,
+      current: Object,
       path: String
     }
   }

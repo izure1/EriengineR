@@ -17,12 +17,12 @@
       VRuntimeTemplate
     },
     props: {
-      macro: Object // 현재 선택된 매크로의 원본입니다
+      macro: Object, // 현재 선택된 매크로의 원본입니다
+      current: Object, // 현재 수정 중인 매크로 파일 정보입니다
     },
     data: () => ({
       updated: performance.now(),
       win: electron.remote.getCurrentWindow(),
-      current: null, // 현재 수정 중인 매크로 파일 정보입니다
       button: null,
       done: {}
     }),
@@ -180,7 +180,6 @@
 
         browser.done(value => {
           this.updateVariable(name, value)
-          this.checkSavable()
         })
 
       },
@@ -195,6 +194,7 @@
         this.current.variables[name].skip = true
 
         this.updated = performance.now()
+        this.checkSavable()
 
       },
 
@@ -210,15 +210,18 @@
         results = Object.keys(this.macro.variables)
         results = results.map(name => !!this.getCombineVariable(name).skip)
 
-        if (!results.includes(false)) {
-
-          this.current.macro = this.macro.cid
-          this.current.text = this.macro.description
-          this.current.variables = this.getCombineVariables()
-
-          this.win.emit('macro-savable', this.current)
-
+        // 매크로에 변수의 추가 입력이 필요할 경우
+        if (results.includes(false)) {
+          this.win.emit('macro-savable', null)
+          return
         }
+
+        // 매크로에 모든 변수가 입력되어 세이브가 가능할 경우
+        this.current.macro = this.macro.cid
+        this.current.text = this.current.getDescriptionFromMacro(this.macro, this.language)
+        this.current.variables = this.getCombineVariables()
+
+        this.win.emit('macro-savable', this.current)
 
       }
 
@@ -226,11 +229,8 @@
 
     created() {
 
-      this.win.on('macro-set', current => {
-        this.current = current
-        this.checkSavable()
-      })
-      this.win.emit('macro-ready')
+      // 변수 입력이 필요없는 매크로일 경우, 바로 저장 버튼이 활성화되어야 합니다
+      this.checkSavable()
 
     }
 
