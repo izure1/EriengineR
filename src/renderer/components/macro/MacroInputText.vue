@@ -1,19 +1,19 @@
 <template>
   <section>
-    <v-tabs dark slider-color="orange" fixed-tabs show-arrows>
+    <v-tabs slider-color="orange" fixed-tabs show-arrows>
       <v-tab v-for="(language, index) in languages" :key="index">{{ language.name }}</v-tab>
       <v-tab-item v-for="(language, index) in languages" :key="index">
-        <v-textarea dark placeholder="내용을 입력하세요. 다국어를 지원하고 싶다면 상단에서 언어를 관리하세요." no-resize full-width clearable
+        <v-textarea placeholder="내용을 입력하세요. 다국어를 지원하고 싶다면 상단에서 언어를 관리하세요." no-resize full-width clearable
           autofocus style="padding:10px" v-model="languageText[language.id]" @change="modalReturn"></v-textarea>
       </v-tab-item>
-      <v-btn dark icon @click="languageManageMode = true">
+      <v-btn icon @click="languageManageMode = true">
         <v-icon>menu</v-icon>
       </v-btn>
     </v-tabs>
-    <v-dialog v-model="languageManageMode" dark fullscreen>
+    <v-dialog v-model="languageManageMode" fullscreen>
       <v-card>
         <v-card-title>
-          <v-toolbar dark fixed>
+          <v-toolbar fixed>
             <v-btn icon @click="languageManageMode = false">
               <v-icon>close</v-icon>
             </v-btn>

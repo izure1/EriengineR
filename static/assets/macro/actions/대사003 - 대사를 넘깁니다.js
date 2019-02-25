@@ -4,6 +4,7 @@
 	class: '대사',
 	title: '대사 및 독백을 넘깁니다',
 	description: '현재 출력 중인 대사 및 독백을 넘깁니다. <br>대사가 출력 중이라면 타이핑을 끝내고, 출력이 완료된 상태라면 다음 행동으로 넘어갑니다.',
+	variables: {},
 	fn: function (next, stop, e) {
 		// 대사 출력을 위한 setTimeout 함수 지우기
 		clearTimeout(Eri.system.dialog.interval);

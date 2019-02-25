@@ -48,6 +48,15 @@
       </ul>
       <a href="#" @click="createMacro('actions')">+</a>
     </div>
+    <v-divider></v-divider>
+    <div class="template-scripteditor-actions">
+      <v-btn large @click="saveScript">
+        <v-icon>save</v-icon>스크립트 저장
+      </v-btn>
+      <v-btn large @click="cancelScript">
+        <v-icon>delete_forever</v-icon>취소
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -71,8 +80,8 @@
     }),
     methods: {
 
-      deleteContext(id, column){
-        
+      deleteContext(id, column) {
+
         let contexts
         let offset
 
@@ -110,6 +119,10 @@
 
         return offset
 
+      },
+
+      tabClose() {
+        this.$root.$emit('closeWorkspaceTab', this.data.id)
       },
 
       openMacroTab(column) {
@@ -167,6 +180,15 @@
         })
 
       },
+
+      saveScript() {
+        this.tabClose()
+      },
+
+      cancelScript() {
+        this.tabClose()
+      }
+
     }
   }
 </script>
@@ -230,6 +252,11 @@
           transform: rotate(180deg)
         }
       }
+    }
+
+    .template-scripteditor-actions {
+      margin-top: 10px;
+      text-align: right;
     }
   }
 </style>

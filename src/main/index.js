@@ -171,7 +171,7 @@ async function createWindow() {
   
   Menu.setApplicationMenu(Menu.buildFromTemplate([]))
 
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
   mainWindow.loadURL(mainURL)
   mainWindow.focus()
 

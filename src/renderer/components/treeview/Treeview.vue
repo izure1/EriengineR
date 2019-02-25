@@ -121,7 +121,7 @@
         if (this.configurable) {
           this.contextmenu_info.open = true
           this.contextmenu_info.x = e.clientX
-          this.contextmenu_info.y = e.clientY
+          this.contextmenu_info.y = e.clientY - 30
           e.currentTarget.focus()
         }
       },

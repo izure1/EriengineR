@@ -1,6 +1,6 @@
 <template>
   <section>
-    <v-list two-line subheader dark>
+    <v-list two-line subheader>
       <v-list-tile v-for="(language, index) in languages" :key="index" @click="setDefaultLanguage(language.id)">
         <v-list-tile-avatar>
           <v-icon color="orange" v-if="isDefaultLanguage(language.id)">check_box</v-icon>
@@ -37,7 +37,7 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
-    <v-dialog dark fullscreen v-model="languageRemove.dialog">
+    <v-dialog fullscreen v-model="languageRemove.dialog">
       <v-card>
         <v-card-title>{{ languageRemove.language }} 제거</v-card-title>
         <v-card-text>

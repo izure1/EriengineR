@@ -3,13 +3,13 @@
     <macro-input-text v-if="modalData.type === 'text'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-text>
     <macro-input-radio v-if="modalData.type === 'radio'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-radio>
     <macro-input-file v-if="modalData.type === 'file'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-file>
-    <v-divider dark></v-divider>
+    <v-divider></v-divider>
     <div class="macro-input-actions">
-      <v-btn dark @click="done">
+      <v-btn @click="done">
         <v-icon>save</v-icon>
         저장
       </v-btn>
-      <v-btn dark @click="cancel">
+      <v-btn @click="cancel">
         <v-icon>delete</v-icon>
         취소
       </v-btn>

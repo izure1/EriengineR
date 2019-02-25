@@ -60,7 +60,7 @@ export default class ModalWindow {
 
     //this.win.setMenu(null)
     this.win.loadURL(getResolvedURI(this.parent.webContents.getURL(), '/modal'))
-    this.win.webContents.openDevTools()
+    //this.win.webContents.openDevTools()
 
     this.win.on('modal-ready', this.__attachBody.bind(this))
 

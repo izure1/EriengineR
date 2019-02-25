@@ -3,7 +3,7 @@
     <header>
       <div>
         <v-autocomplete :items="getMacroList" :hint="macro ? `${macro.class}` : ''" v-model="macro" append-icon="search"
-          dense box dark height="70" background-color="#444" color="orange" item-text="text" item-value="value"
+          dense box height="70" background-color="#444" color="orange" item-text="text" item-value="value"
           label="매크로를 선택하세요" class="macro-selector" @change="sendMacroCopy"></v-autocomplete>
       </div>
     </header>
@@ -12,11 +12,11 @@
         <macro-description v-if="macro" :macro="macro" :current="current" :macros="getMacroGroup"></macro-description>
       </div>
       <div class="macro-description-action">
-        <v-btn @click="complete" :disabled="!isSavable" dark large>
+        <v-btn @click="complete" :disabled="!isSavable" large>
           <v-icon>save</v-icon>
           저장
         </v-btn>
-        <v-btn @click="cancel" dark large>
+        <v-btn @click="cancel" large>
           <v-icon>delete</v-icon>
           취소
         </v-btn>

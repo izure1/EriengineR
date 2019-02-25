@@ -12,7 +12,7 @@ export default function () {
     $workspace = $('#workspace')
     $terminal = $('#terminal')
 
-    vh = document.documentElement.clientHeight
+    vh = document.documentElement.clientHeight - 30
     wh = $workspace.height()
 
     $workspace.resizable('option', 'maxHeight', vh - 63)

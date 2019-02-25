@@ -16,10 +16,10 @@
       <div class="script-box-header">
         <span>{{ getScriptTitle(script.path) }}</span>
         <a href="#" title="스크립트 삭제" @click="dropScript(script)" v-if="!connection.source">
-          <v-icon>delete_forever</v-icon>
+          <v-icon small>delete_forever</v-icon>
         </a>
         <a href="#" title="스크립트 연결" @click="createConnection(script)" v-if="!connection.source">
-          <v-icon>link</v-icon>
+          <v-icon small>link</v-icon>
         </a>
       </div>
       <div class="script-box-container" @dblclick="modifyScript(script)" @click="createConnectionDone(script)">

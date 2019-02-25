@@ -134,6 +134,19 @@
         this.createTab(id, name, template, events)
       })
 
+      this.$root.$on('closeWorkspaceTab', id => {
+
+        for (let item of this.tabs) {
+
+          if (item.id !== id) continue
+          
+          this.tabClose(item)
+          break
+
+        }
+
+      })
+
     }
   }
 </script>
