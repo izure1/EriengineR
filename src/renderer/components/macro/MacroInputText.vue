@@ -32,6 +32,8 @@
   import electron from 'electron'
   import LanguageManager from '@/components/language-manager/LanguageManager'
 
+  import createUUID from '@static/js/createUUID'
+
 
   export default {
 
@@ -50,6 +52,15 @@
     methods: {
 
       modalReturn() {
+
+        for (let language of this.languages) {
+
+          electron.ipcRenderer.sendSync('language-append')
+
+          this.languageText[language.id]
+
+        }
+
         this.variable.text = this.languageText
         this.$emit('modalReturn', this.variable)
       },
@@ -61,18 +72,23 @@
           electron.ipcRenderer.send('language-get')
           electron.ipcRenderer.once('language-get', (e, languages) => {
             resolve(languages)
-            this.setDefaultValue(languages)
+            this.setValue(languages)
           })
 
         })
 
       },
 
-      setDefaultValue(languages) {
+      setValue(languages) {
 
-        for (let language of languages) {
-          this.languageText[language.id] = this.variable.text[language.id] || this.variable.text || ''
-        }
+        electron.ipcRenderer.send('language-find')
+        electron.ipcRenderer.once('language-find', (e, text) => {
+
+          for (let p in text) {
+            this.languageText[p] = text[p] || this.variable.text || ''
+          }
+
+        })
 
       }
 

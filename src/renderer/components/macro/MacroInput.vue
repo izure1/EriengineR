@@ -1,8 +1,9 @@
 <template>
   <section class="macro-input">
     <macro-input-text v-if="modalData.type === 'text'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-text>
-    <macro-input-radio v-if="modalData.type === 'radio'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-radio>
-    <macro-input-file v-if="modalData.type === 'file'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-file>
+    <macro-input-value v-else-if="modalData.type === 'value'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-value>
+    <macro-input-select v-else-if="modalData.type === 'select'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-select>
+    <macro-input-file v-else-if="modalData.type === 'file'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-file>
     <v-divider></v-divider>
     <div class="macro-input-actions">
       <v-btn @click="done">
@@ -21,14 +22,16 @@
   import electron from 'electron'
 
   import MacroInputText from './MacroInputText'
-  import MacroInputRadio from './MacroInputRadio'
+  import MacroInputValue from './MacroInputValue'
+  import MacroInputSelect from './MacroInputSelect'
   import MacroInputFile from './MacroInputFile'
 
 
   export default {
     components: {
       MacroInputText,
-      MacroInputRadio,
+      MacroInputValue,
+      MacroInputSelect,
       MacroInputFile
     },
 
@@ -43,7 +46,7 @@
     methods: {
 
       modalReturn(val) {
-        this.modalData.variable = VRDisplay
+        this.modalData.variable = val
       },
 
       done() {

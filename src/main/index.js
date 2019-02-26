@@ -235,6 +235,7 @@ import ipc_setDefaultLanguage from './language/setDefaultLanguage'
 import ipc_getDefaultLanguage from './language/getDefaultLanguage'
 import ipc_getLanguage from './language/getLanguage'
 import ipc_appendLanguage from './language/appendLanguage'
+import ipc_findLanguage from './language/findLanguage'
 
 
 function runIPC() {
@@ -269,6 +270,7 @@ function runIPC() {
   ipcMain.on('language-set-default', ipc_setDefaultLanguage.bind(mainWindow)) // 기본언어를 설정합니다
   ipcMain.on('language-get-default', ipc_getDefaultLanguage.bind(mainWindow)) // 기본언어를 반환합니다
   ipcMain.on('language-append', ipc_appendLanguage.bind(mainWindow)) // 언어에 문자열을 추가합니다
+  ipcMain.on('language-find', ipc_findLanguage.bind(mainWindow)) // 모든 다국어에 추가된 특정 문자열을 찾아 Object 형태로 반환합니다
 
 }
 

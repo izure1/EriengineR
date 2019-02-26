@@ -3,20 +3,13 @@ import read from './read'
 import write from './write'
 
 
-export default async function (text, uuid) {
+export default async function (language, text, uuid) {
 
   let scenario
-  let languages
 
-  languages = await get.call(this)
+  scenario = await read.call(this, language)
+  scenario.text[uuid] = text
 
-  for (let language of languages) {
-
-    scenario = await read.call(this, language.name)
-    scenario.text[uuid] = text
-
-    await write.call(this, language.name, scenario)
-
-  }
+  await write.call(this, language, scenario)
 
 }

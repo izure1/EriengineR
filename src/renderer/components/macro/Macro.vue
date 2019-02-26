@@ -4,7 +4,7 @@
       <div>
         <v-autocomplete :items="getMacroList" :hint="macro ? `${macro.class}` : ''" v-model="macro" append-icon="search"
           dense box height="70" background-color="#444" color="orange" item-text="text" item-value="value"
-          label="매크로를 선택하세요" class="macro-selector" @change="sendMacroCopy"></v-autocomplete>
+          label="매크로를 선택하세요" class="macro-selector" no-data-text="해당하는 매크로가 없습니다" @change="sendMacroCopy"></v-autocomplete>
       </div>
     </header>
     <main>
@@ -101,7 +101,7 @@
     methods: {
 
       sendMacroCopy(macro) {
-        this.current = new Macro().fromMacro(macro)
+        this.current = new Macro().buildFromMacro(macro)
       },
 
       complete(e) {

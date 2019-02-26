@@ -73,6 +73,11 @@
     }
   }
 
+  *:not(input),
+  *:not(textarea) {
+    user-select: none;
+  }
+
   html,
   body {
     overflow: hidden;

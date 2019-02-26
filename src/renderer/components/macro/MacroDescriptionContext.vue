@@ -133,7 +133,7 @@
          * 자세한 내용은 static/assets/macro/.../xxx.js 파일을 참고하시길 바랍니다.
          * 
          * {
-         *  cid: 'xxxxxxx...',
+         *  id: 'xxxxxxx...',
          *  title: '매크로 제목',
          *  description: '해당 매크로의 내용',
          *  variables: {
@@ -217,7 +217,7 @@
         }
 
         // 매크로에 모든 변수가 입력되어 세이브가 가능할 경우
-        this.current.macro = this.macro.cid
+        this.current.macro = this.macro.id
         this.current.text = this.current.getDescriptionFromMacro(this.macro, this.language)
         this.current.variables = this.getCombineVariables()
 

@@ -1,6 +1,6 @@
 <template>
   <section class="macro-description">
-    <macro-description-context v-for="item in macros" :key="item.cid" v-if="macro.cid === item.cid" :macro="macro" :current="current"></macro-description-context>
+    <macro-description-context v-for="item in macros" :key="item.id" v-if="macro.id === item.id" :macro="macro" :current="current"></macro-description-context>
   </section>
 </template>
 
