@@ -3,8 +3,8 @@
     <v-tabs slider-color="orange" fixed-tabs show-arrows>
       <v-tab v-for="(language, index) in languages" :key="index">{{ language.name }}</v-tab>
       <v-tab-item v-for="(language, index) in languages" :key="index">
-        <v-textarea placeholder="내용을 입력하세요. 다국어를 지원하고 싶다면 상단에서 언어를 관리하세요." no-resize full-width clearable
-          autofocus style="padding:10px" v-model="languageText[language.id]" @change="modalReturn"></v-textarea>
+        <v-textarea placeholder="내용을 입력하세요. 다국어를 지원하고 싶다면 상단에서 언어를 관리하세요." no-resize full-width clearable autofocus
+          style="padding:10px" v-model="inputText[language.id]" @change="modalReturn"></v-textarea>
       </v-tab-item>
       <v-btn icon @click="languageManageMode = true">
         <v-icon>menu</v-icon>
@@ -45,24 +45,21 @@
 
     data: () => ({
       languages: [],
-      languageText: {},
+      inputText: {},
       languageManageMode: false
     }),
 
     methods: {
 
-      modalReturn() {
+      async modalReturn() {
 
+        // 사용자가 입력한 모든 텍스트를 다국어 파일에 삽입합니다
         for (let language of this.languages) {
-
-          electron.ipcRenderer.sendSync('language-append')
-
-          this.languageText[language.id]
-
+          await electron.ipcRenderer.send('language-append', language.name, this.inputText[language.id], this.variable.id)
         }
 
-        this.variable.text = this.languageText
-        this.$emit('modalReturn', this.variable)
+        this.$emit('modalReturn', this.variable.id)
+
       },
 
       getLanguages() {
@@ -72,21 +69,23 @@
           electron.ipcRenderer.send('language-get')
           electron.ipcRenderer.once('language-get', (e, languages) => {
             resolve(languages)
-            this.setValue(languages)
+            this.setSavedText(languages)
           })
 
         })
 
       },
 
-      setValue(languages) {
+      setSavedText(languages) {
 
-        electron.ipcRenderer.send('language-find')
+        electron.ipcRenderer.send('language-find', this.variable.value)
         electron.ipcRenderer.once('language-find', (e, text) => {
 
-          for (let p in text) {
-            this.languageText[p] = text[p] || this.variable.text || ''
+          for (let language of languages) {
+            this.$set(this.inputText, language.id, text[language.id])
           }
+
+          this.modalReturn()
 
         })
 

@@ -20,7 +20,6 @@ class Variable {
 
   constructor(id, value, inputted) {
 
-    // 해당 변수의 고유값입니다
     this.id = id
     // 해당 변수에 담길 값입니다. 이는 인게임에서 사용됩니다
     this.value = value
@@ -30,6 +29,14 @@ class Variable {
   }
 
   get text() {
+
+    let language
+    let text
+
+    language = electron.ipcRenderer.sendSync('language-get-default')
+    text = electron.ipcRenderer.sendSync('language-find', this.value)
+
+    return language in text ? text[language] : this.value
 
   }
 
@@ -149,7 +156,7 @@ class Macro {
   }
 
 
-  getDescriptionFromMacro(language) {
+  getDescriptionFromMacro() {
 
     let description
 
@@ -157,16 +164,7 @@ class Macro {
     description = description.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, match => {
 
       match = match.replace(/\{{2}\s*(.*?)\s*\}{2}/gmi, '$1')
-      match = this.variables[match]
-
-
-      if (!match) {
-        return '(삭제됨)'
-      }
-
-      if (typeof match.text === 'object') {
-        match = language in match.text ? match.text[language] : '(없음)'
-      } else match = match.text
+      match = this.variables[match].text
 
       return match
 

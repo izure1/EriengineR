@@ -36,6 +36,7 @@
     },
 
     props: {
+      returnValue: null,
       modalData: Object
     },
 
@@ -46,11 +47,11 @@
     methods: {
 
       modalReturn(val) {
-        this.modalData.variable = val
+        this.returnValue = val
       },
 
       done() {
-        this.win.emit('modal-return', this.modalData.variable)
+        this.win.emit('modal-return', this.returnValue)
       },
 
       cancel() {
