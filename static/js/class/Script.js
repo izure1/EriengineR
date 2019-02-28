@@ -1,3 +1,4 @@
+import path from 'path'
 import electron from 'electron'
 import createUUID from '@static/js/createUUID'
 
@@ -21,11 +22,22 @@ class Variable {
   constructor(id, value, inputted) {
 
     this.id = id
+    this.type = null
     // 해당 변수에 담길 값입니다. 이는 인게임에서 사용됩니다
     this.value = value
     // 해당 변수가 이전에 입력되었던 값인지 확인합니다. 입력되었다면 true, 아니면 false가 담깁니다
     this.inputted = inputted
 
+  }
+
+}
+
+
+class TextVariable extends Variable {
+
+  constructor(id, value, inputted) {
+    super(id, value, inputted)
+    this.type = 'text'
   }
 
   get text() {
@@ -38,6 +50,53 @@ class Variable {
 
     return language in text ? text[language] : this.value
 
+  }
+
+}
+
+class FileVariable extends Variable {
+
+  constructor(id, value, inputted) {
+    super(id, value, inputted)
+    this.type = 'file'
+  }
+
+  get text() {
+
+    let file = electron.ipcRenderer.sendSync('asset-get-file', this.value, true)
+
+    if (file === null) {
+      return 'undefined'
+    }
+
+    return file
+
+  }
+
+}
+
+class ValueVariable extends Variable {
+
+  constructor(id, value, inputted) {
+    super(id, value, inputted)
+    this.type = 'value'
+  }
+
+  get text() {
+    return this.value + ''
+  }
+
+}
+
+class SelectVariable extends Variable {
+
+  constructor(id, value, inputted) {
+    super(id, value, inputted)
+    this.type = 'select'
+  }
+
+  get text() {
+    return 'test3'
   }
 
 }
@@ -63,6 +122,26 @@ class Macro {
     return JSON.parse(JSON.stringify(obj))
   }
 
+  static getMatchedType(type) {
+
+    switch (type) {
+
+      case 'text':
+        return TextVariable
+
+      case 'value':
+        return ValueVariable
+
+      case 'file':
+        return FileVariable
+
+      case 'select':
+        return SelectVariable
+
+    }
+
+  }
+
   __init(macro) {
 
     setHiddenContext.call(this, '__macro', macro)
@@ -70,34 +149,44 @@ class Macro {
 
   }
 
-  __buildVariables(vs) {
+  __getOldVariables(macro, vs) {
 
     let variables
-    let v
+    let V, v
 
     variables = {}
 
-    for (let p in vs) {
-      v = vs[p]
-      variables[p] = new Variable(v.id, v.value, v.inputted)
+    for (let p in macro.variables) {
+
+      if (macro.variables[p].type !== vs[p].type) {
+        variables[p] = this.__createDefaultVariable(macro.variables[p])
+      } else {
+        v = vs[p]
+        V = Macro.getMatchedType(v.type)
+        variables[p] = new V(v.id, v.value, v.inputted)
+      }
+
     }
 
     return variables
 
   }
 
-  __parseVariables(vs) {
+  __getNewVariables(vs) {
 
-    let variables
-
-    variables = {}
+    let variables = {}
 
     for (let p in vs) {
-      variables[p] = new Variable(createUUID(), vs[p].text, false)
+      variables[p] = this.__createDefaultVariable(vs[p])
     }
 
     return variables
 
+  }
+
+  __createDefaultVariable(v) {
+    let V = Macro.getMatchedType(v.type)
+    return new V(createUUID(), v.text, false)
   }
 
   /**
@@ -111,7 +200,7 @@ class Macro {
     this.id = old.id
     this.macro = old.macro
     this.text = old.text
-    this.variables = this.__buildVariables(old.variables)
+    this.variables = this.__getOldVariables(macro, old.variables)
 
     return this.__init(macro)
 
@@ -126,7 +215,7 @@ class Macro {
   buildFromMacro(macro) {
 
     this.macro = macro.cid
-    this.variables = this.__parseVariables(macro.variables)
+    this.variables = this.__getNewVariables(macro.variables)
 
     return this.__init(macro)
 

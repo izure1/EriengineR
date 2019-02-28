@@ -237,6 +237,10 @@ import ipc_getLanguage from './language/getLanguage'
 import ipc_appendLanguage from './language/appendLanguage'
 import ipc_findLanguage from './language/findLanguage'
 
+import ipc_getAssetPath from './asset/getAssetPath'
+import ipc_getAssetList from './asset/getAssetList'
+import ipc_getAssetFile from './asset/getAssetFile'
+
 
 function runIPC() {
 
@@ -271,6 +275,11 @@ function runIPC() {
   ipcMain.on('language-get-default', ipc_getDefaultLanguage.bind(mainWindow)) // 기본언어를 반환합니다
   ipcMain.on('language-append', ipc_appendLanguage.bind(mainWindow)) // 언어에 문자열을 추가합니다
   ipcMain.on('language-find', ipc_findLanguage.bind(mainWindow)) // 모든 다국어에 추가된 특정 문자열을 찾아 Object 형태로 반환합니다
+
+  // Assets
+  ipcMain.on('asset-get-path', ipc_getAssetPath.bind(mainWindow)) // 현재 프로젝트의 에셋 디렉토리 경로를 반환합니다
+  ipcMain.on('asset-get-list', ipc_getAssetList.bind(mainWindow)) // 현재 프로젝트의 에셋 파일들의 경로를 배열에 담아 반환합니다
+  ipcMain.on('asset-get-file', ipc_getAssetFile.bind(mainWindow)) // 파일 id로부터 가짜 파일 경로를 반환합니다
 
 }
 

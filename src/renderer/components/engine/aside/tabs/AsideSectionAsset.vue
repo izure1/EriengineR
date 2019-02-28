@@ -31,7 +31,7 @@
       Treeview
     },
     data: () => ({
-      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Assets'),
+      path: ipcRenderer.sendSync('asset-get-path'),
       uploadFileProgress: 0
     }),
     computed: {
