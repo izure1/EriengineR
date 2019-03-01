@@ -96,7 +96,17 @@ class SelectVariable extends Variable {
   }
 
   get text() {
-    return 'test3'
+    
+    let text
+
+    for (let item of this.__origin.list) {
+      if (this.value === item.value) {
+        return item.text
+      }
+    }
+
+    return 'undefined'
+
   }
 
 }
@@ -145,6 +155,11 @@ class Macro {
   __init(macro) {
 
     setHiddenContext.call(this, '__macro', macro)
+
+    for (let p in this.variables) {
+      setHiddenContext.call(this.variables[p], '__origin', macro.variables[p])
+    }
+
     return this
 
   }

@@ -111,7 +111,8 @@
 
         browser.createWindow('/components/macro/MacroInput', {
           type: this.macro.variables[name].type,
-          variable: this.current.variables[name]
+          variable: this.current.variables[name],
+          origin: this.macro.variables[name]
         })
 
         browser.done(value => {

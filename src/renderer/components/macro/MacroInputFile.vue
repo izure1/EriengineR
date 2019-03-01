@@ -1,9 +1,14 @@
 <template>
   <section>
-    <treeview :path="path" :filter="filter" :configurable="false" :openItem="selectFile" v-if="!fakePath"></treeview>
+    <treeview :path="path" :filter="getFilter" :configurable="false" :openItem="selectFile" v-if="!file"></treeview>
     <v-card v-else>
       <v-card-title>파일 선택됨</v-card-title>
-      <v-card-text>{{ fakePath }}</v-card-text>
+      <v-card-text>
+        <a href="#" @click="openFile">{{ fileFakePath }}</a>
+        <v-btn icon @click="reset">
+          <v-icon>cancel</v-icon>
+        </v-btn>
+      </v-card-text>
     </v-card>
   </section>
 </template>
@@ -16,23 +21,20 @@
   import Treeview from '@/components/treeview/Treeview'
 
 
-  const ipcRenderer = electron.ipcRenderer
-
-
   export default {
 
     components: {
       Treeview
     },
 
-    props: ['variable'],
+    props: ['variable', 'origin'],
     data: () => ({
 
-      path: ipcRenderer.sendSync('asset-get-path'),
-      fakePath: null,
-      filter: {
-        extensions: /\.png$/
-      }
+      path: electron.ipcRenderer.sendSync('asset-get-path'),
+      file: null,
+      fileFakePath: null,
+      fileRealPath: null,
+      extensions: []
 
     }),
 
@@ -40,6 +42,22 @@
 
       contextmenu() {
         return []
+      },
+
+      getFilter() {
+        
+        let pattern
+        let regexp
+
+        pattern = this.extensions.map(ext => `(\\${ext})$`)
+        pattern = pattern.join('|')
+
+        regexp = new RegExp(pattern, 'gmi')
+
+        return {
+          extensions: regexp
+        }
+
       }
 
     },
@@ -48,15 +66,11 @@
 
       async selectFile(filepath) {
 
-        let file
-        let id
+        this.file = await this.getAssetData(filepath)
+        this.fileFakePath = await this.getFakePath(this.file.id, true)
+        this.fileRealPath = await this.getRealPath(this.file)
 
-        file = await this.getAssetData(filepath)
-        id = file.id
-        file = await this.getFakePath(id)
-
-        this.fakePath = file
-        this.$emit('modalReturn', id)
+        this.$emit('modalReturn', this.file.id)
 
       },
 
@@ -64,22 +78,55 @@
         return await fs.readJSON(asset)
       },
 
-      async getFakePath(id) {
+      async getFakePath(id, relative) {
 
         return new Promise((resolve, reject) => {
 
-          ipcRenderer.send('asset-get-file', id, true)
-          ipcRenderer.once('asset-get-file', (e, fakePath) => {
+          electron.ipcRenderer.send('asset-get-file', id, relative)
+          electron.ipcRenderer.once('asset-get-file', (e, fakePath) => {
             resolve(fakePath)
           })
 
         })
+      },
+
+      async getRealPath(file) {
+
+        let real
+
+        real = electron.ipcRenderer.sendSync('asset-get-path', true)
+        real = path.join(real, file.id + file.ext)
+
+        return real
+
+      },
+
+      async openFile() {
+        electron.shell.openItem(this.fileRealPath)
+      },
+
+      reset() {
+        this.file = null
+        this.fileFakePath = null
+        this.fileRealPath = null
       }
 
+    },
+
+    created() {
+      this.extensions = this.origin.list
     }
 
   }
 </script>
 
 <style lang="scss" scoped>
+  a {
+    text-decoration: none;
+    transition: color .15s linear;
+
+    &:hover {
+      color: lightgreen !important;
+    }
+  }
 </style>

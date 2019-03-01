@@ -1,9 +1,18 @@
 <template>
   <section class="macro-input">
-    <macro-input-text v-if="modalData.type === 'text'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-text>
-    <macro-input-value v-else-if="modalData.type === 'value'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-value>
-    <macro-input-select v-else-if="modalData.type === 'select'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-select>
-    <macro-input-file v-else-if="modalData.type === 'file'" :variable="modalData.variable" @modalReturn="modalReturn"></macro-input-file>
+
+    <macro-input-text v-if="modalData.type === 'text'" :variable="modalData.variable" :origin="modalData.origin"
+      @modalReturn="modalReturn"></macro-input-text>
+
+    <macro-input-value v-else-if="modalData.type === 'value'" :variable="modalData.variable" :origin="modalData.origin"
+      @modalReturn="modalReturn"></macro-input-value>
+
+    <macro-input-select v-else-if="modalData.type === 'select'" :variable="modalData.variable" :origin="modalData.origin"
+      @modalReturn="modalReturn"></macro-input-select>
+
+    <macro-input-file v-else-if="modalData.type === 'file'" :variable="modalData.variable" :origin="modalData.origin"
+      @modalReturn="modalReturn"></macro-input-file>
+
     <v-divider></v-divider>
     <div class="macro-input-actions">
       <v-btn @click="done">

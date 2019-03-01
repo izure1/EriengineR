@@ -1,5 +1,9 @@
 import path from 'path'
 
-export default function () {
-  return path.join(this.variables.project.directory, 'assets').replace(/\\/g, '/')
+export default function (source = false) {
+
+  return source ?
+    path.join(this.variables.project.directory, 'AssetSources').replace(/\\/g, '/') :
+    path.join(this.variables.project.directory, 'Assets').replace(/\\/g, '/')
+
 }
