@@ -1,10 +1,8 @@
 import electron from 'electron'
-import fs from 'fs-extra'
 
 
 export default function (script) {
 
-  let scripts
   let i
 
   electron.ipcRenderer.send('modal-delete-trash', {
@@ -25,5 +23,7 @@ export default function (script) {
     this.saveScript(item)
 
   }
+
+  electron.ipcRenderer.sendSync('script-check-valid')
 
 }

@@ -1,22 +1,7 @@
-import glob from 'glob'
 import fs from 'fs-extra'
+import fg from 'fast-glob'
 import assetPath from './assetPath'
 
-
-
-async function getAssets(pattern, option) {
-
-  return new Promise((resolve, reject) => {
-    glob(pattern, option, (err, files) => {
-      if (err) {
-        reject(err)
-        return
-      }
-      resolve(files)
-    })
-  })
-
-}
 
 async function readAssetData(filepath) {
 
@@ -34,20 +19,14 @@ async function readAssetData(filepath) {
 
 export default async function (e) {
 
-  let cwd, opt
   let files
+  let data
 
-  cwd = assetPath.call(this)
-  opt = {
-    cwd,
-    nodir: true,
+  data = {}
+  files = await fg('**/*', {
+    cwd: assetPath.call(this),
     absolute: true
-  }
-
-
-  let data = {}
-
-  files = await getAssets('**/*', opt)
+  })
 
   for (let file of files) {
     try {

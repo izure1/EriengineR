@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="macro-input-text">
     <v-tabs slider-color="orange" fixed-tabs show-arrows>
       <v-tab v-for="(language, index) in languages" :key="index">{{ language.name }}</v-tab>
       <v-tab-item v-for="(language, index) in languages" :key="index">
@@ -104,6 +104,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-</style>

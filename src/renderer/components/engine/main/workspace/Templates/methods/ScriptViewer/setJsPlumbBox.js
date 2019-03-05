@@ -1,3 +1,6 @@
+import electron from 'electron'
+
+
 export default function () {
 
   this.jsPlumb.reset()
@@ -5,6 +8,7 @@ export default function () {
 
     let source
     let target
+    let ids
 
     // 스트림을 끊으면 저장됩니다
     this.jsPlumb.bind('connectionDetached', info => {

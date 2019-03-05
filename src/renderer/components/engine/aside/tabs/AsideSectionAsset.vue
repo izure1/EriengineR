@@ -15,7 +15,7 @@
   import path from 'path'
   import fs from 'fs-extra'
   import del from 'del'
-  import glob from 'glob'
+  import fg from 'fast-glob'
 
   import {
     ipcRenderer,
@@ -64,7 +64,7 @@
 
               let assets
 
-              assets = await this.glob('**/*.*', {
+              assets = await fg('**/*.*', {
                 cwd: itempath,
                 absolute: true
               })
@@ -290,17 +290,6 @@
         }
 
         await del(file, option)
-
-      },
-
-      async glob(pattern, option) {
-
-        return new Promise((resolve, reject) => {
-          glob(pattern, option, (err, files) => {
-            if (err) reject(err)
-            else resolve(files)
-          })
-        })
 
       },
 

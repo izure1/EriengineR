@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="macro-input-file">
     <treeview :path="path" :filter="getFilter" :configurable="false" :openItem="selectFile" v-if="!file"></treeview>
     <v-card v-else>
       <v-card-title>파일 선택됨</v-card-title>

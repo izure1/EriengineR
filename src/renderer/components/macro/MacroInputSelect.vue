@@ -1,7 +1,8 @@
 <template>
   <section class="macro-input-select">
     <v-radio-group v-model="selected">
-      <v-radio v-for="(item, index) in getRadioList" :key="index" :label="item.text" :value="item.value" color="success" @change="modalReturn"></v-radio>
+      <v-radio v-for="(item, index) in getRadioList" :key="index" :label="item.text" :value="item.value" color="success"
+        @change="modalReturn"></v-radio>
     </v-radio-group>
   </section>
 </template>
@@ -42,14 +43,17 @@
 
       },
 
-      modalReturn(value) {
-        this.$emit('modalReturn', value)
+      modalReturn() {
+        this.$nextTick(() => {
+          this.$emit('modalReturn', this.selected)
+        })
       }
 
     },
 
     created() {
       this.selected = this.getMatchedValue()
+      this.modalReturn()
     }
 
   }

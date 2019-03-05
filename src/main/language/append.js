@@ -1,4 +1,3 @@
-import get from './get'
 import read from './read'
 import write from './write'
 

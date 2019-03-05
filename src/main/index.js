@@ -226,6 +226,11 @@ import ipc_sendError from './terminal/sendError'
 import ipc_sendErrorBeep from './terminal/sendErrorBeep'
 import ipc_sendOutput from './terminal/sendOutput'
 
+import ipc_getScriptPath from './script/getScriptPath'
+import ipc_getScriptList from './script/getScriptList'
+import ipc_checkValidScript from './script/checkValidScript'
+import ipc_writeScript from './script/writeScript'
+
 import ipc_getMacroList from './macro/getMacroList'
 
 import ipc_addLanguage from './language/addLanguage'
@@ -264,6 +269,12 @@ function runIPC() {
   ipc_catchError.call(mainWindow)
 
   // Script
+  ipcMain.on('script-get-path', ipc_getScriptPath.bind(mainWindow)) // 해당 프로젝트의 스크립트 루트 디렉토리 경로를 반환합니다
+  ipcMain.on('script-get-list', ipc_getScriptList.bind(mainWindow)) // 매개변수로 넘어온 경로에 있는 스크립트 파일 목록을 배열에 담아 반환합니다
+  ipcMain.on('script-write', ipc_writeScript.bind(mainWindow)) // 스크립트 파일을 생성하거나 수정합니다
+  ipcMain.on('script-check-valid', ipc_checkValidScript.bind(mainWindow)) // 모든 스크립트 파일의 유효성을 검사하고 수정합니다
+
+  // Macro
   ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow)) // static\assets\macro 내부에 있는 모든 매크로 파일을 배열에 담아 반환합니다
 
   // Language, 다국어 관련

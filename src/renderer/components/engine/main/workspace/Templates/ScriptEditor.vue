@@ -8,7 +8,7 @@
       <p>아래 내용이 발생했을 때 작동합니다</p>
       <ul v-if="data.events.length">
         <li v-for="(event, index) in data.events" :key="index">
-          <v-btn icon small @click="deleteContext(event.id, 'events')">
+          <v-btn icon small @click="deleteMacro(event.id, 'events')">
             <v-icon color="grey">delete_outline</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(event.id, 'events')">{{ event.text }}</a>
@@ -24,7 +24,7 @@
       <p>위 사건이 발생했지만, 아래 내용이 모두 충족되어야 합니다. 원한다면 아무것도 넣지 않아도 됩니다</p>
       <ul v-if="data.conditions.length">
         <li v-for="(condition, index) in data.conditions" @dblclick="modifyItem(condition)" :key="index">
-          <v-btn icon small @click="deleteContext(condition.id, 'conditions')">
+          <v-btn icon small @click="deleteMacro(condition.id, 'conditions')">
             <v-icon color="grey">delete_outline</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(condition.id, 'conditions')">{{ condition.text }}</a>
@@ -40,7 +40,7 @@
       <p>모든 조건이 만족하면 순서대로 실행됩니다</p>
       <ul v-if="data.actions.length">
         <li v-for="(action, index) in data.actions" @dblclick="modifyItem(action)" :key="index">
-          <v-btn icon small @click="deleteContext(action.id, 'actions')">
+          <v-btn icon small @click="deleteMacro(action.id, 'actions')">
             <v-icon color="grey">delete_outline</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(action.id, 'actions')">{{ action.text }}</a>
@@ -50,7 +50,7 @@
     </div>
     <v-divider></v-divider>
     <div class="template-scripteditor-actions">
-      <v-btn large @click="saveScript">
+      <v-btn large @click="saveScript" :disabled="!isSavable">
         <v-icon>save</v-icon>스크립트 저장
       </v-btn>
       <v-btn large @click="cancelScript">
@@ -74,13 +74,24 @@
 
 
   export default {
+
     props: ['data'],
+
     data: () => ({
       current: null
     }),
+
+    computed: {
+
+      isSavable() {
+        return !!this.data.events.length
+      }
+
+    },
+
     methods: {
 
-      deleteContext(id, column) {
+      deleteMacro(id, column) {
 
         let contexts
         let offset

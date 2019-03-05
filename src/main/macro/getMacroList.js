@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs-extra'
-import glob from 'glob'
+import fg from 'fast-glob'
 
 
 export default function getMacroList(e) {
@@ -19,7 +19,7 @@ export default function getMacroList(e) {
     let m
 
     dir = path.join(macroDirectory, dirname, '**/*.js')
-    dir = glob.sync(dir)
+    dir = fg.sync(dir)
     dir = dir.map(path => {
 
       m = __non_webpack_require__(path)

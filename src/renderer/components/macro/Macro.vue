@@ -3,8 +3,8 @@
     <header>
       <div>
         <v-autocomplete :items="getMacroList" :hint="macro ? `${macro.class}` : ''" v-model="macro" append-icon="search"
-          dense box height="70" background-color="#444" color="orange" item-text="text" item-value="value"
-          label="매크로를 선택하세요" class="macro-selector" no-data-text="해당하는 매크로가 없습니다" @change="sendMacroCopy"></v-autocomplete>
+          dense box height="70" background-color="#444" color="orange" item-text="text" item-value="value" label="매크로를 선택하세요"
+          class="macro-selector" no-data-text="해당하는 매크로가 없습니다" @change="sendMacroCopy"></v-autocomplete>
       </div>
     </header>
     <main>
@@ -29,7 +29,7 @@
           <dd>{{ getMacroAuthor }}</dd>
           <dt>정보</dt>
           <dd>
-            <a :href="getMacroURL" target="_blank">{{ getMacroURL }}</a>
+            <a href="#" @click="openExternal(getMacroURL)">{{ getMacroURL }}</a>
           </dd>
         </dl>
       </div>
@@ -40,7 +40,6 @@
 <script>
   import path from 'path'
   import fs from 'fs-extra'
-  import glob from 'glob'
   import electron from 'electron'
 
   import MacroDescription from './MacroDescription'
@@ -111,6 +110,10 @@
 
       cancel(e) {
         this.win.close()
+      },
+
+      openExternal(url) {
+        electron.shell.openExternal(url)
       }
 
     },
@@ -133,7 +136,7 @@
 
 <style lang="scss" scoped>
   section {
-    height: 100%;
+    height: calc(100% - 30px);
     display: flex;
     flex-direction: column;
     background-color: #555;

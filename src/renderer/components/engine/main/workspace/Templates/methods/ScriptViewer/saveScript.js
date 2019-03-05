@@ -1,10 +1,11 @@
-import fs from 'fs-extra'
+import electron from 'electron'
+
 
 export default function (script) {
 
   script = this.getOriginScript(script.id)
-  fs.writeJSONSync(script.path, script, {
-    spaces: 2
-  })
+  
+  electron.ipcRenderer.sendSync('script-write', script.path, script)
+  electron.ipcRenderer.sendSync('script-check-valid')
 
 }

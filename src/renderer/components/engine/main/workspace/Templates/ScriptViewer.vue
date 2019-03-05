@@ -1,7 +1,6 @@
 <template>
   <div v-dragscroll:nochilddrag class="template-scriptviewer" @contextmenu.self="createScript" @mousemove="setCursorInformation"
     @mousewheel="setZAxis" :style="{width: `${100 / persp.value}%`, height: `${100 / persp.value}%`, transform:`scale(${persp.value})`}">
-    <span class="template-scriptviewer-eof"></span>
     <span :id="getCursorPointerId" class="template-scriptviewer-cursor" v-show="connection.source" :style="{ left: `${connection.x}px`, top: `${connection.y}px` }"></span>
     <div class="template-scriptviewer-axis">
       <div v-for="x in pos.x" :key="`pos_${x}`" :style="{left: `${x}px`}">
@@ -158,8 +157,6 @@
 
 <style lang="scss" scoped>
   $maxPerspective: 600px;
-  $maxXAxis: 50000px;
-  $maxYAxis: 50000px;
 
   .template-scriptviewer {
     position: absolute;
@@ -172,15 +169,6 @@
     &:active {
       cursor: -webkit-grabbing;
       cursor: grabbing;
-    }
-
-    >.template-scriptviewer-eof {
-      width: 1px;
-      height: 1px;
-      position: absolute;
-      left: $maxXAxis;
-      top: $maxYAxis;
-      visibility: hidden;
     }
 
     >.template-scriptviewer-cursor {

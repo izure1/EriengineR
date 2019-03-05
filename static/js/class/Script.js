@@ -96,8 +96,6 @@ class SelectVariable extends Variable {
   }
 
   get text() {
-    
-    let text
 
     for (let item of this.__origin.list) {
       if (this.value === item.value) {
@@ -105,7 +103,13 @@ class SelectVariable extends Variable {
       }
     }
 
-    return 'undefined'
+    for (let item of this.__origin.list) {
+      if (this.value === item.text) {
+        return item.text
+      }
+    }
+
+    return this.value
 
   }
 

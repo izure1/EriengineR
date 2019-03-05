@@ -1,4 +1,4 @@
-import glob from 'glob'
+import fg from 'fast-glob'
 import path from 'path'
 
 import read from './read'
@@ -12,7 +12,7 @@ export default async function () {
 
 
   directory = path.join(this.variables.project.directory, 'Languages')
-  languages = glob.sync(path.join(directory, '*.json'))
+  languages = await fg(path.join(directory, '*.json'))
 
   returnValue = []
 

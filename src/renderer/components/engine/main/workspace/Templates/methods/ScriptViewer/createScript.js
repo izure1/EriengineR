@@ -1,5 +1,5 @@
+import electron from 'electron'
 import path from 'path'
-import fs from 'fs-extra'
 import getMouseOffset from '@static/js/getMouseOffset'
 import {
   Script
@@ -26,8 +26,6 @@ export default function (e) {
   scriptname += '.esscript'
 
   // 해당 디렉토리에 새로운 스크립트 파일을 만듭니다. 이는 화면에 자동으로 갱신됩니다
-  fs.writeJSONSync(scriptname, script, {
-    spaces: 2
-  })
+  electron.ipcRenderer.sendSync('script-write', scriptname, script)
 
 }
