@@ -225,6 +225,7 @@
       >a {
         height: 100%;
         line-height: 33px;
+        color: inherit;
         text-decoration: none;
         padding: 0 10px;
         display: flex;

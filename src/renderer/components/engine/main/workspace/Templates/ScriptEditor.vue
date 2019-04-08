@@ -50,7 +50,7 @@
     </div>
     <v-divider></v-divider>
     <div class="template-scripteditor-actions">
-      <v-btn large @click="saveScript" :disabled="!isSavable">
+      <v-btn large @click="saveScript">
         <v-icon>save</v-icon>스크립트 저장
       </v-btn>
       <v-btn large @click="cancelScript">
@@ -81,14 +81,6 @@
       current: null
     }),
 
-    computed: {
-
-      isSavable() {
-        return !!this.data.events.length
-      }
-
-    },
-
     methods: {
 
       deleteMacro(id, column) {
@@ -105,14 +97,22 @@
 
       // 스크립트를 수정한다면 스크립트 컨텍스트 객체를 복사하고, 수정모드로 탭을 엽니다
       modifyMacro(id, column) {
-        this.current = id
-        this.openMacroTab(column)
+
+        let contexts
+        let offset
+
+        contexts = this.data[column]
+        offset = this.getMacroOffset(contexts, id)
+
+        this.current = contexts[offset]
+        this.openMacroTab(column, this.current)
+
       },
 
       // 스크립트를 추가한다면 새로운 스크립트 컨텍스트 객체를 생성하고, 생성모드로 탭을 엽니다
       createMacro(column) {
         this.current = null
-        this.openMacroTab(column)
+        this.openMacroTab(column, this.current)
       },
 
       getMacroOffset(contexts, id) {
@@ -136,7 +136,7 @@
         this.$root.$emit('closeWorkspaceTab', this.data.id)
       },
 
-      openMacroTab(column) {
+      openMacroTab(column, old) {
 
         let browser
         let parent, childURI
@@ -169,6 +169,12 @@
 
         browser.on('closed', () => browser = null)
 
+        // 모달 윈도우로 이전 매크로 정보를 보냅니다.
+        // 매크로를 수정하는 용도로 사용합니다
+        browser.on('macro-input-ready', () => {
+          browser.emit('macro-send-old', old)
+        })
+
         // 모달 내에서 매크로가 수정되면 스크립트에 대입하고 저장합니다
         // 이는 사용자가 저장 버튼을 눌렀을 때 적용됩니다
         browser.on('macro-saved', modifiedMacro => {
@@ -181,7 +187,7 @@
 
           // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
           if (offset !== -1) {
-            contexts[offset] = modifiedMacro
+            contexts.splice(offset, 1, modifiedMacro)
           }
           // 존재하지 않는다면 생성모드이므로, 해당 스크립트에 추가합니다
           else {
@@ -193,7 +199,20 @@
       },
 
       saveScript() {
+
+        let filepath
+        
+        filepath = electron.ipcRenderer.sendSync('script-get-filepath', this.data.id)
+
+        if (!filepath) {
+          electron.remote.dialog.showErrorBox('파일 삭제됨', '해당 파일이 저장될 위치에 파일이 더이상 존재하지 않습니다.')
+          return
+        }
+
+        electron.ipcRenderer.sendSync('script-write', filepath, this.data)
+
         this.tabClose()
+        
       },
 
       cancelScript() {
@@ -234,6 +253,7 @@
             font-size: 13px;
             letter-spacing: -1px;
             word-spacing: 1px;
+            color: gray;
             text-decoration: none;
             display: inline-block;
             transition: color 0.15s linear;

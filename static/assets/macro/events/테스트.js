@@ -29,7 +29,8 @@ module.exports = {
           text: '2번',
           value: 2
         }
-      ]
+      ],
+      skip: true
     }
   },
   run(next, stop) {

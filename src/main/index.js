@@ -228,6 +228,7 @@ import ipc_sendOutput from './terminal/sendOutput'
 
 import ipc_getScriptPath from './script/getScriptPath'
 import ipc_getScriptList from './script/getScriptList'
+import ipc_getScriptFilePath from './script/getScriptFilePath'
 import ipc_checkValidScript from './script/checkValidScript'
 import ipc_writeScript from './script/writeScript'
 
@@ -273,6 +274,7 @@ function runIPC() {
   ipcMain.on('script-get-list', ipc_getScriptList.bind(mainWindow)) // 매개변수로 넘어온 경로에 있는 스크립트 파일 목록을 배열에 담아 반환합니다
   ipcMain.on('script-write', ipc_writeScript.bind(mainWindow)) // 스크립트 파일을 생성하거나 수정합니다
   ipcMain.on('script-check-valid', ipc_checkValidScript.bind(mainWindow)) // 모든 스크립트 파일의 유효성을 검사하고 수정합니다
+  ipcMain.on('script-get-filepath', ipc_getScriptFilePath.bind(mainWindow)) // 스크립트 id로부터 스크립트 파일의 경로를 검색해 반환합니다
 
   // Macro
   ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow)) // static\assets\macro 내부에 있는 모든 매크로 파일을 배열에 담아 반환합니다

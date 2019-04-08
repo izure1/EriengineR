@@ -9,25 +9,15 @@ export default function () {
 
   return [{
       text: '이름 바꾸기',
-      click(e, before, tree) {
-        let t
-        tree.modifyMode = true
-        tree.$nextTick(() => {
-          t = tree.$el.querySelector('input')
-          t.value = tree.model.name
-          t.focus()
-          t.setSelectionRange(0, t.value.lastIndexOf('.'))
-        })
+      click(e, p, tree) {
+        tree.requestModifyName()
       },
       disabledOnTop: true
     },
     {
       text: '삭제',
-      click(e, itempath) {
-        electron.ipcRenderer.send('modal-delete-trash', {
-          name: path.basename(itempath),
-          path: itempath
-        })
+      click(e, p, tree) {
+        tree.requestDeleteItem()
       },
       disabledOnTop: true
     },

@@ -164,6 +164,7 @@ class Macro {
       setHiddenContext.call(this.variables[p], '__origin', macro.variables[p])
     }
 
+    this.macro = macro.id
     return this
 
   }
@@ -205,7 +206,7 @@ class Macro {
 
   __createDefaultVariable(v) {
     let V = Macro.getMatchedType(v.type)
-    return new V(createUUID(), v.text, false)
+    return new V(createUUID(), v.text, !!v.skip)
   }
 
   /**

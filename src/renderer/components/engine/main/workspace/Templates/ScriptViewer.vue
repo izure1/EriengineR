@@ -24,21 +24,25 @@
       <div class="script-box-container" @dblclick="modifyScript(script)" @click="createConnectionDone(script)">
         <div>
           <h6>사건</h6>
-          <ul>
-            <li v-for="(event, index) in script.events" :key="index">{{ event.text }}</li>
+          <ul v-if="script.events.length">
+            <li v-for="(event, index) in script.events" :key="index" class="script-box-text">{{ event.text }}</li>
           </ul>
+          <p v-else class="script-box-text">비어있음</p>
         </div>
         <div>
           <h6>조건</h6>
-          <ul>
-            <li v-for="(condition, index) in script.conditions" :key="index">{{ condition.text }}</li>
+          <ul v-if="script.conditions.length">
+            <li v-for="(condition, index) in script.conditions" :key="index" class="script-box-text">{{ condition.text
+              }}</li>
           </ul>
+          <p v-else class="script-box-text">비어있음</p>
         </div>
         <div>
           <h6>행동</h6>
-          <ul>
-            <li v-for="(action, index) in script.actions" :key="index">{{ action.text }}</li>
+          <ul v-if="script.actions.length">
+            <li v-for="(action, index) in script.actions" :key="index" class="script-box-text">{{ action.text }}</li>
           </ul>
+          <p v-else class="script-box-text">비어있음</p>
         </div>
       </div>
     </section>
@@ -257,8 +261,18 @@
 
         ul {
           padding: 0;
-          margin: 10px 0;
+          margin: 0;
           list-style: none;
+        }
+
+        .script-box-text {
+          font-size: small;
+          color: gray;
+          letter-spacing: -1px;
+          word-spacing: 1px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
     }

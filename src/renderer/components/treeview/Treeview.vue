@@ -1,16 +1,20 @@
 <template>
   <li class="template-treeview-item">
-    <div :title="model.path" @click="toggle" @dblclick="openThis(model.path)" tabindex="-1" @contextmenu="openContextmenu"
-      @blur="contextmenu_info.open = false" draggable="true" @dragstart="setDragItem" @dragover="allowDrop" @drop="dropItem">
+    <div :title="model.path" @click="toggle" @dblclick="openThis(model.path)" tabindex="-1"
+      @contextmenu="openContextmenu" @blur="contextmenu_info.open = false" draggable="true" @dragstart="setDragItem"
+      @dragover="allowDrop" @drop="dropItem" @keydown="runShortcut($event, model.path)">
       <div class="template-treeview-indent" :data-depth="depth">
-        <v-icon v-if="isFolder" color="white">{{ open ? 'arrow_drop_down' : 'arrow_right' }}</v-icon>
-        <v-icon v-else color="white">{{ getFileIcon(model.path) }}</v-icon>
+        <v-icon v-if="isFolder" color="yellow">{{ open ? 'arrow_drop_down' : 'arrow_right' }}</v-icon>
+        <v-icon v-else color="rgb(140, 140, 140)">{{ getFileIcon(model.path) }}</v-icon>
         <p v-if="!modifyMode">{{ model.name }}</p>
-        <input type="text" v-else @keydown.esc="modifyNameCancel" @keydown.enter="modifyName($event, model.path)" @blur="modifyName($event, model.path)">
+        <input type="text" v-else @keydown.esc="modifyNameCancel" @keydown.enter="modifyName($event, model.path)"
+          @blur="modifyName($event, model.path)">
       </div>
-      <div v-if="contextmenu_info.open" class="template-treeview-contextmenu" :style="{left: `${contextmenu_info.x}px`, top: `${contextmenu_info.y}px`}">
+      <div v-if="contextmenu_info.open" class="template-treeview-contextmenu"
+        :style="{left: `${contextmenu_info.x}px`, top: `${contextmenu_info.y}px`}">
         <ul>
-          <li v-for="(item, index) in contextmenu" :key="index" @click="callContextmenuItem($event, item.click, model.path, item.disabledOnTop)"
+          <li v-for="(item, index) in contextmenu" :key="index"
+            @click="callContextmenuItem($event, item.click, model.path, item.disabledOnTop)"
             :class="{disabled: isDisabledItem(item.disabledOnTop)}">
             <hr v-if="item.separator">
             <span v-else>{{ item.text }}</span>
@@ -19,8 +23,9 @@
       </div>
     </div>
     <ul v-show="open" v-if="isFolder">
-      <treeview class="item" v-for="model in model.children" :path="path" :filter="filter" :model="model" :key="model.path"
-        :openItem="openItem" :configurable="configurable" :contextmenu="contextmenu" :top="top" :depth="nextDepth"></treeview>
+      <treeview class="item" v-for="model in model.children" :path="path" :filter="filter" :model="model"
+        :key="model.path" :openItem="openItem" :configurable="configurable" :contextmenu="contextmenu" :top="top"
+        :depth="nextDepth"></treeview>
     </ul>
   </li>
 </template>
@@ -33,6 +38,7 @@
     ipcRenderer
   } from 'electron'
   import dirTree from './js/dirTree'
+  import shortcut from './js/shortcut'
 
 
   export default {
@@ -107,16 +113,31 @@
       }
     },
     methods: {
+
+      runShortcut(e, p) {
+
+        let k = e.keyCode
+
+        console.log(k)
+
+        if (k in shortcut) {
+          shortcut[k].call(this, p)
+        }
+
+      },
+
       toggle() {
         if (this.isFolder && !this.modifyMode) {
           this.open = !this.open
         }
       },
+
       openThis(filepath) {
         if (!this.isFolder) {
           this.openItem(filepath)
         }
       },
+
       openContextmenu(e) {
         if (this.configurable) {
           this.contextmenu_info.open = true
@@ -125,6 +146,7 @@
           e.currentTarget.focus()
         }
       },
+
       callContextmenuItem(e, fn, itempath, disabled = false) {
 
         e.preventDefault()
@@ -139,6 +161,24 @@
         this.contextmenu_info.open = false
 
       },
+
+      requestModifyName() {
+
+        let t
+        if (this.isTop) {
+          return
+        }
+
+        this.modifyMode = true
+        this.$nextTick(() => {
+          t = this.$el.querySelector('input')
+          t.value = this.model.name
+          t.focus()
+          t.setSelectionRange(0, t.value.lastIndexOf('.'))
+        })
+
+      },
+
       modifyName(e, before) {
 
         let name
@@ -171,20 +211,24 @@
         })
 
       },
+
       modifyNameCancel(e) {
         e.currentTarget.value = this.model.name
         this.modifyMode = false
       },
+
       setDragItem(e) {
         if (this.configurable) {
           e.dataTransfer.setData('filePath', this.model.path)
         }
       },
+
       allowDrop(e) {
         if (this.configurable) {
           e.preventDefault()
         }
       },
+
       dropItem(e) {
 
         let before
@@ -197,6 +241,25 @@
         fs.rename(before, after)
 
       },
+
+      requestDeleteItem(eternally) {
+
+        if (this.isTop) {
+          return
+        }
+
+        if (eternally) ipcRenderer.send('model-delete', {
+          name: path.basename(this.model.path),
+          path: this.model.path
+        })
+
+        else ipcRenderer.send('modal-delete-trash', {
+          name: path.basename(this.model.path),
+          path: this.model.path
+        })
+
+      },
+
       isDisabledItem(disabled = false) {
 
         if (this.isTop) {
@@ -207,6 +270,7 @@
         return false
 
       },
+
       getFileIcon(itempath) {
 
         let ext
@@ -236,6 +300,12 @@
             return 'code'
 
           case '.esinterface':
+            return 'touch_app'
+
+          case '.esactor':
+            return 'accessibility'
+            
+          case '.esbackground':
             return 'camera'
 
           case '.json':
@@ -247,6 +317,7 @@
         }
 
       }
+
     },
     mounted() {
       this.$el.querySelectorAll('div.template-treeview-indent').forEach(t => {

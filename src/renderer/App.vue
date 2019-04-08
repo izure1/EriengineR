@@ -7,7 +7,6 @@
 <script>
   import electron from 'electron'
 
-
   export default {
     name: 'eriengine',
     methods: {
@@ -89,14 +88,6 @@
     position: relative;
     top: -30px;
     transform: translateY(30px);
-
-    a {
-      color: inherit;
-
-      &:hover {
-        color: inherit;
-      }
-    }
   }
 
   h1,

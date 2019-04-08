@@ -116,7 +116,6 @@
         })
 
         browser.done(value => {
-          console.log(value, this.current.variables)
           this.updateVariable(name, value)
         })
 

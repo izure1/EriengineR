@@ -7,8 +7,10 @@
           <template-canvas v-else-if="item.template === 'CANVAS'" :data="item.data"></template-canvas>
           <template-script-viewer v-else-if="item.template === 'SCRIPT-VIEWER'" :data="item.data"></template-script-viewer>
           <template-script-editor v-else-if="item.template === 'SCRIPT-EDITOR'" :data="item.data"></template-script-editor>
-          <template-interface-viewer v-else-if="item.template === 'INTERFACE-VIEWER'" :data="item.data"></template-interface-viewer>
+          <template-scene-viewer v-else-if="item.template === 'SCENE-VIEWER'" :data="item.data"></template-scene-viewer>
           <template-language-manager v-else-if="item.template === 'LANGUAGE-MANAGER'" :data="item.data"></template-language-manager>
+          <template-design-creator v-else-if="item.template === 'DESIGN-CREATOR'" :data="item.data"></template-design-creator>
+          <template-design-editor v-else-if="item.template === 'DESIGN-EDITOR'" :data="item.data"></template-design-editor>
         </section>
       </li>
     </ul>
@@ -38,8 +40,10 @@
   import TemplateCanvas from './Templates/Canvas'
   import TemplateScriptViewer from './Templates/ScriptViewer'
   import TemplateScriptEditor from './Templates/ScriptEditor'
-  import TemplateInterfaceViewer from './Templates/InterfaceViewer'
+  import TemplateSceneViewer from './Templates/SceneViewer'
   import TemplateLanguageManager from './Templates/LanguageManager'
+  import TemplateDesignCreator from './Templates/DesignCreator'
+  import TemplateDesignEditor from './Templates/DesignEditor'
 
   export default {
     components: {
@@ -47,8 +51,10 @@
       TemplateCanvas,
       TemplateScriptViewer,
       TemplateScriptEditor,
-      TemplateInterfaceViewer,
-      TemplateLanguageManager
+      TemplateSceneViewer,
+      TemplateLanguageManager,
+      TemplateDesignCreator,
+      TemplateDesignEditor
     },
     data: () => ({
       tabs: []

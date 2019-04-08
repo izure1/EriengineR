@@ -58,7 +58,8 @@
       modifiedMacro: null,
       macros: null,
       macro: null,
-      current: null
+      current: null,
+      old: null
     }),
     computed: {
 
@@ -100,7 +101,12 @@
     methods: {
 
       sendMacroCopy(macro) {
-        this.current = new Macro().buildFromMacro(macro)
+
+        this.current =
+          this.old ?
+          new Macro().buildFromOld(macro, this.old) :
+          new Macro().buildFromMacro(macro)
+          
       },
 
       complete(e) {
@@ -129,6 +135,12 @@
       this.win.on('macro-savable', macro => {
         this.modifiedMacro = macro
       })
+
+      this.win.on('macro-send-old', old => {
+        this.old = old
+      })
+
+      this.win.emit('macro-input-ready')
 
     }
   }
@@ -163,6 +175,7 @@
     background-color: #444;
 
     a {
+      color: inherit;
       text-decoration: none;
 
       &:hover {

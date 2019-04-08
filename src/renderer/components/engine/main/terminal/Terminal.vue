@@ -214,6 +214,11 @@
         >dl {
           margin: 10px 0;
           border-bottom: 1px dashed gray;
+          user-select: all;
+
+          >* {
+            user-select: text;
+          }
 
           >dt {
             color: orange;

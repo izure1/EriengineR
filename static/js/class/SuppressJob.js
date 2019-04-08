@@ -18,7 +18,7 @@ class SuppressJob {
     return !!this.list[id]
   }
 
-  setSuppress(id, complete, delay = 0, count = -1) {
+  set(id, complete, delay = 0, count = -1) {
 
     let t
 
@@ -34,7 +34,7 @@ class SuppressJob {
       }
 
       t.fn()
-      this.clearSuppress(t.id)
+      this.clear(t.id)
 
     } else {
 
@@ -58,7 +58,7 @@ class SuppressJob {
 
   }
 
-  clearSuppress(id) {
+  clear(id) {
 
     if (!this.list[id]) {
       return
@@ -80,10 +80,10 @@ class SuppressJob {
     }
 
     this.list[id].fn()
-    this.clearSuppress(id)
+    this.clear(id)
 
   }
 
 }
 
-export default SuppressJob
+module.exports = SuppressJob
