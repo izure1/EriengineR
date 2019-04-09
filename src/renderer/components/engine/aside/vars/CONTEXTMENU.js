@@ -51,7 +51,7 @@ export default function () {
     {
       text: '탐색기에서 열기',
       click(e, itempath) {
-        electron.shell.showItemInFolder(itempath)
+        electron.ipcRenderer.send('shell-show-item-in-folder', itempath)
       }
     }
   ]

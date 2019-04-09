@@ -4,7 +4,7 @@ let attribute = {}
 attribute.fontSize = {
 
   name: '글자 크기',
-  description: '텍스트 객체일 경우, 글자의 크기를 지정합니다.'
+  description: '텍스트 객체일 경우, 글자의 크기를 지정합니다. 단위는 px입니다.'
 
 }
 
@@ -95,14 +95,14 @@ attribute.shadowBlur = {
 
 attribute.shadowOffsetX = {
 
-  name: '그림자 ｘ위치',
+  name: '그림자 좌표 𝑥',
   description: '그림자가 표시되는 위치를 지정할 수 있습니다. 이 수치만큼 그림자가 오른쪽으로 비칩니다.'
 
 }
 
 attribute.shadowOffsetY = {
 
-  name: '그림자 ｙ위치',
+  name: '그림자 좌표 𝑦',
   description: '그림자가 표시되는 위치를 지정할 수 있습니다. 이 수치만큼 그림자가 아래쪽으로 비칩니다.'
 
 }
@@ -178,6 +178,34 @@ attribute.cursor = {
   name: '포인터 커서',
   description: '객체에 마우스를 올렸을 때 보여줄 마우스 커서의 모양을 선택할 수 있습니다.',
   list: ['auto', 'move', 'pointer', 'grab', 'grabbing', 'help', 'none', 'progress', 'wait', 'zoom-in', 'zoom-out']
+
+}
+
+attribute.marginLeft = {
+
+  name: '좌측 여백',
+  description: '객체가 물리 효과를 받을 때, 좌측에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.'
+
+}
+
+attribute.marginRight = {
+
+  name: '우측 여백',
+  description: '객체가 물리 효과를 받을 때, 우측에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.'
+
+}
+
+attribute.marginBottom = {
+
+  name: '하단 여백',
+  description: '객체가 물리 효과를 받을 때, 하단에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.'
+
+}
+
+attribute.marginTop = {
+
+  name: '상단 여백',
+  description: '객체가 물리 효과를 받을 때, 상단에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.'
 
 }
 

@@ -211,6 +211,8 @@ app.on('ready', start)
  */
 
 
+import ipc_showItemInFolder from './shell/showItemInFolder'
+
 import ipc_createProject from './project/createProject'
 import ipc_openProject from './project/openProject'
 
@@ -249,6 +251,9 @@ import ipc_getAssetFile from './asset/getAssetFile'
 
 
 function runIPC() {
+
+  // Shell
+  ipcMain.on('shell-show-item-in-folder', ipc_showItemInFolder.bind(mainWindow)) // 디렉토리에 있는 파일을 가르킵니다. 이는 Renderer 에서 사용 시 창 앞으로 나오지 않는 오류를 위한 방편입니다.
 
   // Project
   ipcMain.on('project-create', ipc_createProject.bind(mainWindow)) // 프로젝트를 생성하는데 사용합니다
