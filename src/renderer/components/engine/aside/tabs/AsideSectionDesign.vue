@@ -26,7 +26,7 @@
     data: () => ({
       path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Designs'),
       filter: {
-        extensions: /(\.esactor)|(\.esinterface)|(\.esbackground)/
+        extensions: /(\.esdesign_actor)|(\.esdesign_interface)|(\.esdesign_background)/
       }
     }),
     computed: {
@@ -53,10 +53,10 @@
 
         let ext
         let stat
-        
+
         ext = path.extname(itempath)
         stat = fs.lstatSync(itempath)
-        
+
         this.$root.$emit('createWorkspaceTab', stat.ino, `${path.basename(itempath)} 디자인 수정`, `DESIGN-EDITOR`)
         this.$root.$emit('setDataForWorkspaceTab', stat.ino, {
           id: stat.ino,

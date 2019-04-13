@@ -4,62 +4,73 @@
     <p>
       디자인이란, 게임에서 보여줄 어떤 물체의 공통된 특징을 모아둔 설계도이며,
       <br>
-      다음 {{ designs.length }}가지로 분류됩니다.
+      다음 클래스로 분류됩니다.
     </p>
-    <div>
-      <v-select :items="designs" v-model="ext" item-text="name" item-value="ext" label="타입을 선택하세요" box>
-      </v-select>
-    </div>
-    <v-btn :disabled="!ext" @click="createDesign">
-      <v-icon>save</v-icon>만들기
-    </v-btn>
-    <div v-if="ext">
-      <v-divider></v-divider>
-    </div>
-    <v-card v-for="(design, index) in designs" :key="index" v-if="ext === design.ext"
-      class="template-designcreator-info">
+    <design-creator-step @setBanner="setBanner" @createDesign="createDesign"></design-creator-step>
+    <v-divider></v-divider>
+    <v-card class="template-designcreator-info" v-if="banner">
       <v-card-title primary-title>
         <h2>
-          {{ design.name }}(이)란?
+          {{ banner.name }}(이)란?
         </h2>
       </v-card-title>
-      <v-img :src="design.image" max-width="400" class="mx-3"></v-img>
-      <v-card-text class="info-text" v-html="design.description"></v-card-text>
+      <v-img :src="banner.image" max-width="400" class="mx-3"></v-img>
+      <v-card-text class="info-text" v-html="banner.description"></v-card-text>
     </v-card>
   </section>
 </template>
 
 <script>
-  import DESIGN_LIST from './js/DESIGN_LIST'
+  import DesignCreatorStep from './DesignCreatorStep'
 
   import fs from 'fs-extra'
   import path from 'path'
   import createItem from '@static/js/createItem'
+  import createUUID from '@static/js/createUUID'
 
   export default {
 
+    components: {
+      DesignCreatorStep
+    },
     props: ['data'],
     data: () => ({
-      directory: null,
-      ext: null,
-      designs: DESIGN_LIST
+      banner: null
     }),
 
     methods: {
 
-      createDesign() {
+      setBanner(name, image, description) {
 
-        let filenames, filename
+        this.banner = {
+          name,
+          image,
+          description
+        }
+
+      },
+
+      createDesign(ext, type, __assetSrc) {
+
+        let filenames, filename, __id
 
         filenames = fs.readdirSync(this.directory)
         filenames = filenames.map(p => path.parse(p).name)
 
         filename = createItem(filenames, '새로운 디자인')
-        filename += this.ext
+        filename += ext
 
         filename = path.join(this.directory, filename)
+        __id = createUUID()
 
-        fs.writeJSONSync(filename, {})
+        fs.writeJSONSync(filename, {
+          type,
+          __id,
+          __assetSrc,
+          __asset: null
+        }, {
+          spaces: 2
+        })
 
         this.close()
 

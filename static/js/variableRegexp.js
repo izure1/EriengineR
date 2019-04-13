@@ -1,0 +1,1 @@
+export default new RegExp('\{{2}(?!\{)\s*(.*?)\s*\}{2}', 'gmi')

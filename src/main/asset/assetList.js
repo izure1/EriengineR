@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import fg from 'fast-glob'
-import assetPath from './assetPath'
+import assetDirectory from './assetDirectory'
 
 
 async function readAssetData(filepath) {
@@ -24,7 +24,7 @@ export default async function (e) {
 
   data = {}
   files = await fg('**/*', {
-    cwd: assetPath.call(this),
+    cwd: assetDirectory.call(this),
     absolute: true
   })
 

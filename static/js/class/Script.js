@@ -63,7 +63,7 @@ class FileVariable extends Variable {
 
   get text() {
 
-    let file = electron.ipcRenderer.sendSync('asset-get-file', this.value, true)
+    let file = electron.ipcRenderer.sendSync('asset-get-path', this.value, true)
 
     if (file === null) {
       return 'undefined'

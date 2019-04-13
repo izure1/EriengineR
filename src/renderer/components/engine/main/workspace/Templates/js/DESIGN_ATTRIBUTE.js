@@ -1,14 +1,5 @@
 let attribute = {}
 
-
-attribute.type = {
-
-  name: '타입',
-  description: '객체의 타입을 선택합니다.',
-  list: ['image', 'text', 'square', 'circle', 'sprite', 'video']
-
-}
-
 attribute.className = {
 
   name: '카테고리',
@@ -79,6 +70,42 @@ attribute.gravityscale = {
 
   name: '중력 비중',
   description: '지정된 수치만큼 더 강한 중력을 받습니다.'
+
+}
+
+attribute.movementscale = {
+
+  name: '좌표 비율',
+  description: '객체의 𝑥, 𝑦, 𝑧 좌표가 변경될 때, 이 수치의 곱만큼 더 움직입니다.'
+
+}
+
+attribute.spriteplaying = {
+
+  name: '스프라이트 재생 여부',
+  description: '스프라이트 객체일 때, 스프라이트를 재생할지 결정합니다.',
+  list: ['false', 'true']
+
+}
+
+attribute.spritestage = {
+
+  name: '스프라이트 프레임 개수',
+  description: '스프라이트 객체일 때, 이미지 에셋 안에 몇 개의 프레임이 있는지 입력하세요. 잘못 입력하면 이상한 모양으로 보입니다.'
+
+}
+
+attribute.spritefps = {
+
+  name: '스프라이트 재생 속도',
+  description: '스프라이트 객체일 때, 초당 프레임 재생 속도를 입력합니다. 가령 1초에 스프라이트를 전부 재생하고 싶다면, 스프라이트 프레임 개수와 똑같이 입력해주세요.'
+
+}
+
+attribute.spritecurrent = {
+
+  name: '스프라이트 프레임',
+  description: '스프라이트 객체일 때, 현재 스프라이트 프레임 위치를 설정합니다.'
 
 }
 

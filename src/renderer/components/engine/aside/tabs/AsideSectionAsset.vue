@@ -1,6 +1,6 @@
 <template>
   <div class="aside-section-tab">
-    <treeview :path="path" :filter="filter" :openItem="openItem" :uploadFile="uploadFile" :contextmenu="contextmenu"
+    <treeview :path="path" :openItem="openItem" :uploadFile="uploadFile" :contextmenu="contextmenu"
       :configurable="true" v-if="!uploadFileProgress"></treeview>
     <div class="asset-uploading" v-else>
       <v-progress-circular rotate="-90" width="3" size="150" :value="uploadFileProgress" color="orange">{{
@@ -31,7 +31,7 @@
       Treeview
     },
     data: () => ({
-      path: ipcRenderer.sendSync('asset-get-path'),
+      path: ipcRenderer.sendSync('asset-get-directory'),
       uploadFileProgress: 0
     }),
     computed: {

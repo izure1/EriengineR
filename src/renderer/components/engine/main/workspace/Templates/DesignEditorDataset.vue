@@ -28,7 +28,7 @@
           <v-icon>add</v-icon>
         </v-btn>
       </v-card-actions>
-      <v-alert :value="!isEmpty" type="warning">
+      <v-alert :value="!isEmpty" type="info">
         아직 만들어진 변수가 없습니다.
         <br>
         새로운 변수를 만들고 싶으면 상단 버튼을 눌러 생성하세요.
@@ -37,8 +37,8 @@
     <!-- 모달 데이터 수정 -->
     <v-dialog max-width="50%" v-model="modifyMode">
       <v-card class="pa-3" v-if="modify">
-        <v-text-field label="변수명을 입력하세요" :value="modify" @change="saveProperty"></v-text-field>
-        <v-text-field label="초기값을 입력하세요" :value="dataset[modify]" @change="saveValue"></v-text-field>
+        <v-text-field label="변수명을 입력하세요" clearable :value="modify" @change="saveProperty"></v-text-field>
+        <v-text-field label="초기값을 입력하세요" clearable :value="dataset[modify]" @change="saveValue"></v-text-field>
       </v-card>
     </v-dialog>
   </section>

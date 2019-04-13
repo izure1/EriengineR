@@ -245,9 +245,15 @@ import ipc_getLanguage from './language/getLanguage'
 import ipc_appendLanguage from './language/appendLanguage'
 import ipc_findLanguage from './language/findLanguage'
 
-import ipc_getAssetPath from './asset/getAssetPath'
+import ipc_getAssetDirectory from './asset/getAssetDirectory'
 import ipc_getAssetList from './asset/getAssetList'
+import ipc_getAssetPath from './asset/getAssetPath'
 import ipc_getAssetFile from './asset/getAssetFile'
+
+import ipc_getDesignDirectory from './design/getDesignDirectory'
+import ipc_getDesignPath from './design/getDesignPath'
+import ipc_getDesignAssetPath from './design/getDesignAssetPath'
+import ipc_getDesignAssetFile from './design/getDesignAssetFile'
 
 
 function runIPC() {
@@ -295,9 +301,16 @@ function runIPC() {
   ipcMain.on('language-find', ipc_findLanguage.bind(mainWindow)) // 모든 다국어에 추가된 특정 문자열을 찾아 Object 형태로 반환합니다
 
   // Assets
-  ipcMain.on('asset-get-path', ipc_getAssetPath.bind(mainWindow)) // 현재 프로젝트의 에셋 디렉토리 경로를 반환합니다
+  ipcMain.on('asset-get-directory', ipc_getAssetDirectory.bind(mainWindow)) // 현재 프로젝트의 에셋 디렉토리 경로를 반환합니다
   ipcMain.on('asset-get-list', ipc_getAssetList.bind(mainWindow)) // 현재 프로젝트의 에셋 파일들의 경로를 배열에 담아 반환합니다
-  ipcMain.on('asset-get-file', ipc_getAssetFile.bind(mainWindow)) // 파일 id로부터 가짜 파일 경로를 반환합니다
+  ipcMain.on('asset-get-path', ipc_getAssetPath.bind(mainWindow)) // 에셋 id로부터 가짜 파일 경로를 검색해 반환합니다
+  ipcMain.on('asset-get-file', ipc_getAssetFile.bind(mainWindow)) // 에셋 id로부터 진짜 파일 경로를 검색해 반환합니다
+
+  // Design
+  ipcMain.on('design-get-directory', ipc_getDesignDirectory.bind(mainWindow)) // 현재 프로젝트의 디자인 디렉토리 경로를 반환합니다
+  ipcMain.on('design-get-path', ipc_getDesignPath.bind(mainWindow)) // 디자인 id로부터 디자인 파일의 경로를 검색해 반환합니다
+  ipcMain.on('design-get-asset-path', ipc_getDesignAssetPath.bind(mainWindow)) // 디자인 id로부터 디자인이 참조하고 있는 가짜 에셋 파일의 경로를 반환합니다
+  ipcMain.on('design-get-asset-file', ipc_getDesignAssetFile.bind(mainWindow)) // 디자인 id로부터 디자인이 참조하고 있는 진짜 에셋 파일의 경로를 반환합니다
 
 }
 

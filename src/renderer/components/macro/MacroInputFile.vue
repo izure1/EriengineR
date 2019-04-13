@@ -30,7 +30,7 @@
     props: ['variable', 'origin'],
     data: () => ({
 
-      path: electron.ipcRenderer.sendSync('asset-get-path'),
+      path: electron.ipcRenderer.sendSync('asset-get-directory'),
       file: null,
       fileFakePath: null,
       fileRealPath: null,
@@ -82,8 +82,8 @@
 
         return new Promise((resolve, reject) => {
 
-          electron.ipcRenderer.send('asset-get-file', id, relative)
-          electron.ipcRenderer.once('asset-get-file', (e, fakePath) => {
+          electron.ipcRenderer.send('asset-get-path', id, relative)
+          electron.ipcRenderer.once('asset-get-path', (e, fakePath) => {
             resolve(fakePath)
           })
 
@@ -94,7 +94,7 @@
 
         let real
 
-        real = electron.ipcRenderer.sendSync('asset-get-path', true)
+        real = electron.ipcRenderer.sendSync('asset-get-directory', true)
         real = path.join(real, file.id + file.ext)
 
         return real

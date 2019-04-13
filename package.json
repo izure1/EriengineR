@@ -65,7 +65,7 @@
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "jsplumb": "^2.8.8",
-    "lve": "^3.4.0",
+    "lve": "^3.4.1",
     "material-design-icons-iconfont": "^4.0.4",
     "melanke-watchjs": "^1.5.0",
     "trash": "^4.3.0",
@@ -74,7 +74,7 @@
     "vue-dragscroll": "^1.8.3",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.2",
-    "vuetify": "^1.5.1",
+    "vuetify": "^1.5.11",
     "vuex": "^3.1.0",
     "vuex-electron": "^1.0.3"
   },

@@ -60,15 +60,15 @@
     background-color: transparent;
 
     &:hover {
-      background-color: rgba(200, 200, 200, 0.5);
+      background-color: rgba(200, 200, 200, 0.2);
     }
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.3);
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.3);
     }
   }
 
@@ -113,13 +113,9 @@
     right: 0;
   }
 
-  .v-icon {
-    margin-right: 0.4em;
-  }
-
-  .v-btn.v-btn--icon {
+  .v-btn:not(.v-btn--icon) {
     .v-icon {
-      margin-right: 0;
+      margin-right: 0.4em;
     }
   }
 

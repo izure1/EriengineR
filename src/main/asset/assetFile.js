@@ -1,4 +1,6 @@
-import assetPath from './assetPath'
+import path from 'path'
+
+import assetDirectory from './assetDirectory'
 import assetList from './assetList'
 
 
@@ -7,7 +9,7 @@ export default async function (id) {
   let directory
   let filelist, file
 
-  directory = await assetPath.call(this)
+  directory = await assetDirectory.call(this, true)
   filelist = await assetList.call(this)
 
   for (let p in filelist) {
@@ -15,7 +17,7 @@ export default async function (id) {
     file = filelist[p]
 
     if (file.id === id) {
-      return p
+      return path.join(directory, file.id + file.ext)
     }
 
   }

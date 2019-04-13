@@ -148,10 +148,12 @@
       }
 
     },
+
     mounted() {
       setErrorReceiver(this.tabs.error)
       setOutputReceiver(this.tabs.output)
     }
+
   }
 </script>
 

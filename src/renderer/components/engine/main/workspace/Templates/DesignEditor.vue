@@ -1,30 +1,112 @@
 <template>
   <section class="template-designeditor">
+    <design-editor-asset :data="data" :requestReadFile="requestReadFile"></design-editor-asset>
     <design-editor-dataset :data="data" :requestReadFile="requestReadFile"></design-editor-dataset>
     <design-editor-attribute :data="data" :requestReadFile="requestReadFile"></design-editor-attribute>
+    <design-editor-spot :data="data" :requestReadFile="requestReadFile" :updateTimestamp="updateTimestamp">
+    </design-editor-spot>
   </section>
 </template>
 
 <script>
   import fs from 'fs-extra'
   import path from 'path'
+  import LveJS from 'lve'
 
+  import DesignEditorAsset from './DesignEditorAsset'
   import DesignEditorDataset from './DesignEditorDataset'
   import DesignEditorAttribute from './DesignEditorAttribute'
+  import DesignEditorSpot from './DesignEditorSpot'
+
+  import DESIGN_ATTRIBUTE_EXTEND from './js/DESIGN_ATTRIBUTE_EXTEND'
+  import DESIGN_STYLE_EXTEND from './js/DESIGN_STYLE_EXTEND'
 
   export default {
 
     components: {
+      DesignEditorAsset,
       DesignEditorDataset,
-      DesignEditorAttribute
+      DesignEditorAttribute,
+      DesignEditorSpot
     },
     props: ['data'],
+    data: () => ({
+      attribute_extend: DESIGN_ATTRIBUTE_EXTEND,
+      style_extend: DESIGN_STYLE_EXTEND,
+      lve: new LveJS,
+      updateTimestamp: new Date
+    }),
+
+    computed: {
+
+      sampleAttribute() {
+
+        let t, o
+
+        o = {
+          type: 'image'
+        }
+
+        t = this.lve.createObject('__sample__', o)
+        t = this.copyJSON(t)
+
+        return t
+
+      }
+
+    },
 
     methods: {
 
-      requestReadFile() {
-        return fs.readJSONSync(this.data.path)
+      copyJSON(o) {
+        return JSON.parse(JSON.stringify(o))
+      },
+
+      requestReadFile(all = false) {
+
+        let raw
+
+        raw = fs.readJSONSync(this.data.path)
+        raw = Object.assign({}, this.sampleAttribute, raw)
+        raw = Object.assign({}, this.attribute_extend, raw)
+        raw.style = Object.assign({}, this.style_extend, raw.style)
+
+        raw = this.copyJSON(raw)
+
+        if (all) {
+          return raw
+        }
+
+        // 파일에 저장되지 않아야 할 것들을 이곳에 정리합니다
+        delete raw.name
+        delete raw.src
+        delete raw.scene
+        delete raw.element
+        delete raw.animationset
+        delete raw.physicsset
+        delete raw.followset
+        delete raw.spriteset
+
+        delete raw.style.position
+        delete raw.style.left
+        delete raw.style.bottom
+        delete raw.style.perspective
+        delete raw.style.gradient
+        delete raw.style.gradientDirection
+        delete raw.style.gradientType
+        delete raw.style.margin
+
+        return raw
+
       }
+
+    },
+
+    created() {
+
+      fs.watch(this.data.path, () => {
+        this.updateTimestamp = new Date
+      })
 
     }
 
@@ -34,9 +116,5 @@
 <style lang="scss" scoped>
   .template-designeditor {
     padding: 30px;
-  }
-
-  .information-description {
-    font-size: small;
   }
 </style>

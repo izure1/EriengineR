@@ -1,9 +1,25 @@
-import path from 'path'
+import assetDirectory from './assetDirectory'
+import assetList from './assetList'
 
-export default function (source = false) {
 
-  return source ?
-    path.join(this.variables.project.directory, 'AssetSources').replace(/\\/g, '/') :
-    path.join(this.variables.project.directory, 'Assets').replace(/\\/g, '/')
+export default async function (id) {
+
+  let directory
+  let filelist, file
+
+  directory = await assetDirectory.call(this)
+  filelist = await assetList.call(this)
+
+  for (let p in filelist) {
+
+    file = filelist[p]
+
+    if (file.id === id) {
+      return p
+    }
+
+  }
+
+  return null
 
 }

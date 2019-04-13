@@ -1,6 +1,6 @@
 <template>
   <section v-if="isReady">
-    <v-card v-for="(section, index) in getAttributeList" :key="index" class="my-5">
+    <v-card v-for="(section, index) in getAttributeSections" :key="index">
       <v-card-title class="headline">{{ section.name }}</v-card-title>
       <v-card-text>
         이 디자인으로 만들어진 객체가 <span class="light-green--text">기본적으로 가질</span> {{ section.name }}을 정의합니다.
@@ -9,17 +9,21 @@
         있습니다.
       </v-card-text>
       <v-list two-line>
-        <v-list-tile v-for="(value, prop) in section.data" :key="prop"
-          @click="setModifyItem(prop, section.data, section.information, section.type)">
+        <v-list-tile v-for="(value, prop) in getAttributeProperties(section.type)" :key="prop"
+          @click="setModifyItem(prop, section.type)">
           <v-list-tile-avatar>
             <span class="grey--text title">{{ getPropertySymbol(prop) }}</span>
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title class="light-green--text" :title="prop">
-              {{ getPropertyName(prop, section.information) }}<span class="grey--text caption ml-2" v-html="getPreviewValue(value)"></span>
+              {{ getPropertyName(prop, section.type) }}
+              <span class="grey--text caption ml-2" v-html="getPreviewValue(value)"></span>
+              <span v-if="section.type === 'style'" class="ml-2">
+                <span class="grey--text caption" v-html="getPreviewDuration(prop)"></span>
+              </span>
             </v-list-tile-title>
             <v-list-tile-sub-title class="information-description">
-              {{ getDescription(prop, section.information) }}
+              {{ getDescription(prop, section.type) }}
             </v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -28,8 +32,11 @@
     <!-- 모달 데이터 수정 -->
     <v-dialog max-width="50%" v-model="modifyMode">
       <v-card class="pa-3">
-        <v-text-field label="값을 입력하세요" v-if="modify" :hint="getValueSample(modify.property, modify.information)"
-          :value="modify.data[modify.property]" @change="saveFile"></v-text-field>
+        <v-text-field label="값을 입력하세요" clearable :hint="getValueSample(modifyProperty, modifyType)"
+          v-model="modifyValue"></v-text-field>
+        <v-text-field label="값이 변경될 때, 스타일이 몇 초에 걸쳐서 변화되는지 입력해주세요." clearable v-model="duration[modifyProperty]"
+          v-if="isStyle">
+        </v-text-field>
       </v-card>
     </v-dialog>
   </section>
@@ -38,46 +45,59 @@
 <script>
   import fs from 'fs-extra'
   import path from 'path'
-  import Lve from 'lve'
+  import LveJS from 'lve'
 
   import DESIGN_ATTRIBUTE from './js/DESIGN_ATTRIBUTE'
   import DESIGN_STYLE from './js/DESIGN_STYLE'
+
+  import SuppressJob from '@static/js/class/SuppressJob'
+  import REGEXP from '@/assets/js/REGEXP'
+
 
   export default {
 
     props: ['data', 'requestReadFile'],
     data: () => ({
-      lve: new Lve,
+
+      lve: new LveJS,
+      suppressJob: new SuppressJob,
+
       attribute: null,
       style: null,
+      duration: null,
+
+      attribute_information: DESIGN_ATTRIBUTE,
+      style_information: DESIGN_STYLE,
+
       modifyMode: false,
-      modify: null,
-      DESIGN_ATTRIBUTE,
-      DESIGN_STYLE
+      modifyProperty: null,
+      modifyValue: null,
+      modifyType: null
+
     }),
 
     computed: {
 
-      getAttributeList() {
+      getAttributeSections() {
 
         return [{
             name: '속성',
-            type: 'attribute',
-            data: this.attribute,
-            information: this.DESIGN_ATTRIBUTE
+            type: 'attribute'
           },
           {
             name: '스타일',
-            type: 'style',
-            data: this.style,
-            information: this.DESIGN_STYLE
+            type: 'style'
           }
         ]
 
       },
 
       isReady() {
-        return this.attribute && this.style
+        return this.attribute && this.style && this.duration
+      },
+
+      isStyle() {
+        return this.modifyType === 'style'
       }
 
     },
@@ -86,6 +106,10 @@
 
       copyJSON(o) {
         return JSON.parse(JSON.stringify(o))
+      },
+
+      getAttributeProperties(name) {
+        return this[name]
       },
 
       getPropertySymbol(p) {
@@ -99,7 +123,13 @@
 
       },
 
-      getPropertyName(p, information) {
+      getPropertyInformation(type) {
+        return this[type + '_information']
+      },
+
+      getPropertyName(p, type) {
+
+        let information = this.getPropertyInformation(type)
 
         if (p in information) {
           return information[p].name
@@ -109,9 +139,13 @@
 
       },
 
-      getDescription(p, information) {
+      getDescription(p, type) {
 
-        let sample = ''
+        let sample
+        let information
+
+        sample = ''
+        information = this.getPropertyInformation(type)
 
         if (p in information) {
 
@@ -125,9 +159,18 @@
 
       },
 
-      getValueSample(p, information) {
+      getValueSample(p, type) {
 
-        let sample = ''
+        let sample
+        let information
+
+
+        if (!p || !type) {
+          return ''
+        }
+
+        sample = ''
+        information = this.getPropertyInformation(type)
 
         if (p in information) {
 
@@ -142,104 +185,127 @@
       },
 
       getPreviewValue(v) {
-        
+
         v += ''
 
         if (v === '') {
           v = '“”'
         }
 
-        v = v.replace(/\{{2}(?!\{)\s*(.*?)\s*\}{2}/gmi, '<span class="yellow--text mx-1">$1</span>')
+        v = v.replace(REGEXP.variable, '<span class="yellow--text">$1</span>')
 
         return v
 
       },
 
-      setModifyItem(property, data, information, type) {
+      getPreviewDuration(p) {
 
-        this.modify = {
-          property,
-          data,
-          information,
-          type
+        let v
+
+        v = this.duration[p] || ''
+        v += ''
+
+        v = v.replace(REGEXP.variable, '<span class="yellow--text">$1</span>')
+
+        if (v) {
+          v = `/${v}s`
         }
+
+        return v
+
+      },
+
+      setModifyItem(property, type) {
+
+        this.modifyProperty = property
+        this.modifyType = type
+        this.modifyValue = this[type][property]
+
         this.modifyMode = true
 
       },
 
       getInformation(p) {
 
-        let sample
-
         let information
         let attribute
         let style
         let dataset
-
-
-        sample = this.lve.createObject('__sample__', {
-          type: 'image'
-        })
+        let duration
 
         information = this.requestReadFile()
-        information = Object.assign({}, sample, information)
 
+        // Copy JSON
         attribute = this.copyJSON(information)
         style = this.copyJSON(information).style
         dataset = this.copyJSON(information).dataset
+        duration = this.copyJSON(information).__duration
 
-        delete attribute.name
-        delete attribute.src
-        delete attribute.scene
-        delete attribute.element
-        delete attribute.animationset
-        delete attribute.dataset
-        delete attribute.followset
-        delete attribute.physicsset
-        delete attribute.spriteset
+        // Delete unuseful properties
+        delete attribute.type
         delete attribute.style
-
-        delete style.position
-        delete style.left
-        delete style.bottom
-        delete style.perspective
-        delete style.gradient
-        delete style.gradientDirection
-        delete style.gradientType
-        delete style.margin
+        delete attribute.dataset
+        delete attribute.__id
+        delete attribute.__duration
+        delete attribute.__asset
+        delete attribute.__assetSrc
+        delete attribute.__spot
 
         this.attribute = attribute
         this.style = style
         this.dataset = dataset
+        this.duration = duration
 
       },
 
-      saveFile(v) {
+      getUsefulDuration() {
 
-        this.modify.data[this.modify.property] = v
+        let duration = this.copyJSON(this.duration)
 
-        let raw = this.requestReadFile()
+        // Append duration properties
+        for (let p in duration) {
 
-        // Combine with raw data
-        switch (this.modify.type) {
+          if (isNaN(duration[p] - 0)) {
+            continue
+          }
 
-          case 'attribute':
-            raw = Object.assign(raw, this.modify.data)
-            break
+          if (duration[p] > 0) {
+            continue
+          }
 
-          case 'style':
-            raw.style = this.modify.data
-            break
+          delete duration[p]
 
         }
 
-        // Save file
-        fs.writeJSONSync(this.data.path, raw, {
-          spaces: 2
-        })
+        return duration
 
-        // Reload data from file
-        this.getInformation(this.data.path)
+      },
+
+      saveValue(type, property, value) {
+        this[type][property] = value
+      },
+
+      saveFile() {
+
+        let raw
+
+        this.suppressJob.set('save', () => {
+
+          raw = this.requestReadFile()
+
+          raw = Object.assign(raw, this.attribute)
+          raw.style = this.style
+          raw.__duration = this.getUsefulDuration()
+
+          // Save file
+          fs.writeJSONSync(this.data.path, raw, {
+            spaces: 2
+          })
+
+          // Reload data from file
+          this.getInformation(this.data.path)
+
+        }, 300)
 
       },
 
@@ -248,6 +314,41 @@
     created() {
 
       this.getInformation(this.data.path)
+
+    },
+
+    watch: {
+
+      modifyValue() {
+        this.saveValue(this.modifyType, this.modifyProperty, this.modifyValue)
+      },
+
+      attribute: {
+
+        deep: true,
+        handler() {
+          this.saveFile()
+        }
+
+      },
+
+      style: {
+
+        deep: true,
+        handler() {
+          this.saveFile()
+        }
+
+      },
+
+      duration: {
+
+        deep: true,
+        handler() {
+          this.saveFile()
+        }
+
+      }
 
     }
 

@@ -86,4 +86,4 @@ class SuppressJob {
 
 }
 
-module.exports = SuppressJob
+export default SuppressJob

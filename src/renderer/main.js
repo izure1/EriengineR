@@ -57,7 +57,7 @@ import App from './App'
 
 
 Vue.config.productionTip = false
-//Vue.config.silent = true
+Vue.config.silent = true
 
 // Send error
 Vue.config.errorHandler = function (e) {

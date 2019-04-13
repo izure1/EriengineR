@@ -34,7 +34,7 @@ attribute.fontStyle = {
 attribute.textAlign = {
 
   name: '글자 정렬',
-  description: '텍스트 객체일 경우, 글자를 정렬합니다. 좌/우/중앙 정렬이 가능합니다.',
+  description: '텍스트 객체일 경우, 글자를 정렬합니다.',
   list: ['left', 'center', 'right']
 
 }
@@ -42,7 +42,7 @@ attribute.textAlign = {
 attribute.width = {
 
   name: '너비',
-  description: '객체의 너비를 지정합니다. 숫자, 퍼센테이지, 또는 auto로 지정할 수 있습니다.',
+  description: '객체의 너비를 지정합니다.',
   list: ['auto 입력', 'ｎ% 입력', '숫자 입력']
 
 }
@@ -50,7 +50,7 @@ attribute.width = {
 attribute.height = {
 
   name: '높이',
-  description: '객체의 높이를 지정합니다. 숫자, 퍼센테이지, 또는 auto로 지정할 수 있습니다.',
+  description: '객체의 높이를 지정합니다.',
   list: ['auto 입력', 'ｎ% 입력', '숫자 입력']
 
 }
@@ -58,24 +58,24 @@ attribute.height = {
 attribute.color = {
 
   name: '색상',
-  description: '객체을 표현할 색상을 지정합니다. RGB, RGBA, HASH 등으로 입력할 수 있습니다.',
-  list: ['RGB 입력', 'RGBA 입력', 'HASH 입력']
+  description: '객체을 표현할 색상을 지정합니다.',
+  list: ['RGB 입력', 'RGBA 입력', 'HASH 입력', '색상명(영문) 입력']
 
 }
 
 attribute.borderColor = {
 
   name: '테두리 색상',
-  description: '객체의 테두리 색상을 지정합니다. RGB, RGBA, HASH 등으로 입력할 수 있습니다.',
-  list: ['RGB 입력', 'RGBA 입력', 'HASH 입력']
+  description: '객체의 테두리 색상을 지정합니다.',
+  list: ['RGB 입력', 'RGBA 입력', 'HASH 입력', '색상명(영문) 입력']
 
 }
 
 attribute.shadowColor = {
 
   name: '그림자 색상',
-  description: '객체의 그림자 색상을 지정합니다. RGB, RGBA, HASH 등으로 입력할 수 있습니다.',
-  list: ['RGB 입력', 'RGBA 입력', 'HASH 입력']
+  description: '객체의 그림자 색상을 지정합니다.',
+  list: ['RGB 입력', 'RGBA 입력', 'HASH 입력', '색상명(영문) 입력']
 
 }
 
@@ -124,7 +124,7 @@ attribute.rotate = {
 attribute.scale = {
 
   name: '크기',
-  description: '객체가 너비와 높이의 비례를 유지한 채, 이 수치만큼 커집니다. 객체의 무게에 영향을 줍니다.'
+  description: '객체가 너비와 높이의 비례를 유지한 채, 이 수치의 곱만큼 커집니다. 객체의 무게에 영향을 줍니다.'
 
 }
 
@@ -162,7 +162,8 @@ attribute.lineHeight = {
 attribute.verticalAlign = {
 
   name: '기준점',
-  description: '객체의 좌표가 기준점에 따라 화면에 표시됩니다. \'회전\' 스타일에도 영향을 줍니다.'
+  description: '객체의 좌표가 기준점에 따라 화면에 표시됩니다. \'회전\' 스타일에도 영향을 줍니다.',
+  list: ['top', 'middle', 'bottom']
 
 }
 
