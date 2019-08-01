@@ -8,7 +8,7 @@ export default function (language) {
 
   let languages
 
-  del.sync(path.join(this.variables.project.directory, 'Languages', `${language}.json`), {
+  del.sync(path.posix.join(this.variables.project.directory, 'Languages', `${language}.json`), {
     force: true
   })
 

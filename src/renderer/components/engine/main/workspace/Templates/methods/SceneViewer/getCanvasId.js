@@ -1,3 +1,3 @@
 export default function () {
-  return `template-interfaceviewer-canvas-${this.uuid}`
+  return `template-sceneviewer-canvas-${this.uuid}`
 }

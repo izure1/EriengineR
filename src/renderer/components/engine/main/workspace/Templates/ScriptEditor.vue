@@ -8,8 +8,8 @@
       <p>아래 내용이 발생했을 때 작동합니다</p>
       <ul v-if="data.events.length">
         <li v-for="(event, index) in data.events" :key="index">
-          <v-btn icon small @click="deleteMacro(event.id, 'events')">
-            <v-icon color="grey">delete_outline</v-icon>
+          <v-btn icon @click="deleteMacro(event.id, 'events')" class="mr-0" small>
+            <v-icon color="grey" size="standard">delete_outline</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(event.id, 'events')">{{ event.text }}</a>
         </li>
@@ -24,8 +24,11 @@
       <p>위 사건이 발생했지만, 아래 내용이 모두 충족되어야 합니다. 원한다면 아무것도 넣지 않아도 됩니다</p>
       <ul v-if="data.conditions.length">
         <li v-for="(condition, index) in data.conditions" @dblclick="modifyItem(condition)" :key="index">
-          <v-btn icon small @click="deleteMacro(condition.id, 'conditions')">
-            <v-icon color="grey">delete_outline</v-icon>
+          <v-btn icon @click="deleteMacro(condition.id, 'conditions')" class="mr-0" small>
+            <v-icon color="grey" size="standard">delete_outline</v-icon>
+          </v-btn>
+          <v-btn icon @click="copyMacro(condition.id, 'conditions')" class="ml-0" small>
+            <v-icon color="grey" size="standard">file_copy</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(condition.id, 'conditions')">{{ condition.text }}</a>
         </li>
@@ -40,8 +43,11 @@
       <p>모든 조건이 만족하면 순서대로 실행됩니다</p>
       <ul v-if="data.actions.length">
         <li v-for="(action, index) in data.actions" @dblclick="modifyItem(action)" :key="index">
-          <v-btn icon small @click="deleteMacro(action.id, 'actions')">
-            <v-icon color="grey">delete_outline</v-icon>
+          <v-btn icon @click="deleteMacro(action.id, 'actions')" class="mr-0" small>
+            <v-icon color="grey" size="standard">delete_outline</v-icon>
+          </v-btn>
+          <v-btn icon @click="copyMacro(action.id, 'actions')" class="ml-0" small>
+            <v-icon color="grey" size="standard">file_copy</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(action.id, 'actions')">{{ action.text }}</a>
         </li>
@@ -92,6 +98,39 @@
         offset = this.getMacroOffset(contexts, id)
 
         contexts.splice(offset, 1)
+
+      },
+
+      copyMacro(id, column) {
+
+        let contexts, context
+        let offset
+
+        contexts = this.data[column]
+        offset = this.getMacroOffset(contexts, id)
+
+        context = contexts[offset]
+        context.id = createUUID()
+
+
+        if (context.variables) {
+
+          let v
+
+          for (let p in context.variables) {
+
+            v = context.variables[p]
+            v.id = createUUID()
+
+            if (v.type === 'text') {
+              v.value = '입력하세요'
+            }
+
+          }
+
+        }
+
+        contexts.splice(offset, 0, context)
 
       },
 
@@ -201,7 +240,7 @@
       saveScript() {
 
         let filepath
-        
+
         filepath = electron.ipcRenderer.sendSync('script-get-filepath', this.data.id)
 
         if (!filepath) {
@@ -212,7 +251,7 @@
         electron.ipcRenderer.sendSync('script-write', filepath, this.data)
 
         this.tabClose()
-        
+
       },
 
       cancelScript() {

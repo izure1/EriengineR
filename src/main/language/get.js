@@ -11,8 +11,10 @@ export default async function () {
   let returnValue
 
 
-  directory = path.join(this.variables.project.directory, 'Languages')
-  languages = await fg(path.join(directory, '*.json'))
+  directory = path.posix.join(this.variables.project.directory, 'Languages')
+  languages = await fg('*.json', {
+    cwd: directory
+  })
 
   returnValue = []
 

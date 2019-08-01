@@ -86,6 +86,7 @@
         delete raw.physicsset
         delete raw.followset
         delete raw.spriteset
+        delete raw.videoset
 
         delete raw.style.position
         delete raw.style.left
@@ -98,16 +99,20 @@
 
         return raw
 
+      },
+
+      watchFile() {
+        this.updateTimestamp = new Date
       }
 
     },
 
     created() {
+      fs.watchFile(this.data.path, this.watchFile)
+    },
 
-      fs.watch(this.data.path, () => {
-        this.updateTimestamp = new Date
-      })
-
+    destroyed() {
+      fs.unwatchFile(this.data.path, this.watchFile)
     }
 
   }

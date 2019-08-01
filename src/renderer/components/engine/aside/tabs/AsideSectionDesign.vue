@@ -17,6 +17,17 @@
   } from 'electron'
 
   import CONTEXTMENU from '../vars/CONTEXTMENU'
+  import DESIGN_LIST from '../../main/workspace/Templates/js/DESIGN_LIST'
+
+
+  let extensions = ''
+
+  for (let p in DESIGN_LIST) {
+    extensions += `(\\${DESIGN_LIST[p].ext})|`
+  }
+
+  extensions = extensions.substr(0, extensions.length - 1)
+  extensions = new RegExp(extensions, '')
 
 
   export default {
@@ -24,9 +35,9 @@
       Treeview
     },
     data: () => ({
-      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Designs'),
+      path: path.posix.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Designs'),
       filter: {
-        extensions: /(\.esdesign_actor)|(\.esdesign_interface)|(\.esdesign_background)/
+        extensions
       }
     }),
     computed: {

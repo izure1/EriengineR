@@ -18,9 +18,6 @@
             <v-list-tile-title class="light-green--text" :title="prop">
               {{ getPropertyName(prop, section.type) }}
               <span class="grey--text caption ml-2" v-html="getPreviewValue(value)"></span>
-              <span v-if="section.type === 'style'" class="ml-2">
-                <span class="grey--text caption" v-html="getPreviewDuration(prop)"></span>
-              </span>
             </v-list-tile-title>
             <v-list-tile-sub-title class="information-description">
               {{ getDescription(prop, section.type) }}
@@ -33,10 +30,7 @@
     <v-dialog max-width="50%" v-model="modifyMode">
       <v-card class="pa-3">
         <v-text-field label="값을 입력하세요" clearable :hint="getValueSample(modifyProperty, modifyType)"
-          v-model="modifyValue"></v-text-field>
-        <v-text-field label="값이 변경될 때, 스타일이 몇 초에 걸쳐서 변화되는지 입력해주세요." clearable v-model="duration[modifyProperty]"
-          v-if="isStyle">
-        </v-text-field>
+          v-model="modifyValue" color="orange"></v-text-field>
       </v-card>
     </v-dialog>
   </section>
@@ -64,7 +58,6 @@
 
       attribute: null,
       style: null,
-      duration: null,
 
       attribute_information: DESIGN_ATTRIBUTE,
       style_information: DESIGN_STYLE,
@@ -93,7 +86,7 @@
       },
 
       isReady() {
-        return this.attribute && this.style && this.duration
+        return this.attribute && this.style
       },
 
       isStyle() {
@@ -198,23 +191,6 @@
 
       },
 
-      getPreviewDuration(p) {
-
-        let v
-
-        v = this.duration[p] || ''
-        v += ''
-
-        v = v.replace(REGEXP.variable, '<span class="yellow--text">$1</span>')
-
-        if (v) {
-          v = `/${v}s`
-        }
-
-        return v
-
-      },
-
       setModifyItem(property, type) {
 
         this.modifyProperty = property
@@ -231,7 +207,6 @@
         let attribute
         let style
         let dataset
-        let duration
 
         information = this.requestReadFile()
 
@@ -239,14 +214,12 @@
         attribute = this.copyJSON(information)
         style = this.copyJSON(information).style
         dataset = this.copyJSON(information).dataset
-        duration = this.copyJSON(information).__duration
 
         // Delete unuseful properties
         delete attribute.type
         delete attribute.style
         delete attribute.dataset
         delete attribute.__id
-        delete attribute.__duration
         delete attribute.__asset
         delete attribute.__assetSrc
         delete attribute.__spot
@@ -254,30 +227,6 @@
         this.attribute = attribute
         this.style = style
         this.dataset = dataset
-        this.duration = duration
-
-      },
-
-      getUsefulDuration() {
-
-        let duration = this.copyJSON(this.duration)
-
-        // Append duration properties
-        for (let p in duration) {
-
-          if (isNaN(duration[p] - 0)) {
-            continue
-          }
-
-          if (duration[p] > 0) {
-            continue
-          }
-
-          delete duration[p]
-
-        }
-
-        return duration
 
       },
 
@@ -295,15 +244,11 @@
 
           raw = Object.assign(raw, this.attribute)
           raw.style = this.style
-          raw.__duration = this.getUsefulDuration()
 
           // Save file
           fs.writeJSONSync(this.data.path, raw, {
             spaces: 2
           })
-
-          // Reload data from file
-          this.getInformation(this.data.path)
 
         }, 300)
 
@@ -333,15 +278,6 @@
       },
 
       style: {
-
-        deep: true,
-        handler() {
-          this.saveFile()
-        }
-
-      },
-
-      duration: {
 
         deep: true,
         handler() {

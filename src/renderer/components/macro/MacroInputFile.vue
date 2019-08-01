@@ -95,7 +95,7 @@
         let real
 
         real = electron.ipcRenderer.sendSync('asset-get-directory', true)
-        real = path.join(real, file.id + file.ext)
+        real = path.posix.join(real, file.id + file.ext)
 
         return real
 

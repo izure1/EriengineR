@@ -1,5 +1,5 @@
 <template>
-  <v-app dark id="app">
+  <v-app id="app">
     <router-view></router-view>
   </v-app>
 </template>
@@ -72,6 +72,12 @@
     }
   }
 
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
   *:not(input),
   *:not(textarea) {
     user-select: none;
@@ -85,9 +91,6 @@
   #app {
     color: lightgray;
     overflow: hidden;
-    position: relative;
-    top: -30px;
-    transform: translateY(30px);
   }
 
   h1,
@@ -121,5 +124,10 @@
 
   .v-icon {
     vertical-align: middle;
+  }
+
+  .v-dialog--fullscreen {
+    height: calc(100% - 30px);
+    top: 30px;
   }
 </style>

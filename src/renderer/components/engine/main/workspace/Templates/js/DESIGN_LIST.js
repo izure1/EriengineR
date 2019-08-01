@@ -6,51 +6,99 @@ import banner_design_interface from '@/assets/img/banner_design_interface.gif'
 export default [
 
   {
-    name: '액터',
-    ext: '.esdesign_actor',
+    name: '이미지',
+    ext: '.esdesign_image',
     description: `
     <p>
-      씬에 배치할 수 있는 객체입니다.
-      비주얼노벨에서는 등장인물이 여기에 포함됩니다.
+      가장 많이 사용됩니다.
+      <br>
+      화면에 이미지를 그려넣고 싶을 때 사용합니다.
     </p>
-    <p>
-      2D 게임에서는 주인공과, NPC 등이 포함됩니다. 그리고 상호작용하는 것들 역시 액터로 취급됩니다.
-      <br>
-      가령 주인공이 몬스터를 공격할 수 있다면, 몬스터 역시 액터라 볼 수 있습니다.
-      <br>
-      나무를 벨 수 있다면, 나무 역시 액터라고 볼 수 있죠. 탄막 게임에서는 탄막도 액터라 볼 수 있습니다.
-    </p>`,
-    image: banner_design_actor,
+    `,
+    image: null,
     type: null
   },
 
   {
-    name: '인터페이스',
-    ext: '.esdesign_interface',
+    name: '스프라이트',
+    ext: '.esdesign_sprite',
     description: `
     <p>
-      카메라의 위치에 상관없이 항상 화면에 고정되어 있는 객체입니다.
+      움직이는 이미지를 그려넣고 싶을 때 사용합니다.
       <br>
-      가령 대사창, 체력 게이지, 미니맵, 버튼 등이 여기에 포함됩니다.
+      가령 2D 게임일 경우, 움직이는 캐릭터를 스프라이트 객체로 만듭니다.
     </p>
-    <p>
-      인터페이스는 플레이어에게 정보를 제공하거나, 상호작용을 돕는 용도로 사용됩니다.
-    </p>`,
-    image: banner_design_interface,
+    `,
+    image: null,
     type: null
   },
 
   {
-    name: '배경',
-    ext: '.esdesign_background',
+    name: '비디오',
+    ext: '.esdesign_video',
     description: `
     <p>
-      씬의 배경화면을 의미합니다.
+      비디오를 재생하고 싶을 때 사용합니다.
+    </p>
+    `,
+    image: null,
+    type: null
+  },
+
+  {
+    name: '오디오',
+    ext: '.esdesign_audio',
+    description: `
+    <p>
+      오디오를 재생하고 싶을 때 사용합니다.
       <br>
-      카메라의 위치에 따라 미묘하게 움직임으로써, 입체감을 더할 수 있습니다.
-    </p>`,
-    image: banner_design_background,
-    type: 'image'
+      효과음, 배경음 등이 이곳에 해당됩니다.
+    </p>
+    `,
+    image: null,
+    type: null
+  },
+
+  {
+    name: '텍스트',
+    ext: '.esdesign_text',
+    description: `
+    <p>
+      텍스트를 그리고 싶을 때 사용합니다.
+      <br>
+      텍스트를 꾸미고 기울기, 굵기 등 효과를 줄 수 있습니다.
+    </p>
+    `,
+    image: null,
+    type: null
+  },
+
+  {
+    name: '타이핑 텍스트',
+    ext: '.esdesign_typing',
+    description: `
+    <p>
+      내용을 변경하면 글자가 타이핑되는 효과를 보여줍니다.
+      <br>
+      비주얼노벨의 경우, 대사창이 이곳에 해당됩니다. 
+    </p>
+    `,
+    image: null,
+    type: null
+  },
+
+  {
+    name: 'GUI',
+    ext: '.esdesign_gui',
+    description: `
+    <p>
+    Graphical User Interface 의 약자입니다. 흔히 인터페이스라고 불립니다.
+    <br>
+    버튼, HP, MP바, 인벤토리 등을 구현하는데 이 객체를 사용합니다.
+    </p>
+    `,
+    image: null,
+    type: null
   }
 
 ]

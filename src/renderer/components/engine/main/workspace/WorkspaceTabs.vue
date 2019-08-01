@@ -1,6 +1,6 @@
 <template>
-  <ul class="workspace-tabs" @dragover.self="allowDropTab" @drop.self="dropTab(null)">
-    <li v-for="item in tabs" :key="item.id" :class="item.selected ? 'workspace-tabs-selected' : ''" draggable="true"
+  <section class="workspace-tabs" @dragover.self="allowDropTab" @drop.self="dropTab(null)">
+    <div v-for="item in tabs" :key="item.id" :class="item.selected ? 'workspace-tabs-selected' : ''" draggable="true"
       @dragstart="startDragTab(item)" @dragover="allowDropTab" @drop="dropTab(item)">
       <a href="#">
         <p @mousedown="tabMousedown(item)">{{ item.name }}</p>
@@ -9,8 +9,8 @@
       </a>
       <span v-if="item.selected" class="workspace-tabs-smoothes left"></span>
       <span v-if="item.selected" class="workspace-tabs-smoothes right"></span>
-    </li>
-  </ul>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -78,12 +78,9 @@
           t = this.tabs[i]
 
           if (t.id !== item.id) continue
-          if (t.onclose && t.onclose.call) {
-            t.onclose()
-          }
 
           this.tabs.splice(i, 1)
-          this.$root.$emit('closeWorkspaceTab-content', item.id)
+          this.$root.$emit('closeWorkspaceTab-content', item.id, t.onclose)
           break
 
         }
@@ -155,12 +152,6 @@
   $barBackgroundColor: #555;
   $tabBackgroundColor: #333;
 
-  ul,
-  li {
-    padding: 0;
-    margin: 0;
-  }
-
   .workspace-tabs {
     width: 100%;
     height: 33px;
@@ -172,7 +163,7 @@
     z-index: 0;
     background-color: $barBackgroundColor;
 
-    >li {
+    >div {
       max-width: 200px;
       height: 100%;
       position: relative;

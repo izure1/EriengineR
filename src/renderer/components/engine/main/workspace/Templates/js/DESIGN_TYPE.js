@@ -53,17 +53,19 @@ export default [
   },
 
   {
-    name: '비디오',
+    name: '미디어',
     value: 'video',
     description: `
     <p>
-      동영상을 재생합니다. 스프라이트와의 차이점은, 사운드가 포함되어 있다는 점입니다.
+      동영상 또는 사운드를 재생합니다.
       <br>
-      재생 속도를 조절할 수 있습니다.
+      사운드 용도로 생성하면 씬에 배치하여 씬의 배경음으로 사용할 수도 있습니다. 카메라와 다른 씬에 있으면 소리가 들리지 않습니다.
+      <br>
+      재생 속도, 볼륨을 조절할 수 있습니다.
     </p>
     `,
     image: banner_design_video,
-    src: REGEXP.video.source
+    src: REGEXP.media.source
   },
 
   {

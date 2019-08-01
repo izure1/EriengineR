@@ -2,6 +2,6 @@ import path from 'path'
 
 export default function () {
 
-  return path.join(this.variables.project.directory, 'Designs').replace(/\\/g, '/')
+  return path.posix.join(this.variables.project.directory, 'Designs')
 
 }

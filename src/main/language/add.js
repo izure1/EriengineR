@@ -12,7 +12,7 @@ export default async function (language) {
 
   if (languages.filter(item => item.name === language).length === 0) {
 
-    language = path.join(this.variables.project.directory, 'Languages', `${language}.json`)
+    language = path.posix.join(this.variables.project.directory, 'Languages', `${language}.json`)
 
     fs.writeJSONSync(language, {
       id: createUUID(),

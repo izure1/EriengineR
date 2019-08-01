@@ -21,7 +21,7 @@
       Treeview
     },
     data: () => ({
-      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Languages'),
+      path: path.posix.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Languages'),
       filter: {
         extensions: /\.json/
       }

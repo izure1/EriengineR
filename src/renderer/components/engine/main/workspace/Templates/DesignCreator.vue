@@ -14,7 +14,7 @@
           {{ banner.name }}(이)란?
         </h2>
       </v-card-title>
-      <v-img :src="banner.image" max-width="400" class="mx-3"></v-img>
+      <v-img :src="banner.image || ''" max-width="400" class="mx-3"></v-img>
       <v-card-text class="info-text" v-html="banner.description"></v-card-text>
     </v-card>
   </section>
@@ -50,7 +50,7 @@
 
       },
 
-      createDesign(ext, type, __assetSrc) {
+      createDesign(ext) {
 
         let filenames, filename, __id
 
@@ -60,14 +60,11 @@
         filename = createItem(filenames, '새로운 디자인')
         filename += ext
 
-        filename = path.join(this.directory, filename)
+        filename = path.posix.join(this.directory, filename)
         __id = createUUID()
 
         fs.writeJSONSync(filename, {
-          type,
-          __id,
-          __assetSrc,
-          __asset: null
+          __id
         }, {
           spaces: 2
         })

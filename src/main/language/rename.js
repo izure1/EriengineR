@@ -6,10 +6,10 @@ export default function (origin, after) {
 
   let directory
 
-  directory = path.join(this.variables.project.directory, 'Languages')
+  directory = path.posix.join(this.variables.project.directory, 'Languages')
 
-  origin = path.join(directory, `${origin}.json`)
-  after = path.join(directory, `${after}.json`)
+  origin = path.posix.join(directory, `${origin}.json`)
+  after = path.posix.join(directory, `${after}.json`)
 
   if (fs.existsSync(origin)) {
     try {

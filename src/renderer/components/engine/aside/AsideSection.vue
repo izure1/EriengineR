@@ -3,7 +3,7 @@
     <aside-section-home v-show="tabId === 'home'"></aside-section-home>
     <aside-section-asset v-show="tabId === 'asset'"></aside-section-asset>
     <aside-section-design v-show="tabId === 'design'"></aside-section-design>
-    <aside-section-scene v-show="tabId === 'scene'"></aside-section-scene>
+    <aside-section-view v-show="tabId === 'view'"></aside-section-view>
     <aside-section-script v-show="tabId === 'script'"></aside-section-script>
     <aside-section-language v-show="tabId === 'language'"></aside-section-language>
   </section>
@@ -18,7 +18,7 @@
   import AsideSectionHome from './tabs/AsideSectionHome'
   import AsideSectionAsset from './tabs/AsideSectionAsset'
   import AsideSectionDesign from './tabs/AsideSectionDesign'
-  import AsideSectionScene from './tabs/AsideSectionScene'
+  import AsideSectionView from './tabs/AsideSectionView'
   import AsideSectionScript from './tabs/AsideSectionScript'
   import AsideSectionLanguage from './tabs/AsideSectionLanguage'
 
@@ -27,7 +27,7 @@
       AsideSectionHome,
       AsideSectionAsset,
       AsideSectionDesign,
-      AsideSectionScene,
+      AsideSectionView,
       AsideSectionScript,
       AsideSectionLanguage
     },

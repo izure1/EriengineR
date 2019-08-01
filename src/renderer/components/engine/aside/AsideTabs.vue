@@ -1,6 +1,6 @@
 <template>
-  <ul>
-    <li v-for="(tab, index) in tabs" :key="index">
+  <div class="aside-tabs">
+    <div v-for="(tab, index) in tabs" :key="index" class="aside-tabs-tab">
       <a href="#" @click="selectTab" @mouseover="tab.hover = true" @mouseout="tab.hover = false" :data-key="index"
         :data-unique="tab.id" :title="tab.alt">
         <div v-if="tab.select" class="tab-highlight">
@@ -11,8 +11,8 @@
         <span v-else-if="tab.hover" class="tab-hovering">{{ tab.icon }}</span>
         <span v-else>{{ tab.icon }}</span>
       </a>
-    </li>
-  </ul>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -48,7 +48,7 @@
     src: url('~@/assets/fonts/sylarStencil.woff');
   }
 
-  ul {
+  .aside-tabs {
     width: 60px;
     height: 100%;
     list-style: none;
@@ -57,13 +57,7 @@
     z-index: 0;
   }
 
-  ul,
-  li {
-    padding: 0;
-    margin: 0;
-  }
-
-  li {
+  .aside-tabs-tab {
     height: 60px;
     text-align: center;
 

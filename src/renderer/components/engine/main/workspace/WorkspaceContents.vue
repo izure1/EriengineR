@@ -1,19 +1,25 @@
 <template>
   <section class="workspace-contents">
-    <ul v-if="!isEmpty">
-      <li v-for="(item, index) in tabs" :key="index" :data-id="item.id" v-show="item.show">
-        <section>
+    <div v-if="!isEmpty" class="workspace-contents-wrap">
+      <div v-for="(item, index) in tabs" :key="index" :data-id="item.id" v-show="item.show"
+        class="workspace-contents-tab">
+        <section class="workspace-contents-page">
           <template-default v-if="item.template === 'DEFAULT'" :data="item.data"></template-default>
           <template-canvas v-else-if="item.template === 'CANVAS'" :data="item.data"></template-canvas>
-          <template-script-viewer v-else-if="item.template === 'SCRIPT-VIEWER'" :data="item.data"></template-script-viewer>
-          <template-script-editor v-else-if="item.template === 'SCRIPT-EDITOR'" :data="item.data"></template-script-editor>
+          <template-script-viewer v-else-if="item.template === 'SCRIPT-VIEWER'" :data="item.data">
+          </template-script-viewer>
+          <template-script-editor v-else-if="item.template === 'SCRIPT-EDITOR'" :data="item.data">
+          </template-script-editor>
           <template-scene-viewer v-else-if="item.template === 'SCENE-VIEWER'" :data="item.data"></template-scene-viewer>
-          <template-language-manager v-else-if="item.template === 'LANGUAGE-MANAGER'" :data="item.data"></template-language-manager>
-          <template-design-creator v-else-if="item.template === 'DESIGN-CREATOR'" :data="item.data"></template-design-creator>
-          <template-design-editor v-else-if="item.template === 'DESIGN-EDITOR'" :data="item.data"></template-design-editor>
+          <template-language-manager v-else-if="item.template === 'LANGUAGE-MANAGER'" :data="item.data">
+          </template-language-manager>
+          <template-design-creator v-else-if="item.template === 'DESIGN-CREATOR'" :data="item.data">
+          </template-design-creator>
+          <template-design-editor v-else-if="item.template === 'DESIGN-EDITOR'" :data="item.data">
+          </template-design-editor>
         </section>
-      </li>
-    </ul>
+      </div>
+    </div>
     <div v-if="isEmpty" class="workspace-contents-empty">
       <div>
         <div class="workspace-contents-emptylogo">
@@ -87,7 +93,7 @@
 
       },
 
-      closeContent(id) {
+      closeContent(id, onclose) {
 
         let i
         let tab
@@ -101,6 +107,11 @@
           if (tab.id !== id) continue
 
           this.tabs.splice(i, 1)
+
+          if (onclose && onclose.call) {
+            onclose.call(tab)
+          }
+
           break
 
         }
@@ -133,8 +144,8 @@
         this.showContent(id)
       })
 
-      this.$root.$on('closeWorkspaceTab-content', id => {
-        this.closeContent(id)
+      this.$root.$on('closeWorkspaceTab-content', (id, onclose) => {
+        this.closeContent(id, onclose)
       })
 
       this.$root.$on('setDataForWorkspaceTab', (id, data) => {
@@ -153,22 +164,21 @@
   }
 
   .workspace-contents {
-    width: 100%;
     height: calc(100% - 33px);
+  }
 
-    >ul {
-      width: 100%;
-      height: 100%;
+  .workspace-contents-wrap,
+  .workspace-contents-tab {
+    height: 100%;
+  }
 
-      >li {
-        width: 100%;
-        height: 100%;
+  .workspace-contents-page {
+    height: 100%;
+    overflow: auto;
 
-        >section {
-          height: 100%;
-          overflow: auto;
-        }
-      }
+    >* {
+      overflow: auto;
+      position: relative;
     }
   }
 

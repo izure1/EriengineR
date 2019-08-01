@@ -17,7 +17,7 @@ export default async function (id) {
     file = filelist[p]
 
     if (file.id === id) {
-      return path.join(directory, file.id + file.ext)
+      return path.posix.join(directory, file.id + file.ext)
     }
 
   }

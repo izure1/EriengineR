@@ -4,7 +4,8 @@ let attribute = {}
 attribute.fontSize = {
 
   name: '글자 크기',
-  description: '텍스트 객체일 경우, 글자의 크기를 지정합니다. 단위는 px입니다.'
+  description: '텍스트 객체일 경우, 글자의 크기를 지정합니다. 단위는 px입니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
@@ -43,7 +44,7 @@ attribute.width = {
 
   name: '너비',
   description: '객체의 너비를 지정합니다.',
-  list: ['auto 입력', 'ｎ% 입력', '숫자 입력']
+  list: ['auto 입력', '𝑛% 입력', '숫자(0 ~ 𝑛) 입력']
 
 }
 
@@ -51,7 +52,7 @@ attribute.height = {
 
   name: '높이',
   description: '객체의 높이를 지정합니다.',
-  list: ['auto 입력', 'ｎ% 입력', '숫자 입력']
+  list: ['auto 입력', '𝑛% 입력', '숫자(0 ~ 𝑛) 입력']
 
 }
 
@@ -82,56 +83,64 @@ attribute.shadowColor = {
 attribute.borderWidth = {
 
   name: '테두리 두께',
-  description: '지정한 수치만큼 객체의 테두리를 표시합니다.'
+  description: '지정한 수치만큼 객체의 테두리를 표시합니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
 attribute.shadowBlur = {
 
   name: '그림자 번짐',
-  description: '지정한 수치만큼 객체의 그림자가 번집니다.'
+  description: '지정한 수치만큼 객체의 그림자가 번집니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
 attribute.shadowOffsetX = {
 
   name: '그림자 좌표 𝑥',
-  description: '그림자가 표시되는 위치를 지정할 수 있습니다. 이 수치만큼 그림자가 오른쪽으로 비칩니다.'
+  description: '그림자가 표시되는 위치를 지정할 수 있습니다. 이 수치만큼 그림자가 오른쪽으로 비칩니다.',
+  list: ['±𝑛']
 
 }
 
 attribute.shadowOffsetY = {
 
   name: '그림자 좌표 𝑦',
-  description: '그림자가 표시되는 위치를 지정할 수 있습니다. 이 수치만큼 그림자가 아래쪽으로 비칩니다.'
+  description: '그림자가 표시되는 위치를 지정할 수 있습니다. 이 수치만큼 그림자가 아래쪽으로 비칩니다.',
+  list: ['±𝑛']
 
 }
 
 attribute.opacity = {
 
   name: '투명도',
-  description: '객체의 투명도를 조절합니다.'
+  description: '객체의 투명도를 조절합니다.',
+  list: ['0 ~ 1']
 
 }
 
 attribute.rotate = {
 
   name: '회전',
-  description: '객체가 회전된 각도를 지정합니다. 회전은 객체의 \'기준점\' 스타일의 영향을 받습니다.'
+  description: '객체가 회전된 각도를 지정합니다. 회전은 객체의 \'기준점\' 스타일의 영향을 받습니다.',
+  list: ['±𝑛']
 
 }
 
 attribute.scale = {
 
   name: '크기',
-  description: '객체가 너비와 높이의 비례를 유지한 채, 이 수치의 곱만큼 커집니다. 객체의 무게에 영향을 줍니다.'
+  description: '객체가 너비와 높이의 비례를 유지한 채, 이 수치의 곱만큼 커집니다. 객체의 무게에 영향을 줍니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
 attribute.blur = {
 
   name: '번짐',
-  description: '이 수치만큼 객체가 번져 보입니다. 흐릿하게 사라져가는 표현을 할 때 좋습니다.'
+  description: '이 수치만큼 객체가 번져 보입니다. 흐릿하게 사라져가는 표현을 할 때 좋습니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
@@ -155,7 +164,7 @@ attribute.lineHeight = {
 
   name: '줄바꿈 간격',
   description: '텍스트 객체일 경우, 줄바꿈 간격을 지정할 수 있습니다.',
-  list: ['ｎ% 입력', '숫자 입력']
+  list: ['𝑛% 입력', '숫자(0 ~ 𝑛) 입력']
 
 }
 
@@ -170,7 +179,8 @@ attribute.verticalAlign = {
 attribute.zIndex = {
 
   name: '우선 순위',
-  description: '이 수치가 낮은 다른 객체보다 위에 표시됩니다.'
+  description: '이 수치가 낮은 다른 객체보다 위에 표시됩니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
@@ -185,28 +195,32 @@ attribute.cursor = {
 attribute.marginLeft = {
 
   name: '좌측 여백',
-  description: '객체가 물리 효과를 받을 때, 좌측에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.'
+  description: '객체가 물리 효과를 받을 때, 좌측에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
 attribute.marginRight = {
 
   name: '우측 여백',
-  description: '객체가 물리 효과를 받을 때, 우측에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.'
+  description: '객체가 물리 효과를 받을 때, 우측에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
 attribute.marginBottom = {
 
   name: '하단 여백',
-  description: '객체가 물리 효과를 받을 때, 하단에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.'
+  description: '객체가 물리 효과를 받을 때, 하단에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.',
+  list: ['0 ~ 𝑛']
 
 }
 
 attribute.marginTop = {
 
   name: '상단 여백',
-  description: '객체가 물리 효과를 받을 때, 상단에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.'
+  description: '객체가 물리 효과를 받을 때, 상단에 보이지 않는 여백이 추가되어 간격이 생깁니다. 객체의 무게에 영향을 주지 않습니다.',
+  list: ['0 ~ 𝑛']
 
 }
 

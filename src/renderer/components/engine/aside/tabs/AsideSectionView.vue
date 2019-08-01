@@ -1,6 +1,7 @@
 <template>
   <div class="aside-section-tab">
-    <treeview :path="path" :filter="filter" :openItem="openItem" :contextmenu="contextmenu" :configurable="true"></treeview>
+    <treeview :path="path" :filter="filter" :openItem="openItem" :contextmenu="contextmenu" :configurable="true">
+    </treeview>
   </div>
 </template>
 
@@ -23,16 +24,17 @@
       Treeview
     },
     data: () => ({
-      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Scenes'),
+      path: path.posix.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Views'),
       filter: {
-        extensions: /\.esscene/
+        extensions: /\.esview/
       }
     }),
     computed: {
 
       contextmenu() {
         return [{
-            text: '씬 편집',
+            text: '뷰 편집',
+            disabledOnTop: true,
             click(e, itempath) {
               this.openViewer(itempath)
             }
@@ -71,7 +73,7 @@
 
         dirname = path.basename(directory)
 
-        this.$root.$emit('createWorkspaceTab', stat.ino, `${dirname} 씬 뷰어`, 'SCENE-VIEWER')
+        this.$root.$emit('createWorkspaceTab', stat.ino, `${dirname} 뷰 에디터`, 'VIEW-VIEWER')
         this.$root.$emit('setDataForWorkspaceTab', stat.ino, directory)
 
       }

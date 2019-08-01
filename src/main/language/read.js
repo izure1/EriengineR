@@ -8,8 +8,8 @@ export default async function (language) {
   let file
 
 
-  directory = path.join(this.variables.project.directory, 'Languages')
-  file = path.join(directory, `${language}.json`)
+  directory = path.posix.join(this.variables.project.directory, 'Languages')
+  file = path.posix.join(directory, `${language}.json`)
 
 
   if (!fs.existsSync(file)) {

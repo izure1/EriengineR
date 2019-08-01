@@ -8,45 +8,39 @@
         스크립트의 <span class="light-green--text">특정 부분 위치 확대</span> 기능을 사용하여 액터의 원하는 부분을 쉽게 확대할 수 있습니다.
       </v-card-text>
       <div v-if="isActor">
-        <div v-if="isImageType">
-          <div v-if="assetId">
-            <v-list one-line dense>
-              <v-list-tile v-for="(value, property) in spot" :key="property" @click="setModifyItem(property, value)">
-                <v-list-tile-avatar>
-                  <v-icon color="grey">arrow_right</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>
-                    <span class="light-green--text">{{ property }}</span>
-                    <span class="grey--text ml-2 caption">{{ getSpotDescription(value) }}</span>
-                  </v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
-          </div>
-          <div v-else>
-            <v-alert :value="true" type="error">
-              아직 이 디자인의 에셋이 지정되지 않았습니다.
-              <br>
-              먼저 에셋을 지정해주세요.
-            </v-alert>
-          </div>
+        <div v-if="assetId">
+          <v-list one-line dense>
+            <v-list-tile v-for="(value, property) in spot" :key="property" @click="setModifyItem(property, value)">
+              <v-list-tile-avatar>
+                <v-icon color="grey">arrow_right</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  <span class="light-green--text">{{ property }}</span>
+                  <span class="grey--text ml-2 caption">{{ getSpotDescription(value) }}</span>
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
         </div>
-        <v-alert :value="!isImageType" type="error">
-          이 기능은 이미지 타입에서만 사용할 수 있습니다.
-        </v-alert>
+        <div v-else>
+          <v-alert :value="true" type="error">
+            아직 이 디자인의 에셋이 지정되지 않았습니다.
+            <br>
+            먼저 에셋을 지정해주세요.
+          </v-alert>
+        </div>
       </div>
       <v-alert :value="!isActor" type="error">
         이 기능은 액터 클래스에서만 사용할 수 있습니다.
       </v-alert>
     </v-card>
     <!-- 모달 데이터 수정 -->
-    <v-dialog max-width="50%" v-model="modifyMode">
+    <v-dialog v-model="modifyMode">
       <v-card style="overflow:hidden">
         <div style="position:relative">
-          <v-img v-if="assetSrc" :src="assetSrc" :aspect-ratio="16/9" contain @click="setModifySpot"
-            @mousemove="updateImageInformation" class="my-4"></v-img>
-          <div :style="{'left': getSpotPositionX, 'top': getSpotPositionY}" class="spot-point"></div>
+          <canvas v-show="assetSrc" :width="imageWidth" :height="imageHeight" :id="getCanvasId"
+            @click="setModifySpot"></canvas>
         </div>
       </v-card>
     </v-dialog>
@@ -57,7 +51,9 @@
   import electron from 'electron'
   import fs from 'fs-extra'
   import path from 'path'
+  import Lve from 'lve'
 
+  import createUUID from '@static/js/createUUID'
   import createItem from '@static/js/createItem'
   import DESIGN_SPOT from './js/DESIGN_SPOT'
 
@@ -65,20 +61,24 @@
 
     props: ['data', 'requestReadFile', 'updateTimestamp'],
     data: () => ({
+
+      lve: new Lve,
+      uuid: createUUID(),
+
       spot: null,
       modifyMode: false,
       modifyProperty: null,
       modifyValue: null,
+
       assetId: null,
       assetSrc: null,
-      modalWidth: 0,
-      modalHeight: 0,
+      assetObject: null,
+
       imageWidth: 0,
       imageHeight: 0,
-      pointX: 100,
-      pointY: 100,
-      imageOffsetX: 0,
-      imageOffsetY: 0
+      pointX: 0,
+      pointY: 0,
+
     }),
 
     computed: {
@@ -87,27 +87,12 @@
         return path.extname(this.data.path) === '.esdesign_actor'
       },
 
-      isImageType() {
-        return this.requestReadFile(true).type === 'image'
+      isNeededAsset() {
+        return
       },
 
-      isWidthBigger() {
-
-        let imageS, modalS
-
-        imageS = this.imageWidth / this.imageHeight
-        modalS = this.modalWidth / this.modalHeight
-
-        return imageS > modalS
-
-      },
-
-      getSpotPositionX() {
-        return this.imageOffsetX + (this.imageWidth * this.pointX) - 50 + 'px'
-      },
-
-      getSpotPositionY() {
-        return this.imageOffsetY + (this.imageHeight * this.pointY) - 50 + 'px'
+      getCanvasId() {
+        return 'template-designeditor-spot-' + this.uuid
       }
 
     },
@@ -138,66 +123,10 @@
         this.modifyMode = true
         this.modifyProperty = u
 
+        await this.drawImageToCanvas()
+
         this.pointX = v[0]
         this.pointY = v[1]
-
-      },
-
-      getImageSize(src) {
-
-        let img
-
-        return new Promise((resolve, reject) => {
-
-          img = new Image()
-          img.onload = function () {
-            resolve([this.naturalWidth, this.naturalHeight])
-          }
-          img.onerror = function (e) {
-            reject(e)
-          }
-
-          img.src = src
-
-        })
-
-      },
-
-      async updateImageInformation(e) {
-
-        let modal, img
-
-        modal = e.currentTarget.getBoundingClientRect()
-        img = await this.getImageSize(this.assetSrc)
-
-        let modalW, modalH, modalS
-        let imageW, imageH, imageS
-        let startX, startY
-
-        modalW = modal.width
-        modalH = modal.height
-
-        imageS = img[0] / img[1]
-        modalS = modalW / modalH
-
-        if (this.isWidthBigger) {
-          imageW = modalW
-          imageH = imageW / imageS
-        } else {
-          imageH = modalH
-          imageW = imageH * imageS
-        }
-
-        startX = (modalW - imageW) / 2
-        startY = (modalH - imageH) / 2
-
-
-        this.modalWidth = modalW
-        this.modalHeight = modalH
-        this.imageWidth = imageW
-        this.imageHeight = imageH
-        this.imageOffsetX = startX
-        this.imageOffsetY = startY
 
       },
 
@@ -205,20 +134,80 @@
 
         let x, y
 
-        await this.updateImageInformation(e)
+        x = e.offsetX / e.currentTarget.width
+        y = e.offsetY / e.currentTarget.height
 
-        x = e.offsetX - this.imageOffsetX
-        y = e.offsetY - this.imageOffsetY
-
-        if (x < 0) x = 0
-        if (y < 0) y = 0
-
-        x /= this.imageWidth
-        y /= this.imageHeight
-
+        this.modifyValue = [x, y]
         this.pointX = x
         this.pointY = y
-        this.modifyValue = [x, y]
+
+      },
+
+      initCanvas() {
+
+        this.lve.init({
+          canvas: `#${this.getCanvasId}`
+        })
+
+        this.lve('__system_camera__').create({
+          type: 'camera'
+        }).use()
+
+        this.lve('__system_spot__').create({
+          type: 'circle'
+        }).css({
+          borderWidth: 3,
+          borderColor: 'red',
+          position: 'fixed',
+          color: 'transparent',
+          verticalAlign: 'middle',
+          zIndex: 1,
+          pointerEvents: false
+        })
+
+      },
+
+      async drawImageToCanvas() {
+
+        let o, sample
+        let el
+        let calc
+
+        return new Promise(resolve => {
+
+          this.lve('__system_asset_sample__').remove()
+
+          el = document.documentElement
+
+          o = this.requestReadFile()
+          o.src = this.assetSrc
+
+          sample = this.lve('__system_asset_sample__').create(o)
+          sample.css('verticalAlign', 'middle')
+          sample.on('load', (e) => {
+
+            el = document.documentElement
+            calc = this.lve.calcRatio(el.clientWidth, el.clientHeight, sample.width(), sample.height(), 0.8)
+
+            this.imageWidth = calc.width
+            this.imageHeight = calc.height
+            this.pointX = this.pointX
+            this.pointY = this.pointY
+
+            sample.css({
+              width: this.imageWidth,
+              height: this.imageHeight
+            })
+
+            if (sample.type === 'sprite') {
+              sample.play()
+            }
+
+            resolve()
+
+          })
+
+        })
 
       }
 
@@ -246,14 +235,47 @@
 
       },
 
+      pointX() {
+        this.lve('__system_spot__').css('left', this.imageWidth * this.pointX - 50)
+      },
+
+      pointY() {
+        this.lve('__system_spot__').css('bottom', this.imageHeight * (1 - this.pointY))
+      },
+
       updateTimestamp() {
+
+        if (this.lve.getRenderStates().ready) {
+          this.lve.destroy()
+          this.lve = new Lve
+        }
+
         this.getInformation()
+        this.initCanvas()
+        this.drawImageToCanvas()
+
       }
 
     },
 
+    created() {
+      window.addEventListener('resize', this.drawImageToCanvas)
+    },
+
     mounted() {
+
       this.getInformation()
+      this.initCanvas()
+      this.drawImageToCanvas()
+
+    },
+
+    beforeDestroy() {
+      this.lve.destroy()
+    },
+
+    destroyed() {
+      window.removeEventListener('resize', this.drawImageToCanvas)
     }
 
   }
@@ -264,12 +286,8 @@
     font-size: small;
   }
 
-  .spot-point {
-    width: 100px;
-    height: 100px;
+  canvas {
+    margin: 0 auto;
     display: block;
-    position: absolute;
-    border: 3px solid red;
-    pointer-events: none;
   }
 </style>

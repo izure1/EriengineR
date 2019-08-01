@@ -37,7 +37,7 @@
     data: () => ({
       project: {
         name: '새로운 프로젝트',
-        directory: path.join(os.homedir(), 'Desktop'),
+        directory: path.posix.join(os.homedir(), 'Desktop'),
         id: `org.izure.eriengine.p_${createUUID().split('-').pop()}`,
         width: 1366,
         height: 768,

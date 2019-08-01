@@ -15,8 +15,8 @@ export default async function (e, options) {
   let success
 
   src = options.template.path
-  dist = path.join(options.directory, options.id)
-  esproject = path.join(dist, 'project.esproject')
+  dist = path.posix.join(options.directory, options.id)
+  esproject = path.posix.join(dist, 'project.esproject')
 
   // 쓸모없는 정보를 삭제합니다
   delete options.directory
@@ -41,7 +41,7 @@ export default async function (e, options) {
 
     for (let dirname of DIRECTORYS) {
 
-      if (fs.existsSync(directory = path.join(dist, dirname))) {
+      if (fs.existsSync(directory = path.posix.join(dist, dirname))) {
         continue
       }
 

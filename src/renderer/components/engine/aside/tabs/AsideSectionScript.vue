@@ -23,7 +23,7 @@
       Treeview
     },
     data: () => ({
-      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Scripts'),
+      path: path.posix.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Views'),
       filter: {
         extensions: /\.esscript/
       }
@@ -34,6 +34,7 @@
 
         return [{
             text: '스크립트 편집',
+            disabledOnTop: true,
             click(e, itempath) {
               this.openViewer(itempath)
             }
@@ -58,7 +59,7 @@
           recursive: true
         }, (e, filepath) => {
 
-          directory = path.join(this.path, filepath)
+          directory = path.posix.join(this.path, filepath)
           stat = fs.lstatSync(directory)
 
           if (!stat.isDirectory()) {

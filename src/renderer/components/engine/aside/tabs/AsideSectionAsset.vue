@@ -141,7 +141,7 @@
         let directory
 
         projectDirectory = ipcRenderer.sendSync('var-get-sync', 'project.directory')
-        directory = path.join(projectDirectory, 'AssetSources')
+        directory = path.posix.join(projectDirectory, 'AssetSources')
 
         return directory
 
@@ -162,7 +162,7 @@
           return
         }
 
-        src = path.join(this.assetSources, asset.id + asset.ext)
+        src = path.posix.join(this.assetSources, asset.id + asset.ext)
 
         shell.openItem(src)
 
@@ -220,7 +220,7 @@
 
           filename = path.basename(file)
           fileext = path.extname(file)
-          asset = path.join(directory, filename)
+          asset = path.posix.join(directory, filename)
 
           alreadyExists = fs.existsSync(asset)
 
@@ -251,7 +251,7 @@
           let contents
 
           uuid = beforeFile ? beforeFile.id : createUUID()
-          dist = path.join(this.assetSources, uuid + fileext)
+          dist = path.posix.join(this.assetSources, uuid + fileext)
 
           contents = {
             id: uuid,
@@ -267,7 +267,7 @@
             continue
           }
 
-          await fs.writeJSON(asset, contents, {
+          fs.writeJSONSync(asset, contents, {
             spaces: 2
           })
 
@@ -284,7 +284,7 @@
         let file
         let option
 
-        file = path.join(this.assetSources, asset.id + asset.ext)
+        file = path.posix.join(this.assetSources, asset.id + asset.ext)
         option = {
           force: true
         }

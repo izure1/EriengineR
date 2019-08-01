@@ -1,7 +1,9 @@
 <template>
-  <div v-dragscroll:nochilddrag class="template-scriptviewer" @contextmenu.self="createScript" @mousemove="setCursorInformation"
-    @mousewheel="setZAxis" :style="{width: `${100 / persp.value}%`, height: `${100 / persp.value}%`, transform:`scale(${persp.value})`}">
-    <span :id="getCursorPointerId" class="template-scriptviewer-cursor" v-show="connection.source" :style="{ left: `${connection.x}px`, top: `${connection.y}px` }"></span>
+  <div v-dragscroll:nochilddrag class="template-scriptviewer" @contextmenu.self="createScript"
+    @mousemove="setCursorInformation" @mousewheel="setZAxis"
+    :style="{width: `${100 / persp.value}%`, height: `${100 / persp.value}%`, transform:`scale(${persp.value})`}">
+    <span :id="getCursorPointerId" class="template-scriptviewer-cursor" v-show="connection.source"
+      :style="{ left: `${connection.x}px`, top: `${connection.y}px` }"></span>
     <div class="template-scriptviewer-axis">
       <div v-for="x in pos.x" :key="`pos_${x}`" :style="{left: `${x}px`}">
         <div v-for="y in pos.y" :key="`pos_${y}`" :style="{top: `${y}px`}">
@@ -9,13 +11,17 @@
         </div>
       </div>
     </div>
-    <section v-for="script in scripts" :key="script.id" :id="getScriptId(script.id)" :data-id="script.id" class="script-box"
-      :class="{isdropping: (connection.target === script && connection.source)}" @mouseenter="connection.target = script"
-      @mouseleave="connection.target = null" :style="{left: `${script.position.x}px`, top: `${script.position.y}px`}">
+    <section v-for="script in scripts" :key="script.id" :id="getScriptId(script.id)" :data-id="script.id"
+      class="script-box" :class="{isdropping: (connection.target === script && connection.source)}"
+      @mouseenter="connection.target = script" @mouseleave="connection.target = null"
+      :style="{left: `${script.position.x}px`, top: `${script.position.y}px`}">
       <div class="script-box-header">
         <span>{{ getScriptTitle(script.path) }}</span>
         <a href="#" title="스크립트 삭제" @click="dropScript(script)" v-if="!connection.source">
           <v-icon small>delete_forever</v-icon>
+        </a>
+        <a href="#" title="스크립트 복사" @click="copyScript(script.path)" v-if="!connection.source">
+          <v-icon small>file_copy</v-icon>
         </a>
         <a href="#" title="스크립트 연결" @click="createConnection(script)" v-if="!connection.source">
           <v-icon small>link</v-icon>
@@ -72,6 +78,7 @@
   import deleteConnection from './methods/ScriptViewer/deleteConnection'
   import createConnectionDone from './methods/ScriptViewer/createConnectionDone'
   import createScript from './methods/ScriptViewer/createScript'
+  import copyScript from './methods/ScriptViewer/copyScript'
   import dropScript from './methods/ScriptViewer/dropScript'
   import focusScript from './methods/ScriptViewer/focusScript'
   import getScriptId from './methods/ScriptViewer/getScriptId'
@@ -136,6 +143,7 @@
       cancelConnecting,
       deleteConnection,
       createConnectionDone,
+      copyScript,
       dropScript,
       focusScript,
       modifyScript,
@@ -226,10 +234,18 @@
       clear: both;
       cursor: move;
 
+      >* {
+        display: inline-block;
+        vertical-align: top;
+      }
+
       >span {
+        width: 320px;
         font-size: small;
         line-height: 25px;
-        float: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       >a {

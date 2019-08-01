@@ -13,18 +13,19 @@
         </div>
         <div v-else>
           <v-card-actions>
-            <v-btn @click="showAssetMode = true">
+            <!-- <v-btn @click="showAssetMode = true"> -->
+            <v-btn @click="openAsset">
               <v-icon>camera</v-icon>지정된 에셋 보기
             </v-btn>
             <v-btn @click="removeAsset" color="warning">
               <v-icon>delete_forever</v-icon>에셋 재지정
             </v-btn>
           </v-card-actions>
-          <v-dialog v-model="showAssetMode" max-width="60%">
+          <!-- <v-dialog v-model="showAssetMode" max-width="60%">
             <v-card>
               <v-img :src="getAssetFile(asset)"></v-img>
             </v-card>
-          </v-dialog>
+          </v-dialog> -->
         </div>
       </div>
       <v-alert :value="!asset" type="warning">
@@ -109,6 +110,10 @@
         this.asset = id
         this.saveAsset(this.asset)
 
+      },
+
+      openAsset(){
+        electron.shell.openItem(this.getAssetFile())
       },
 
       removeAsset() {

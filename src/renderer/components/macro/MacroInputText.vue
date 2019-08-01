@@ -1,30 +1,15 @@
 <template>
   <section class="macro-input-text">
-    <v-tabs slider-color="orange" fixed-tabs show-arrows>
+    <v-tabs fixed-tabs show-arrows prev-icon="chevron_left" next-icon="chevron_right" v-model="tab">
+      <v-tabs-slider color="orange"></v-tabs-slider>
       <v-tab v-for="(language, index) in languages" :key="index">{{ language.name }}</v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="tab" class="macro-input-place">
       <v-tab-item v-for="(language, index) in languages" :key="index">
         <v-textarea placeholder="내용을 입력하세요. 다국어를 지원하고 싶다면 상단에서 언어를 관리하세요." no-resize full-width clearable autofocus
           style="padding:10px" v-model="inputText[language.id]" @change="modalReturn"></v-textarea>
       </v-tab-item>
-      <v-btn icon @click="languageManageMode = true">
-        <v-icon>menu</v-icon>
-      </v-btn>
-    </v-tabs>
-    <v-dialog v-model="languageManageMode" fullscreen>
-      <v-card>
-        <v-card-title>
-          <v-toolbar fixed>
-            <v-btn icon @click="languageManageMode = false">
-              <v-icon>close</v-icon>
-            </v-btn>
-            <v-toolbar-title>다국어 관리자</v-toolbar-title>
-          </v-toolbar>
-        </v-card-title>
-        <v-card-text>
-          <language-manager></language-manager>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    </v-tabs-items>
   </section>
 </template>
 
@@ -33,6 +18,11 @@
   import LanguageManager from '@/components/language-manager/LanguageManager'
 
   import createUUID from '@static/js/createUUID'
+
+
+  function isUUID(uuid) {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(uuid)
+  }
 
 
   export default {
@@ -44,9 +34,9 @@
     props: ['variable'],
 
     data: () => ({
+      tab: null,
       languages: [],
-      inputText: {},
-      languageManageMode: false
+      inputText: {}
     }),
 
     methods: {
@@ -55,7 +45,8 @@
 
         // 사용자가 입력한 모든 텍스트를 다국어 파일에 삽입합니다
         for (let language of this.languages) {
-          await electron.ipcRenderer.send('language-append', language.name, this.inputText[language.id], this.variable.id)
+          await electron.ipcRenderer.send('language-append', language.name, this.inputText[language.id], this.variable
+            .id)
         }
 
         this.$emit('modalReturn', this.variable.id)
@@ -73,7 +64,6 @@
           })
 
         })
-
       },
 
       setSavedText(languages) {
@@ -104,3 +94,9 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .macro-input-place {
+    background-color: transparent !important;
+  }
+</style>

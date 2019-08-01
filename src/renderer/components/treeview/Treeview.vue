@@ -1,11 +1,11 @@
 <template>
-  <li class="template-treeview-item">
+  <div class="template-treeview-item">
     <div @click="toggle" @dblclick="openThis(tree.path)" tabindex="-1" @contextmenu="openContextmenu"
       @blur="contextmenu_info.open = false" draggable="true" @dragstart="setDragItem" @dragover="allowDrop"
-      @drop="dropItem" @keydown="runShortcut($event, tree.path)">
+      @drop="dropItem" @keydown="runShortcut($event, tree.path)" class="template-treeview-itemwrap">
       <div class="template-treeview-indent" :data-depth="depth">
-        <v-icon v-if="isFolder" color="yellow">{{ open ? 'arrow_drop_down' : 'arrow_right' }}</v-icon>
-        <v-icon v-else color="rgb(140, 140, 140)">{{ getFileIcon(tree.path) }}</v-icon>
+        <v-icon v-if="isFolder" color="yellow" small>{{ open ? 'arrow_drop_down' : 'arrow_right' }}</v-icon>
+        <v-icon v-else color="rgb(140, 140, 140)" small>{{ getFileIcon(tree.path) }}</v-icon>
         <v-tooltip v-if="!modifyMode" bottom :disabled="isFolder">
           <template v-slot:activator="{ on }">
             <p v-on="on">{{ tree.name }}</p>
@@ -13,7 +13,7 @@
           <div class="treeview-tooltip-section">
             <div class="treeview-tooltip-name text-xs-center">{{ tree.name }}</div>
             <div v-if="!!getPreviewSrc">
-              <v-divider></v-divider>
+              <v-divider class="mt-1 mb-2"></v-divider>
               <div v-if="isImageFile">
                 <v-img :src="getPreviewSrc"></v-img>
               </div>
@@ -28,23 +28,22 @@
       </div>
       <div v-if="contextmenu_info.open" class="template-treeview-contextmenu"
         :style="{left: `${contextmenu_info.x}px`, top: `${contextmenu_info.y}px`}">
-        <ul>
-          <li v-for="(item, index) in contextmenu" :key="index"
-            @click="callContextmenuItem($event, item.click, tree.path, item.disabledOnTop)"
-            :class="{disabled: isDisabledItem(item.disabledOnTop)}">
+        <div class="template-treeview-contextitem">
+          <div v-for="(item, index) in contextmenu" :key="index"
+            @click="callContextmenuItem($event, item.click, tree.path, item.disabledOnTop, item.onlyOnTop)"
+            :class="{disabled: isDisabledItem(item.disabledOnTop, item.onlyOnTop)}">
             <hr v-if="item.separator">
             <span v-else>{{ item.text }}</span>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
     </div>
-    <ul v-show="open" v-if="isFolder">
-      <treeview class="item" v-for="branch in tree.children" :path="branch.path" :filter="filter" :tree="branch"
-        :key="branch.path" :openItem="openItem" :configurable="configurable" :contextmenu="contextmenu" :top="top"
-        :depth="nextDepth">
+    <div v-show="open" v-if="isFolder" class="template-treeview-next">
+      <treeview v-for="branch in tree.children" :path="branch.path" :filter="filter" :tree="branch" :key="branch.path"
+        :openItem="openItem" :configurable="configurable" :contextmenu="contextmenu" :top="top" :depth="nextDepth">
       </treeview>
-    </ul>
-  </li>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -177,12 +176,16 @@
         }
       },
 
-      callContextmenuItem(e, fn, itempath, disabled = false) {
+      callContextmenuItem(e, fn, itempath, disabledOnTop = false, onlyOnTop = false) {
 
         e.preventDefault()
         e.stopPropagation()
 
-        if (disabled && this.isTop) {
+        if (this.isTop && disabledOnTop) {
+          return
+        }
+
+        if (!this.isTop && onlyOnTop) {
           return
         }
 
@@ -215,7 +218,7 @@
         let after
 
         name = e.currentTarget.value
-        after = path.join(path.dirname(before), name)
+        after = path.posix.join(path.dirname(before), name)
 
         if (!name) {
           this.modifyNameCancel(e)
@@ -266,7 +269,7 @@
 
         before = e.dataTransfer.getData('filePath')
         after = this.tree.path
-        after = path.join(after, path.basename(before))
+        after = path.posix.join(after, path.basename(before))
 
         fs.rename(before, after)
 
@@ -290,11 +293,14 @@
 
       },
 
-      isDisabledItem(disabled = false) {
+      isDisabledItem(disabledOnTop = false, onlyOnTop = false) {
 
-        if (this.isTop) {
-          if (disabled) return true
-          else return false
+        if (this.isTop && disabledOnTop) {
+          return true
+        }
+
+        if (!this.isTop && onlyOnTop) {
+          return true
         }
 
         return false
@@ -312,19 +318,19 @@
 
           case '.woff':
           case '.woff2':
-            return 'fonticons';
+            return 'fonticons'
 
           case '.png':
           case '.jpg':
           case '.jpeg':
           case '.gif':
-            return 'image';
+            return 'image'
 
           case '.mp3':
-            return 'audiotrack';
+            return 'audiotrack'
 
           case '.mp4':
-            return 'movie';
+            return 'movie'
 
           case '.esscript':
             return 'code'
@@ -342,7 +348,7 @@
             return 'language'
 
           default:
-            return 'attachment';
+            return 'attachment'
 
         }
 
@@ -408,7 +414,7 @@
     mounted() {
 
       this.$el.querySelectorAll('div.template-treeview-indent').forEach(t => {
-        t.style.marginLeft = `${t.dataset.depth * 10 + 15}px`
+        t.style.marginLeft = `${t.dataset.depth * 10 + 10}px`
       })
 
     }
@@ -417,15 +423,6 @@
 </script>
 
 <style lang="scss" scoped>
-  ul {
-    padding: 0;
-    margin: 0;
-  }
-
-  li {
-    list-style: none;
-  }
-
   .v-icon {
     font-size: smaller;
   }
@@ -434,15 +431,14 @@
     margin: 4px 0;
     position: relative;
     cursor: pointer;
+  }
 
-    >div {
-      outline: none;
+  .template-treeview-itemwrap:hover {
+    background-color: rgba(255, 255, 255, .1);
+  }
 
-      &:hover {
-        background-color: rgba(255, 255, 255, .1);
-      }
-    }
-
+  .template-treeview-next {
+    outline: none;
   }
 
   .template-treeview-contextmenu {
@@ -451,33 +447,33 @@
     box-shadow: 0px 0px 3px rgba(0, 0, 0, .3);
     position: fixed;
     z-index: 1;
+  }
 
-    >ul {
-      padding: 5px 0;
+  .template-treeview-contextitem {
+    padding: 5px 0;
 
-      >li {
-        &.disabled {
-          color: #555;
-        }
+    >div {
+      &.disabled {
+        color: #555;
+      }
 
-        &:not(.disabled):hover {
-          background-color: rgba(255, 255, 255, .1);
-        }
+      &:not(.disabled):hover {
+        background-color: rgba(255, 255, 255, .1);
+      }
 
-        >span {
-          height: 25px;
-          font-size: smaller;
-          line-height: 25px;
-          padding: 0 25px;
-          display: block;
-        }
+      >span {
+        height: 25px;
+        font-size: smaller;
+        line-height: 25px;
+        padding: 0 25px;
+        display: block;
+      }
 
-        >hr {
-          height: 1px;
-          margin: 7px;
-          border: 0;
-          background-color: #555;
-        }
+      >hr {
+        height: 1px;
+        margin: 7px;
+        border: 0;
+        background-color: #555;
       }
     }
   }

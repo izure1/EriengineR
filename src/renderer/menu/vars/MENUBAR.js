@@ -3,6 +3,8 @@ import {
   shell
 } from 'electron'
 
+import HELPERS from './HELPERS'
+
 const {
   dialog
 } = remote
@@ -12,16 +14,6 @@ export default function () {
   return [{
       label: '파일',
       submenu: [{
-          label: '저장',
-          accelerator: 'CmdOrCtrl + S',
-          click() {
-            //electron.ipcMain.emit('save-project')
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
           label: '내보내기',
           submenu: [{
               label: '게임 빌드',
@@ -49,12 +41,8 @@ export default function () {
     {
       label: '데이터',
       submenu: [{
-          label: '게임명 수정'
-        },
-        {
-          label: '해상도 수정'
-        }
-      ]
+        label: '게임 설정 수정'
+      }]
     },
     {
       label: '관리',
@@ -94,7 +82,9 @@ export default function () {
         },
         {
           label: '엔진 건의/오류',
-          click() {}
+          click() {
+            shell.openExternal('http://cafe.naver.com/ArticleList.nhn?search.clubid=28675793&search.menuid=38&search.boardtype=Q')
+          }
         },
         {
           type: 'separator'
@@ -150,28 +140,19 @@ export default function () {
               }
             }
           ]
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: '격자'
         }
       ]
     },
     {
       label: '정보',
       submenu: [{
-          label: '내 정보'
-        },
-        {
-          type: 'separator'
-        },
-        {
           label: '게임 정보'
         },
         {
           type: 'separator'
+        },
+        {
+          label: '내 정보'
         },
         {
           label: '엔진 정보',
@@ -181,7 +162,7 @@ export default function () {
               type: 'info',
               title: '에리엔진',
               message: '에리엔진',
-              detail: `버전: ${win.variables.package.version}\n제작: ${win.variables.package.author}\n라이센스: ${win.variables.package.license}`
+              detail: `버전: ${win.variables.package.version}\n제작: ${win.variables.package.author}\n라이센스: ${win.variables.package.license}\n\n\n도움을 주신 분들 모두 감사드립니다\n\n${HELPERS.join(', ')}`
             })
           }
         },

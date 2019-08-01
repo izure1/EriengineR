@@ -37,8 +37,8 @@
     <!-- 모달 데이터 수정 -->
     <v-dialog max-width="50%" v-model="modifyMode">
       <v-card class="pa-3" v-if="modify">
-        <v-text-field label="변수명을 입력하세요" clearable :value="modify" @change="saveProperty"></v-text-field>
-        <v-text-field label="초기값을 입력하세요" clearable :value="dataset[modify]" @change="saveValue"></v-text-field>
+        <v-text-field label="변수명을 입력하세요" clearable :value="modify" @change="saveProperty" color="orange"></v-text-field>
+        <v-text-field label="초기값을 입력하세요" clearable :value="dataset[modify]" @change="saveValue" color="orange"></v-text-field>
       </v-card>
     </v-dialog>
   </section>

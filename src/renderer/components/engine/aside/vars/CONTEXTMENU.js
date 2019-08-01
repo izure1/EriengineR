@@ -41,7 +41,7 @@ export default function () {
         directorys = fs.readdirSync(directory)
 
         name = createItem(directorys, name)
-        fs.mkdir(path.join(directory, name))
+        fs.mkdir(path.posix.join(directory, name))
 
       }
     },

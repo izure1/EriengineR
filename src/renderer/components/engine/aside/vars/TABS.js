@@ -21,9 +21,9 @@ export default function () {
       hover: false
     },
     {
-      alt: '씬',
-      id: 'scene',
-      icon: 'N',
+      alt: '뷰',
+      id: 'view',
+      icon: 'V',
       select: false,
       hover: false
     },

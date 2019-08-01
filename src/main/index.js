@@ -41,7 +41,7 @@ switch (process.env.NODE_ENV) {
      */
   default:
     global.__devmode = false
-    global.__static = path.join(__dirname, 'static').replace(/\\/g, '\\\\')
+    global.__static = path.posix.join(__dirname, 'static').replace(/\\/g, '\\\\')
     break;
 
 }
@@ -59,7 +59,7 @@ mainURL = global.__devmode ?
   url.format({
     protocol: 'file',
     slashes: true,
-    pathname: path.join(__dirname, 'index.html')
+    pathname: path.posix.join(__dirname, 'index.html')
   })
 
 
@@ -160,7 +160,7 @@ async function createWindow() {
   mainWindow = new BrowserWindow({
     height: 670,
     width: 1000,
-    icon: path.join(__dirname, '../assets/image/ico.ico'),
+    icon: path.posix.join(__dirname, '../assets/image/ico.ico'),
     frame: false,
     webPreferences: {
       webSecurity: false

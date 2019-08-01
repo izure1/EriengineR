@@ -88,16 +88,17 @@
         width: 800px;
         height: 100px;
         font-size: xx-large;
-        color: white;
+        color: grey;
         margin: 10px auto;
         display: block;
         background-color: transparent;
         border: 0;
-        cursor: pointer;
+        outline: none;
+        transition: color 0.15s linear;
+        cursor: default;
 
         &:hover {
           color: white;
-          background-color: #0075c8;
         }
       }
     }

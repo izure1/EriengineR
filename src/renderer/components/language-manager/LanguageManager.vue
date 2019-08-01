@@ -1,43 +1,43 @@
 <template>
   <section>
-    <v-list two-line subheader>
-      <v-list-tile v-for="(language, index) in languages" :key="index" @click="setDefaultLanguage(language.id)">
-        <v-list-tile-avatar>
+    <v-list subheader>
+      <v-list-item two-line v-for="(language, index) in languages" :key="index" @click="setDefaultLanguage(language.id)">
+        <v-list-item-avatar>
           <v-icon color="orange" v-if="isDefaultLanguage(language.id)">check_box</v-icon>
           <v-icon color="white" v-else>check_box_outline_blank</v-icon>
-        </v-list-tile-avatar>
-        <v-list-tile-content>
-          <v-list-tile-title>
-            <p v-if="languageModify !== language.id">{{ language.name }}</p>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>
+            <span v-if="languageModify !== language.id">{{ language.name }}</span>
             <input :value="language.name" v-else @blur="modifyLanguage($event, language.name)" @keydown.enter="modifyLanguage($event, language.name)"
               @keydown.esc="languageModify = null" @click.stop>
-          </v-list-tile-title>
-          <v-list-tile-sub-title>
+          </v-list-item-title>
+          <v-list-item-sub-title>
             <span v-if="isDefaultLanguage(language.id)">현재 선택된 기본언어입니다</span>
             <span v-else>클릭하면 {{ language.name }}를(을) 기본언어로 지정합니다</span>
-          </v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action>
-          <v-btn icon title="이름을 수정합니다" @click.stop="modifyLanguageConfirm(language.id)">
-            <v-icon small>settings</v-icon>
+          </v-list-item-sub-title>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-btn x-small icon title="이름을 수정합니다" @click.stop="modifyLanguageConfirm(language.id)">
+            <v-icon>settings</v-icon>
           </v-btn>
-          <v-btn icon title="해당 언어를 삭제합니다" @click.stop="removeLanguageConfirm(language.name)">
-            <v-icon small>delete</v-icon>
+          <v-btn x-small icon title="해당 언어를 삭제합니다" @click.stop="removeLanguageConfirm(language.name)">
+            <v-icon>delete</v-icon>
           </v-btn>
-        </v-list-tile-action>
-      </v-list-tile>
+        </v-list-item-action>
+      </v-list-item>
       <v-divider></v-divider>
-      <v-list-tile @click="addLanguage" style="cursor:pointer">
-        <v-list-tile-avatar>
+      <v-list-item two-line @click="addLanguage" style="cursor:pointer">
+        <v-list-item-avatar>
           <v-icon>add</v-icon>
-        </v-list-tile-avatar>
-        <v-list-tile-content>
-          <v-list-tile-title>새로운 언어 추가</v-list-tile-title>
-          <v-list-tile-sub-title>새로운 언어를 추가합니다</v-list-tile-sub-title>
-        </v-list-tile-content>
-      </v-list-tile>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>새로운 언어 추가</v-list-item-title>
+          <v-list-item-sub-title>새로운 언어를 추가합니다</v-list-item-sub-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
-    <v-dialog fullscreen v-model="languageRemove.dialog">
+    <v-dialog v-model="languageRemove.dialog">
       <v-card>
         <v-card-title>{{ languageRemove.language }} 제거</v-card-title>
         <v-card-text>
