@@ -41,7 +41,7 @@ switch (process.env.NODE_ENV) {
      */
   default:
     global.__devmode = false
-    global.__static = path.posix.join(__dirname, 'static').replace(/\\/g, '\\\\')
+    global.__static = path.join(__dirname, 'static').replace(/\\/g, '\\\\')
     break;
 
 }
@@ -59,7 +59,7 @@ mainURL = global.__devmode ?
   url.format({
     protocol: 'file',
     slashes: true,
-    pathname: path.posix.join(__dirname, 'index.html')
+    pathname: path.join(__dirname, 'index.html')
   })
 
 
@@ -153,14 +153,14 @@ async function runEngine() {
 
 
 
-import getResolvedURI from '@static/js/getResolvedURI'
+import getResolvedURI from '@common/js/getResolvedURI'
 
 async function createWindow() {
 
   mainWindow = new BrowserWindow({
     height: 670,
     width: 1000,
-    icon: path.posix.join(__dirname, '../assets/image/ico.ico'),
+    icon: path.join(__static, 'assets/image/ico_eri_64.png'),
     frame: false,
     webPreferences: {
       webSecurity: false
@@ -215,6 +215,7 @@ import ipc_showItemInFolder from './shell/showItemInFolder'
 
 import ipc_createProject from './project/createProject'
 import ipc_openProject from './project/openProject'
+import ipc_createSubDirectory from './project/createSubDirectory'
 
 import ipc_delete from './modal/delete'
 import ipc_deleteTrash from './modal/deleteTrash'
@@ -248,12 +249,12 @@ import ipc_findLanguage from './language/findLanguage'
 import ipc_getAssetDirectory from './asset/getAssetDirectory'
 import ipc_getAssetList from './asset/getAssetList'
 import ipc_getAssetPath from './asset/getAssetPath'
-import ipc_getAssetFile from './asset/getAssetFile'
+import ipc_getAssetPathFull from './asset/getAssetPathFull'
 
 import ipc_getDesignDirectory from './design/getDesignDirectory'
 import ipc_getDesignPath from './design/getDesignPath'
-import ipc_getDesignAssetPath from './design/getDesignAssetPath'
-import ipc_getDesignAssetFile from './design/getDesignAssetFile'
+
+import ipc_addSceneDirectory from './scene/addSceneDirectory'
 
 
 function runIPC() {
@@ -264,6 +265,7 @@ function runIPC() {
   // Project
   ipcMain.on('project-create', ipc_createProject.bind(mainWindow)) // 프로젝트를 생성하는데 사용합니다
   ipcMain.on('project-open', ipc_openProject.bind(mainWindow)) // 프로젝트를 여는데 사용합니다
+  ipcMain.on('project-create-subdirectory', ipc_createSubDirectory.bind(mainWindow)) // 프로젝트 운용에 필요한 서브 디렉토리를 생성하는데 사용합니다
 
   // Modal
   ipcMain.on('modal-open-sync', ipc_openModal.bind(mainWindow)) // 새로운 모달창을 띄웁니다
@@ -303,14 +305,15 @@ function runIPC() {
   // Assets
   ipcMain.on('asset-get-directory', ipc_getAssetDirectory.bind(mainWindow)) // 현재 프로젝트의 에셋 디렉토리 경로를 반환합니다
   ipcMain.on('asset-get-list', ipc_getAssetList.bind(mainWindow)) // 현재 프로젝트의 에셋 파일들의 경로를 배열에 담아 반환합니다
-  ipcMain.on('asset-get-path', ipc_getAssetPath.bind(mainWindow)) // 에셋 id로부터 가짜 파일 경로를 검색해 반환합니다
-  ipcMain.on('asset-get-file', ipc_getAssetFile.bind(mainWindow)) // 에셋 id로부터 진짜 파일 경로를 검색해 반환합니다
+  ipcMain.on('asset-get-path', ipc_getAssetPath.bind(mainWindow)) // 에셋 경로를 상대경로로 만들어 반환합니다
+  ipcMain.on('asset-get-path-full', ipc_getAssetPathFull.bind(mainWindow)) // 에셋 경로를 절대경로로 만들어 반환합니다
 
   // Design
   ipcMain.on('design-get-directory', ipc_getDesignDirectory.bind(mainWindow)) // 현재 프로젝트의 디자인 디렉토리 경로를 반환합니다
   ipcMain.on('design-get-path', ipc_getDesignPath.bind(mainWindow)) // 디자인 id로부터 디자인 파일의 경로를 검색해 반환합니다
-  ipcMain.on('design-get-asset-path', ipc_getDesignAssetPath.bind(mainWindow)) // 디자인 id로부터 디자인이 참조하고 있는 가짜 에셋 파일의 경로를 반환합니다
-  ipcMain.on('design-get-asset-file', ipc_getDesignAssetFile.bind(mainWindow)) // 디자인 id로부터 디자인이 참조하고 있는 진짜 에셋 파일의 경로를 반환합니다
+
+  // Scene
+  ipcMain.on('scene-add-directory', ipc_addSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 SceneOrigin 디렉토리에 특정 씬 전용 디렉토리를 만듭니다.
 
 }
 

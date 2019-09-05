@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import scriptPath from './scriptPath'
 
 
-export default async function (deep = false, cwd = scriptPath.call(this)) {
+export default async function (deep = false, cwd = null) {
 
   let files
   let scripts
@@ -11,6 +11,11 @@ export default async function (deep = false, cwd = scriptPath.call(this)) {
   deep = deep ? '**/*.esscript' : '*.esscript'
 
   scripts = []
+
+  if (cwd === null) {
+    cwd = scriptPath.call(this)
+  }
+
   files = await fg(deep, {
     cwd,
     absolute: true

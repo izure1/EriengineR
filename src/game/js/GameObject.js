@@ -2,9 +2,7 @@ import setHiddenContext from './utils/setHiddenContext'
 
 import GameAnimation from './GameAnimation'
 import GameEvent from './GameEvent'
-
-import DefaultAttribute from './vars/DEFAULT_ATTRIBUTE'
-import DefaultDataset from './vars/DEFAULT_DATASET'
+import DatasetDefault from './vars/DATASET_DEFAULT'
 
 
 class GameObject {
@@ -48,16 +46,12 @@ class GameObject {
 
   initProperties() {
 
-    this.status = {
-
-      attribute: new DefaultAttribute,
-      dataset: new DefaultDataset
-
-    }
-
+    this.status = {}
 
     this._anim = {}
     this._listener = {}
+
+    this.extendProperties('dataset', DatasetDefault)
 
   }
 
@@ -68,7 +62,11 @@ class GameObject {
    */
   extendProperties(p, obj) {
 
-    this.status[p] = obj
+    if (!this.status.hasOwnProperty(p)) {
+      this.status[p] = {}
+    }
+
+    Object.assign(this.status[p], obj)
     this.initAnimProperties()
 
   }

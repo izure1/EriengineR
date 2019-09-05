@@ -25,8 +25,8 @@
 
   import fs from 'fs-extra'
   import path from 'path'
-  import createItem from '@static/js/createItem'
-  import createUUID from '@static/js/createUUID'
+  import createItem from '@common/js/createItem'
+  import createUUID from '@common/js/createUUID'
 
   export default {
 
@@ -50,22 +50,27 @@
 
       },
 
-      createDesign(ext) {
+      createDesign(objClass) {
 
         let filenames, filename, __id
+        let sample
 
         filenames = fs.readdirSync(this.directory)
         filenames = filenames.map(p => path.parse(p).name)
 
         filename = createItem(filenames, '새로운 디자인')
-        filename += ext
+        filename += objClass.ext
 
-        filename = path.posix.join(this.directory, filename)
-        __id = createUUID()
+        filename = path.join(this.directory, filename)
 
-        fs.writeJSONSync(filename, {
-          __id
-        }, {
+        sample = new objClass.Constructor
+        sample = JSON.stringify(sample)
+        sample = JSON.parse(sample)
+
+        sample._id = createUUID()
+        
+
+        fs.writeJSONSync(filename, sample, {
           spaces: 2
         })
 

@@ -1,16 +1,23 @@
 <template>
   <div class="aside-tabs">
-    <div v-for="(tab, index) in tabs" :key="index" class="aside-tabs-tab">
-      <a href="#" @click="selectTab" @mouseover="tab.hover = true" @mouseout="tab.hover = false" :data-key="index"
-        :data-unique="tab.id" :title="tab.alt">
-        <div v-if="tab.select" class="tab-highlight">
-          <div></div>
-          <div></div>
-        </div>
-        <span v-if="tab.select" class="tab-hovering">{{ tab.icon }}</span>
-        <span v-else-if="tab.hover" class="tab-hovering">{{ tab.icon }}</span>
-        <span v-else>{{ tab.icon }}</span>
-      </a>
+    <div v-for="(tab, index) in tabs" :key="tab.id" class="aside-tabs-tab">
+      <v-tooltip right max-width="250" open-delay="600">
+        <template v-slot:activator="{ on }">
+          <a href="#" @click="selectTab" @mouseover="tab.hover = true" @mouseout="tab.hover = false" :data-key="index"
+            :data-unique="tab.id" v-on="on">
+            <div v-if="tab.select" class="tab-highlight">
+              <div></div>
+              <div></div>
+            </div>
+            <v-icon v-if="tab.select" class="tab-hovering">{{ tab.icon }}</v-icon>
+            <v-icon v-else-if="tab.hover" class="tab-hovering">{{ tab.icon }}</v-icon>
+            <v-icon v-else>{{ tab.icon }}</v-icon>
+          </a>
+        </template>
+        <span class="subtitle-1">{{ tab.alt }}</span>
+        <v-divider class="my-1"></v-divider>
+        <span class="aside-tabs-alt caption">{{ tab.description }}</span>
+      </v-tooltip>
     </div>
   </div>
 </template>
@@ -21,12 +28,12 @@
   export default {
     methods: {
       selectTab(e) {
+
         let key
         let id
 
-        id = e.target.dataset.unique
         key = e.target.dataset.key
-        key -= 0
+        id = e.target.dataset.unique
 
         for (let tab of this.tabs) {
           tab.select = false
@@ -34,6 +41,7 @@
 
         this.tabs[key].select = true
         this.$root.$emit('showAsideTab', this.tabs[key].id)
+
       }
     },
     data: () => ({
@@ -120,10 +128,8 @@
 
       }
 
-      span {
-        font-size: xx-large;
-        font-weight: bold;
-        font-family: 'sylarStencil';
+      .v-icon {
+        font-size: x-large;
         color: gray;
         line-height: 60px;
         text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
@@ -134,5 +140,9 @@
         }
       }
     }
+  }
+
+  .aside-tabs-alt {
+    word-break: keep-all;
   }
 </style>

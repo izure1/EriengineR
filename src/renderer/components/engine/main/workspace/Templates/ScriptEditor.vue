@@ -57,12 +57,15 @@
     <v-divider></v-divider>
     <div class="template-scripteditor-actions">
       <v-btn large @click="saveScript">
-        <v-icon>save</v-icon>스크립트 저장
+        <v-icon left>save</v-icon>스크립트 저장
       </v-btn>
       <v-btn large @click="cancelScript">
-        <v-icon>delete_forever</v-icon>취소
+        <v-icon left>delete_forever</v-icon>취소
       </v-btn>
     </div>
+    <v-dialog v-model="modifyMode" width="1024" height="600">
+      <macro-modal :information="modifyInformation"></macro-modal>
+    </v-dialog>
   </div>
 </template>
 
@@ -71,20 +74,23 @@
   import path from 'path'
   import electron from 'electron'
 
-  import getResolvedURI from '@static/js/getResolvedURI'
-  import createUUID from '@static/js/createUUID'
+  import getResolvedURI from '@common/js/getResolvedURI'
+  import createUUID from '@common/js/createUUID'
 
-  import {
-    Macro
-  } from '@static/js/class/Script'
+  import MacroModal from '@/components/macro/Macro'
 
 
   export default {
 
     props: ['data'],
+    components: {
+      MacroModal
+    },
 
     data: () => ({
-      current: null
+      current: null,
+      modifyMode: false,
+      modifyInformation: null
     }),
 
     methods: {
@@ -177,63 +183,60 @@
 
       openMacroTab(column, old) {
 
-        let browser
-        let parent, childURI
-
-
-        parent = electron.remote.getCurrentWindow()
-
-        childURI = parent.webContents.getURL()
-        childURI = getResolvedURI(childURI, `/macro/${column}`)
+        this.modifyMode = true
+        this.modifyInformation = {
+          column,
+          old
+        }
 
 
         // 스크립트의 경로와 해당 매크로의 저장된 내용을 저장해둡니다
         // 이는 이후 Macro 윈도우에서 가져와서 사용될 것입니다
 
-        browser = new electron.remote.BrowserWindow({
-          width: 1024,
-          height: 600,
-          modal: true,
-          darkTheme: true,
-          frame: false,
-          parent,
-          webPreferences: {
-            webSecurity: false
-          }
-        })
+        // browser = new electron.remote.BrowserWindow({
+        //   width: 1024,
+        //   height: 600,
+        //   modal: true,
+        //   darkTheme: true,
+        //   frame: false,
+        //   parent,
+        //   webPreferences: {
+        //     webSecurity: false
+        //   }
+        // })
 
-        browser.setMenu(null)
-        browser.loadURL(childURI)
+        // browser.setMenu(null)
+        // browser.loadURL(childURI)
 
 
-        browser.on('closed', () => browser = null)
+        // browser.on('closed', () => browser = null)
 
-        // 모달 윈도우로 이전 매크로 정보를 보냅니다.
-        // 매크로를 수정하는 용도로 사용합니다
-        browser.on('macro-input-ready', () => {
-          browser.emit('macro-send-old', old)
-        })
+        // // 모달 윈도우로 이전 매크로 정보를 보냅니다.
+        // // 매크로를 수정하는 용도로 사용합니다
+        // browser.on('macro-input-ready', () => {
+        //   browser.emit('macro-send-old', old)
+        // })
 
-        // 모달 내에서 매크로가 수정되면 스크립트에 대입하고 저장합니다
-        // 이는 사용자가 저장 버튼을 눌렀을 때 적용됩니다
-        browser.on('macro-saved', modifiedMacro => {
+        // // 모달 내에서 매크로가 수정되면 스크립트에 대입하고 저장합니다
+        // // 이는 사용자가 저장 버튼을 눌렀을 때 적용됩니다
+        // browser.on('macro-saved', modifiedMacro => {
 
-          let contexts
-          let offset
+        //   let contexts
+        //   let offset
 
-          contexts = this.data[column]
-          offset = this.getMacroOffset(contexts, modifiedMacro.id)
+        //   contexts = this.data[column]
+        //   offset = this.getMacroOffset(contexts, modifiedMacro.id)
 
-          // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
-          if (offset !== -1) {
-            contexts.splice(offset, 1, modifiedMacro)
-          }
-          // 존재하지 않는다면 생성모드이므로, 해당 스크립트에 추가합니다
-          else {
-            contexts.push(modifiedMacro)
-          }
+        //   // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
+        //   if (offset !== -1) {
+        //     contexts.splice(offset, 1, modifiedMacro)
+        //   }
+        //   // 존재하지 않는다면 생성모드이므로, 해당 스크립트에 추가합니다
+        //   else {
+        //     contexts.push(modifiedMacro)
+        //   }
 
-        })
+        // })
 
       },
 

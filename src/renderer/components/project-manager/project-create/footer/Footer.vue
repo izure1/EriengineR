@@ -32,7 +32,7 @@
     },
     computed: {
       getFullDirectoryPath() {
-        return path.posix.join(this.project.directory, this.project.id)
+        return path.join(this.project.directory, this.project.id)
       }
     },
     methods: {

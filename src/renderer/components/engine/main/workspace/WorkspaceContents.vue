@@ -6,11 +6,12 @@
         <section class="workspace-contents-page">
           <template-default v-if="item.template === 'DEFAULT'" :data="item.data"></template-default>
           <template-canvas v-else-if="item.template === 'CANVAS'" :data="item.data"></template-canvas>
+          <template-script-viewer-action v-else-if="item.template === 'SCRIPT-VIEWER-ACTION'" :data="item.data">
+          </template-script-viewer-action>
           <template-script-viewer v-else-if="item.template === 'SCRIPT-VIEWER'" :data="item.data">
           </template-script-viewer>
           <template-script-editor v-else-if="item.template === 'SCRIPT-EDITOR'" :data="item.data">
           </template-script-editor>
-          <template-scene-viewer v-else-if="item.template === 'SCENE-VIEWER'" :data="item.data"></template-scene-viewer>
           <template-language-manager v-else-if="item.template === 'LANGUAGE-MANAGER'" :data="item.data">
           </template-language-manager>
           <template-design-creator v-else-if="item.template === 'DESIGN-CREATOR'" :data="item.data">
@@ -44,9 +45,9 @@
   // template 목록
   import TemplateDefault from './Templates/Default'
   import TemplateCanvas from './Templates/Canvas'
+  import TemplateScriptViewerAction from './Templates/ScriptViewerAction'
   import TemplateScriptViewer from './Templates/ScriptViewer'
   import TemplateScriptEditor from './Templates/ScriptEditor'
-  import TemplateSceneViewer from './Templates/SceneViewer'
   import TemplateLanguageManager from './Templates/LanguageManager'
   import TemplateDesignCreator from './Templates/DesignCreator'
   import TemplateDesignEditor from './Templates/DesignEditor'
@@ -55,9 +56,9 @@
     components: {
       TemplateDefault,
       TemplateCanvas,
+      TemplateScriptViewerAction,
       TemplateScriptViewer,
       TemplateScriptEditor,
-      TemplateSceneViewer,
       TemplateLanguageManager,
       TemplateDesignCreator,
       TemplateDesignEditor
@@ -177,7 +178,6 @@
     overflow: auto;
 
     >* {
-      overflow: auto;
       position: relative;
     }
   }

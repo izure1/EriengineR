@@ -1,25 +1,28 @@
+import path from 'path'
 import assetDirectory from './assetDirectory'
-import assetList from './assetList'
 
-
-export default async function (id) {
+export default async function (asset, relative = false) {
 
   let directory
-  let filelist, file
 
-  directory = await assetDirectory.call(this)
-  filelist = await assetList.call(this)
+  directory = assetDirectory.call(this)
+  directory = path.dirname(directory)
 
-  for (let p in filelist) {
+  let p
 
-    file = filelist[p]
-
-    if (file.id === id) {
-      return p
-    }
-
+  if (path.isAbsolute(asset)) {
+    p = relative ? asset.replace(directory, '') : asset
+  } else {
+    p = relative ? asset : path.join(directory, asset)
   }
 
-  return null
+  p = p.split(path.sep).filter(t => !!t)
+  p = p.join(path.sep)
+
+  if (relative) {
+    p = path.sep + p
+  }
+
+  return p
 
 }

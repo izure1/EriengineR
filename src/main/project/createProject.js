@@ -5,7 +5,7 @@ import {
   dialog
 } from 'electron'
 
-import DIRECTORYS from './Vars/DIRECTORYS'
+import subDirectory from './subDirectory'
 
 
 export default async function (e, options) {
@@ -15,8 +15,8 @@ export default async function (e, options) {
   let success
 
   src = options.template.path
-  dist = path.posix.join(options.directory, options.id)
-  esproject = path.posix.join(dist, 'project.esproject')
+  dist = path.join(options.directory, options.id)
+  esproject = path.join(dist, 'project.esproject')
 
   // 쓸모없는 정보를 삭제합니다
   delete options.directory
@@ -36,18 +36,7 @@ export default async function (e, options) {
 
     // 서브 디렉토리 생성하기
     // 서브 디렉토리 목록은 ./Vars/DIRECTORYS.js 에서 관리할 수 있습니다
-
-    let directory
-
-    for (let dirname of DIRECTORYS) {
-
-      if (fs.existsSync(directory = path.posix.join(dist, dirname))) {
-        continue
-      }
-
-      await fs.mkdir(directory)
-
-    }
+    await subDirectory(dist)
 
     success = true
 

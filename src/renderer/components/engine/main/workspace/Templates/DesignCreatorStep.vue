@@ -10,8 +10,8 @@
         <v-select :items="designs" v-model="selectedClass" item-text="name" return-object label="클래스를 선택하세요">
         </v-select>
         <div class="text-xs-center">
-          <v-btn icon @click="createDesign" :disabled="!designExt">
-            <v-icon>done</v-icon>
+          <v-btn @click="createDesign" :disabled="!selectedClass">
+            <v-icon left>save</v-icon>만들기
           </v-btn>
         </div>
       </v-stepper-content>
@@ -38,7 +38,6 @@
       step: 0,
       selectedClass: null,
       designs: DESIGN_LIST,
-      designExt: null,
     }),
 
     methods: {
@@ -48,7 +47,7 @@
       },
 
       createDesign() {
-        this.$emit('createDesign', this.designExt)
+        this.$emit('createDesign', this.selectedClass)
       }
 
     },
@@ -56,12 +55,6 @@
     watch: {
 
       selectedClass() {
-
-        this.designExt = this.selectedClass.ext
-
-        if (this.selectedClass.type) {
-          this.selectedType = this.designTypes.find(t => t.value === this.selectedClass.type)
-        }
 
         this.$nextTick(() => {
           this.setBanner(this.selectedClass.name, this.selectedClass.image, this.selectedClass.description)

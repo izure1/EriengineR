@@ -116,11 +116,11 @@
     right: 0;
   }
 
-  .v-btn:not(.v-btn--icon) {
-    .v-icon {
-      margin-right: 0.4em;
-    }
-  }
+  // .v-btn:not(.v-btn--icon) {
+  //   .v-icon {
+  //     margin-right: 0.4em;
+  //   }
+  // }
 
   .v-icon {
     vertical-align: middle;

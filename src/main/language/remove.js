@@ -7,8 +7,11 @@ import updateLanguage from './update'
 export default function (language) {
 
   let languages
+  let p
 
-  del.sync(path.posix.join(this.variables.project.directory, 'Languages', `${language}.json`), {
+  p = path.join(this.variables.project.directory, 'Languages', `${language}.json`)
+
+  del.sync(p, {
     force: true
   })
 

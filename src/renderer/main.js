@@ -30,7 +30,7 @@ customElectronTitlebar = require('custom-electron-titlebar')
 customTitlebar = new customElectronTitlebar.Titlebar({
 
   backgroundColor: customElectronTitlebar.Color.fromHex('#555'),
-  icon: path.posix.join(__static, 'assets', 'image', 'ico_eri_16.png')
+  icon: path.join(__static, 'assets/image/ico_eri_16.png').replace(/\\/g, '/')
 
 })
 
@@ -50,7 +50,6 @@ win.on('close', menuDispose.bind(customTitlebar))
 
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import colors from 'vuetify/lib/util/colors'
 import store from './store/store'
 import router from './router/index'
 
@@ -97,12 +96,7 @@ new Vue({
    */
   vuetify: new Vuetify({
     theme: {
-      dark: true,
-      themes: {
-        dark: {
-          primary: '#ffffff'
-        }
-      }
+      dark: true
     }
   })
 

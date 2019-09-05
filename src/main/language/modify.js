@@ -1,4 +1,4 @@
-import createItem from '@static/js/createItem'
+import createItem from '@common/js/createItem'
 import updateLanguage from './update'
 
 import get from './get'

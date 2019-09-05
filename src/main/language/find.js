@@ -2,7 +2,7 @@ import get from './get'
 import read from './read'
 
 
-export default async function (uuid) {
+export default async function (uid) {
 
   let languages
   let scenario
@@ -14,7 +14,7 @@ export default async function (uuid) {
   for (let language of languages) {
     
     scenario = await read.call(this, language.name)
-    text[language.id] = scenario.text[uuid]
+    text[language.id] = scenario.text[uid]
 
   }
 

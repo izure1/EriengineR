@@ -1,4 +1,4 @@
-import getMouseOffset from '@static/js/getMouseOffset'
+import getMouseOffset from '@common/js/getMouseOffset'
 
 
 export default function (e) {

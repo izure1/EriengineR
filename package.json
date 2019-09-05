@@ -57,7 +57,7 @@
     "axios": "^0.18.0",
     "copy": "^0.3.2",
     "custom-electron-titlebar": "^3.1.0",
-    "del": "^4.1.1",
+    "del": "^5.1.0",
     "directory-tree": "^2.2.3",
     "find-package-json": "^1.2.0",
     "fs-extra": "^8.1.0",
@@ -74,9 +74,10 @@
     "vue-dragscroll": "^1.10.0",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.7",
-    "vuetify": "^2.0.3",
+    "vuetify": "^2.0.14",
     "vuex": "^3.1.1",
-    "vuex-electron": "^1.0.3"
+    "vuex-electron": "^1.0.3",
+    "shortid": "^2.2.14"
   },
   "devDependencies": {
     "ajv": "^6.5.5",

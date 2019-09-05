@@ -21,7 +21,6 @@
   aside {
     height: 100%;
     display: flex;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 1;
   }

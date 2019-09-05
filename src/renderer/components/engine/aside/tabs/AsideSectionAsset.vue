@@ -1,11 +1,19 @@
 <template>
   <div class="aside-section-tab">
-    <treeview :path="path" :openItem="openItem" :uploadFile="uploadFile" :contextmenu="contextmenu"
-      :configurable="true" v-if="!uploadFileProgress"></treeview>
-    <div class="asset-uploading" v-else>
+    <treeview :path="path" :openItem="openItem" :uploadFile="uploadFile" :contextmenu="contextmenu" :configurable="true"
+      v-if="!uploadFileProgress"></treeview>
+    <div class="asset-uploading text-center" v-else>
       <v-progress-circular rotate="-90" width="3" size="150" :value="uploadFileProgress" color="orange">{{
         uploadFileProgress }}%</v-progress-circular>
     </div>
+    <v-snackbar v-model="assetCopyComplete" timeout="3000">
+      <div class="grey--text">
+        <span class="white--text mr-1">{{ assetCopyPath }}</span> 에셋 경로 복사 완료!
+      </div>
+      <v-btn icon>
+        <v-icon color="red">close</v-icon>
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -20,11 +28,11 @@
   import {
     ipcRenderer,
     shell,
-    remote
+    remote,
+    clipboard
   } from 'electron'
 
-  import CONTEXTMENU from '../vars/CONTEXTMENU'
-  import createUUID from '@static/js/createUUID'
+  import createUUID from '@common/js/createUUID'
 
   export default {
     components: {
@@ -32,118 +40,48 @@
     },
     data: () => ({
       path: ipcRenderer.sendSync('asset-get-directory'),
-      uploadFileProgress: 0
+      uploadFileProgress: 0,
+      assetCopyPath: '',
+      assetCopyComplete: false
     }),
     computed: {
 
       contextmenu() {
 
-        // 삭제 기능을 수정합니다
-        // 에셋을 삭제하면 원본 파일도 삭제되어야 합니다
-        let newContextmenu
+        let contextmenu
+        let menus
+
+        contextmenu = new Treeview.Contextmenu
+        menus = Treeview.Contextmenu.createDefaultMenus()
 
 
-        newContextmenu = new CONTEXTMENU
-        newContextmenu = newContextmenu.map(t => {
+        let uploadMenu
+        let copyPathMenu
 
-          if (t.text !== '삭제') {
-            return t
-          }
-
-          t.click = async function (e, itempath) {
-
-            let asset
-            let deleted
-
-            let stat
-
-            stat = fs.lstatSync(itempath)
-
-            // 디렉토리를 삭제하는 경우
-            if (stat.isDirectory()) {
-
-              let assets
-
-              assets = await fg('**/*.*', {
-                cwd: itempath,
-                absolute: true
-              })
-              assets = await this.getAssetData(assets)
-
-              deleted = ipcRenderer.sendSync('modal-delete', {
-                name: path.basename(itempath),
-                path: itempath
-              })
-
-              // 디렉토리를 삭제하면 해당 디렉토리에 있던 모든 에셋의 정보를 기반으로
-              // 원본 에셋 파일까지 제거합니다
-              if (deleted) {
-                for (let asset of assets) {
-                  await this.dropFile(asset)
-                }
-              }
-
-              return
-
-            }
-
-
-            // 개별 파일을 삭제하는 경우
-            try {
-              asset = await this.getAssetData(itempath)
-              asset = asset[0]
-            } catch (e) {
-              dialog.showErrorBox(e.message, e.stack)
-              return
-            }
-
-            // asasset 파일을 삭제합니다
-            deleted = ipcRenderer.sendSync('modal-delete', {
-              name: path.basename(itempath),
-              path: itempath
-            })
-
-
-            // 삭제했다면 원본 파일도 삭제합니다
-            if (!deleted) {
-              return
-            }
-
-            if (!asset) {
-              return
-            }
-
-            await this.dropFile(asset)
-
-          }
-
-          return t
-
+        uploadMenu = new Treeview.ContextmenuItem('upload', '에셋 추가')
+        uploadMenu.setOption({
+          onlyDirectory: true
+        }).click(function (e, itempath) {
+          this.uploadFile(itempath)
         })
 
-        return [{
-            text: '에셋 추가',
-            click(e, itempath) {
-              this.uploadFile(itempath)
-            }
-          },
-          {
-            separator: true
-          },
-          ...newContextmenu
-        ]
 
-      },
+        copyPathMenu = new Treeview.ContextmenuItem('copyPath', '에셋 경로 복사')
+        copyPathMenu.setOption({
+          onlyFile: true
+        }).click(function (e, itempath) {
+          this.assetCopyPath = this.copyAssetPath(itempath)
+          this.assetCopyComplete = true
+        })
 
-      assetSources() {
 
-        let projectDirectory
-        let directory
+        contextmenu.extend(uploadMenu)
+        contextmenu.extend(Treeview.Contextmenu.createSeparatorMenu())
+        contextmenu.extend(copyPathMenu)
+        contextmenu.extend(Treeview.Contextmenu.createSeparatorMenu())
+        contextmenu.extend(menus)
 
-        projectDirectory = ipcRenderer.sendSync('var-get-sync', 'project.directory')
-        directory = path.posix.join(projectDirectory, 'AssetSources')
-
-        return directory
+        return contextmenu.render()
 
       }
 
@@ -152,19 +90,7 @@
 
       async openItem(itempath) {
 
-        let src
-        let asset
-
-        try {
-          asset = await fs.readJSON(itempath)
-        } catch (e) {
-          remote.dialog.showErrorBox(e.message, e.stack)
-          return
-        }
-
-        src = path.posix.join(this.assetSources, asset.id + asset.ext)
-
-        shell.openItem(src)
+        shell.openItem(itempath)
 
       },
 
@@ -213,28 +139,19 @@
 
           current++
 
-          let filename, fileext
-          let asset
-          let alreadyExists, beforeFile
-
+          let alreadyExists
+          let filename, filepath
 
           filename = path.basename(file)
-          fileext = path.extname(file)
-          asset = path.posix.join(directory, filename)
+          filepath = path.join(itempath, filename)
+          alreadyExists = fs.existsSync(filepath)
 
-          alreadyExists = fs.existsSync(asset)
-
-
-          // 같은 위치에 이미 파일일 존재하고 있다면 덮어쓰기 위해
-          // AssetSources 위치의 원본 파일을 삭제합니다
+          // 같은 위치에 이미 파일일 존재하고 있다면 덮어쓰기 위해 원본 파일을 삭제합니다
           if (alreadyExists) {
 
             try {
 
-              beforeFile = await this.getAssetData(asset)
-              beforeFile = beforeFile[0]
-
-              await this.dropFile(beforeFile)
+              await this.dropFile(filepath)
 
             } catch (e) {
               errors.push(e)
@@ -245,31 +162,14 @@
 
 
           // 파일을 복사합니다
-          // 파일의 이름은 UUID로 변경되어 assetSources 디렉토리로 복사됩니다.
-          let uuid
-          let dist
-          let contents
-
-          uuid = beforeFile ? beforeFile.id : createUUID()
-          dist = path.posix.join(this.assetSources, uuid + fileext)
-
-          contents = {
-            id: uuid,
-            ext: fileext
-          }
-
           try {
 
-            await fs.copy(file, dist)
+            await fs.copy(file, filepath)
 
           } catch (e) {
             errors.push(e)
             continue
           }
-
-          fs.writeJSONSync(asset, contents, {
-            spaces: 2
-          })
 
           this.uploadFileProgress = ~~((current / max) * 100)
 
@@ -279,38 +179,24 @@
 
       },
 
-      async dropFile(asset) {
+      copyAssetPath(itempath) {
 
-        let file
+        let p = ipcRenderer.sendSync('asset-get-path', itempath)
+
+        clipboard.writeText(p)
+        return p
+
+      },
+
+      async dropFile(file) {
+
         let option
 
-        file = path.posix.join(this.assetSources, asset.id + asset.ext)
         option = {
           force: true
         }
 
         await del(file, option)
-
-      },
-
-      async getAssetData(assets) {
-
-        let ret = []
-
-        if (!Array.isArray(assets)) {
-          assets = [assets]
-        }
-
-        for (let i = 0, len = assets.length, asset; i < len; i++) {
-
-          asset = assets[i]
-          asset = await fs.readJSON(asset)
-
-          ret.push(asset)
-
-        }
-
-        return ret
 
       }
 
@@ -321,15 +207,7 @@
 <style lang="scss" scoped>
   @import 'common.scss';
 
-  .aside-section-tab {
-    .asset-uploading {
-      .v-progress-circular {
-        font-size: 20px;
-        letter-spacing: -1px;
-        text-align: center;
-        margin: 30px auto;
-        display: block;
-      }
-    }
+  .asset-uploading {
+    margin-top: 50px;
   }
 </style>

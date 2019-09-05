@@ -1,12 +1,12 @@
 import append from './append'
-import createUUID from '@static/js/createUUID'
+import createUID from '@common/js/createUID'
 
 
-export default async function (e, language, text, uuid = createUUID()) {
+export default async function (e, language, text, uid = createUID()) {
 
-  await append.call(this, language, text, uuid)
+  await append.call(this, language, text, uid)
 
-  e.sender.send('language-append', uuid)
-  e.returnValue = uuid
+  e.sender.send('language-append', uid)
+  e.returnValue = uid
 
 }

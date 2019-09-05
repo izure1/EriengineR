@@ -1,14 +1,14 @@
 <template>
   <section class="workspace-tabs" @dragover.self="allowDropTab" @drop.self="dropTab(null)">
-    <div v-for="item in tabs" :key="item.id" :class="item.selected ? 'workspace-tabs-selected' : ''" draggable="true"
-      @dragstart="startDragTab(item)" @dragover="allowDropTab" @drop="dropTab(item)">
-      <a href="#">
-        <p @mousedown="tabMousedown(item)">{{ item.name }}</p>
-        <span @click="tabClose(item)">⨉</span>
-        <hr v-if="!item.selected">
+    <div v-for="tab in tabs" :key="tab.id" :class="tab.selected ? 'workspace-tabs-selected' : ''" draggable="true"
+      @dragstart="startDragTab(tab)" @dragover="allowDropTab" @drop="dropTab(tab)">
+      <a href="#" v-on="on">
+        <p @mousedown="tabClick(tab)">{{ tab.name }}</p>
+        <span @click="tabClose(tab)">⨉</span>
+        <hr v-if="!tab.selected">
       </a>
-      <span v-if="item.selected" class="workspace-tabs-smoothes left"></span>
-      <span v-if="item.selected" class="workspace-tabs-smoothes right"></span>
+      <span v-if="tab.selected" class="workspace-tabs-smoothes left"></span>
+      <span v-if="tab.selected" class="workspace-tabs-smoothes right"></span>
     </div>
   </section>
 </template>
@@ -16,7 +16,7 @@
 <script>
   import fs from 'fs'
 
-  import createUUID from '@static/js/createUUID'
+  import createUUID from '@common/js/createUUID'
   import WorkspaceTab from './js/WorkspaceTab'
 
   export default {
@@ -51,10 +51,10 @@
 
         }
 
-        this.tabMousedown(tab)
+        this.tabClick(tab)
 
       },
-      tabMousedown(item) {
+      tabClick(item) {
 
         this.tabs.forEach(t => t.selected = false)
         item.selected = true
@@ -86,7 +86,7 @@
         }
 
         if (this.tabs.length) {
-          this.tabMousedown(this.tabs[0])
+          this.tabClick(this.tabs[0])
         }
 
       },
@@ -136,7 +136,7 @@
         for (let item of this.tabs) {
 
           if (item.id !== id) continue
-          
+
           this.tabClose(item)
           break
 

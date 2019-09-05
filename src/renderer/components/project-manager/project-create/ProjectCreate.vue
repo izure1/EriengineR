@@ -25,7 +25,7 @@
 
   import os from 'os'
   import path from 'path'
-  import createUUID from '@static/js/createUUID'
+  import createUID from '@common/js/createUID'
   
 
   export default {
@@ -37,8 +37,8 @@
     data: () => ({
       project: {
         name: '새로운 프로젝트',
-        directory: path.posix.join(os.homedir(), 'Desktop'),
-        id: `org.izure.eriengine.p_${createUUID().split('-').pop()}`,
+        directory: path.join(os.homedir(), 'Desktop'),
+        id: `org.izure.eriengine.${createUID()}`,
         width: 1366,
         height: 768,
         color: '#0075c8',

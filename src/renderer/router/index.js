@@ -10,24 +10,24 @@ router = new Router({
       path: '/engine',
       component: require('@/components/engine/Engine').default
     },
-    {
-      path: '/macro/:group',
-      component: require('@/components/macro/Macro').default,
-      meta: {
-        title: '스크립트 관리자'
-      }
-    },
-    {
-      path: '/macro-input/:type',
-      component: require('@/components/macro/MacroInput').default,
-      meta: {
-        title: '매크로 입력'
-      }
-    },
-    {
-      path: '/modal',
-      component: require('@/modalWindow/components/ModalWindow.vue').default
-    },
+    // {
+    //   path: '/macro/:group',
+    //   component: require('@/components/macro/Macro').default,
+    //   meta: {
+    //     title: '스크립트 관리자'
+    //   }
+    // },
+    // {
+    //   path: '/macro-input/:type',
+    //   component: require('@/components/macro/MacroInput').default,
+    //   meta: {
+    //     title: '매크로 입력'
+    //   }
+    // },
+    // {
+    //   path: '/modal',
+    //   component: require('@/modalWindow/components/ModalWindow.vue').default
+    // },
     {
       path: '/project-manager',
       component: require('@/components/project-manager/ProjectManager').default,

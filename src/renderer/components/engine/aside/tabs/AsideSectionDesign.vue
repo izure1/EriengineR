@@ -16,7 +16,6 @@
     shell
   } from 'electron'
 
-  import CONTEXTMENU from '../vars/CONTEXTMENU'
   import DESIGN_LIST from '../../main/workspace/Templates/js/DESIGN_LIST'
 
 
@@ -35,7 +34,7 @@
       Treeview
     },
     data: () => ({
-      path: path.posix.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Designs'),
+      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Designs'),
       filter: {
         extensions
       }
@@ -43,17 +42,28 @@
     computed: {
 
       contextmenu() {
-        return [{
-            text: '디자인 추가',
-            click(e, itempath) {
-              this.openViewer(itempath)
-            }
-          },
-          {
-            separator: true
-          },
-          ...new CONTEXTMENU
-        ]
+
+        let contextmenu
+        let menus
+
+        contextmenu = new Treeview.Contextmenu
+        menus = Treeview.Contextmenu.createDefaultMenus()
+
+
+        let addDesignMenu
+
+        addDesignMenu = new Treeview.ContextmenuItem('addDesign', '디자인 추가').setOption({
+          onlyDirectory: true
+        }).click(function (e, itempath) {
+          this.openViewer(itempath)
+        })
+
+        contextmenu.extend(addDesignMenu)
+        contextmenu.extend(Treeview.Contextmenu.createSeparatorMenu())
+        contextmenu.extend(menus)
+
+        return contextmenu.render()
+
       }
 
     },
@@ -83,16 +93,7 @@
         let dirname
 
         stat = fs.lstatSync(itempath)
-
-        // 폴더일 경우 자기 자신에서 열기
-        if (stat.isDirectory()) {
-          directory = itempath
-        }
-        // 파일일 경우, 해당 폴더에서 열기
-        else {
-          directory = path.dirname(itempath)
-          stat = fs.lstatSync(directory)
-        }
+        directory = itempath
 
         dirname = path.basename(directory)
 

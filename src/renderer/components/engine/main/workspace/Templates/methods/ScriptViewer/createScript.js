@@ -1,9 +1,9 @@
 import electron from 'electron'
 import path from 'path'
-import getMouseOffset from '@static/js/getMouseOffset'
+import getMouseOffset from '@common/js/getMouseOffset'
 import {
   Script
-} from '@static/js/class/Script'
+} from '@common/js/Script'
 
 
 export default function (e) {
@@ -22,7 +22,7 @@ export default function (e) {
   y = o.y
 
   script = new Script(x, y)
-  scriptname = path.posix.join(this.data.directory, script.id)
+  scriptname = path.join(this.data.directory, script.id)
   scriptname += '.esscript'
 
   // 해당 디렉토리에 새로운 스크립트 파일을 만듭니다. 이는 화면에 자동으로 갱신됩니다

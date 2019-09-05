@@ -30,8 +30,9 @@
         :style="{left: `${contextmenu_info.x}px`, top: `${contextmenu_info.y}px`}">
         <div class="template-treeview-contextitem">
           <div v-for="(item, index) in contextmenu" :key="index"
-            @click="callContextmenuItem($event, item.click, tree.path, item.disabledOnTop, item.onlyOnTop)"
-            :class="{disabled: isDisabledItem(item.disabledOnTop, item.onlyOnTop)}">
+            @click="callContextmenuItem($event, item.handler, tree.path, item.disabledOnTop, item.onlyOnTop)"
+            :class="{disabled: isDisabledItem(item.disabledOnTop, item.onlyOnTop)}"
+            v-show="isContextItemShow(item, index)">
             <hr v-if="item.separator">
             <span v-else>{{ item.text }}</span>
           </div>
@@ -47,18 +48,53 @@
 </template>
 
 <script>
-  import fs from 'fs-extra'
-  import path from 'path'
+  import electron from 'electron'
 
-  import electron, {
-    ipcRenderer
-  } from 'electron'
-  import dirTree from './js/dirTree'
-  import shortcut from './js/shortcut'
-  import REGEXP from '@/assets/js/REGEXP'
+  // Computed
+  import getPreviewSrc from './js/computed/getPreviewSrc'
+  import isFolder from './js/computed/isFolder'
+  import isImageFile from './js/computed/isImageFile'
+  import isTop from './js/computed/isTop'
+  import isVideoFile from './js/computed/isVideoFile'
+  import nextDepth from './js/computed/nextDepth'
 
+  // Methods
+  import allowDrop from './js/methods/allowDrop'
+  import callContextmenuItem from './js/methods/callContextmenuItem'
+  import copyJSON from './js/methods/copyJSON'
+  import dropItem from './js/methods/dropItem'
+  import getFileIcon from './js/methods/getFileIcon'
+  import isContextItemShow from './js/methods/isContextItemShow'
+  import isDisabledItem from './js/methods/isDisabledItem'
+  import modifyName from './js/methods/modifyName'
+  import modifyNameCancel from './js/methods/modifyNameCancel'
+  import openContextmenu from './js/methods/openContextmenu'
+  import openThis from './js/methods/openThis'
+  import requestDeleteItem from './js/methods/requestDeleteItem'
+  import requestModifyName from './js/methods/requestModifyName'
+  import runShortcut from './js/methods/runShortcut'
+  import setDragItem from './js/methods/setDragItem'
+  import toggle from './js/methods/toggle'
+  import watchDirectory from './js/methods/watchDirectory'
+  import unwatchDirectory from './js/methods/unwatchDirectory'
+
+  // Watch
+  import watchFilter from './js/watch/filter'
+  import watchPath from './js/watch/path'
+
+
+  import {
+    Contextmenu,
+    ContextmenuItem
+  } from './js/Contextmenu'
 
   export default {
+
+    // Export Contextmenu class
+    Contextmenu,
+    ContextmenuItem,
+
+    // Vue data tree
     name: 'treeview',
     props: {
       watcher: null,
@@ -101,6 +137,7 @@
     data: () => ({
       open: false,
       modifyMode: false,
+      separatorVisible: false,
       contextmenu_info: {
         x: 0,
         y: 0,
@@ -109,302 +146,37 @@
       previewImage: ''
     }),
     computed: {
-      isFolder() {
-        return this.tree.children
-      },
-      isTop() {
-        return this.top === this
-      },
-      nextDepth() {
-        return this.depth + 1
-      },
-      isImageFile() {
-        return REGEXP.image.test(this.tree.name)
-      },
-      isVideoFile() {
-        return REGEXP.video.test(this.tree.name)
-      },
-      getPreviewSrc() {
-
-        if (!this.isImageFile && !this.isVideoFile) {
-          return
-        }
-
-        let asset
-
-        asset = fs.readJSONSync(this.path)
-        asset = asset.id
-
-        return ipcRenderer.sendSync('asset-get-file', asset)
-
-      }
+      isFolder,
+      isTop,
+      nextDepth,
+      isImageFile,
+      isVideoFile,
+      getPreviewSrc,
     },
     methods: {
-
-      copyJSON(json) {
-        return JSON.parse(JSON.stringify(json))
-      },
-
-      runShortcut(e, p) {
-
-        let k = e.keyCode
-
-        if (k in shortcut) {
-          shortcut[k].call(this, p)
-        }
-
-      },
-
-      toggle() {
-        if (this.isFolder && !this.modifyMode) {
-          this.open = !this.open
-        }
-      },
-
-      openThis(filepath) {
-        if (!this.isFolder) {
-          this.openItem(filepath)
-        }
-      },
-
-      openContextmenu(e) {
-        if (this.configurable) {
-          this.contextmenu_info.open = true
-          this.contextmenu_info.x = e.clientX
-          this.contextmenu_info.y = e.clientY - 30
-          e.currentTarget.focus()
-        }
-      },
-
-      callContextmenuItem(e, fn, itempath, disabledOnTop = false, onlyOnTop = false) {
-
-        e.preventDefault()
-        e.stopPropagation()
-
-        if (this.isTop && disabledOnTop) {
-          return
-        }
-
-        if (!this.isTop && onlyOnTop) {
-          return
-        }
-
-        fn.call(this.top.$parent, e, itempath, this)
-
-        this.contextmenu_info.open = false
-
-      },
-
-      requestModifyName() {
-
-        let t
-        if (this.isTop) {
-          return
-        }
-
-        this.modifyMode = true
-        this.$nextTick(() => {
-          t = this.$el.querySelector('input')
-          t.value = this.tree.name
-          t.focus()
-          t.setSelectionRange(0, t.value.lastIndexOf('.'))
-        })
-
-      },
-
-      modifyName(e, before) {
-
-        let name
-        let after
-
-        name = e.currentTarget.value
-        after = path.posix.join(path.dirname(before), name)
-
-        if (!name) {
-          this.modifyNameCancel(e)
-          return
-        }
-
-        if (path.parse(before).ext !== path.parse(after).ext) {
-          after = path.format({
-            dir: path.dirname(after),
-            name: path.parse(after).name,
-            ext: path.extname(before)
-          })
-        }
-
-        fs.rename(before, after, err => {
-
-          this.modifyMode = false
-
-          if (err) {
-            throw err
-          }
-
-        })
-
-      },
-
-      modifyNameCancel(e) {
-        e.currentTarget.value = this.tree.name
-        this.modifyMode = false
-      },
-
-      setDragItem(e) {
-        if (this.configurable) {
-          e.dataTransfer.setData('filePath', this.tree.path)
-        }
-      },
-
-      allowDrop(e) {
-        if (this.configurable) {
-          e.preventDefault()
-        }
-      },
-
-      dropItem(e) {
-
-        let before
-        let after
-
-        before = e.dataTransfer.getData('filePath')
-        after = this.tree.path
-        after = path.posix.join(after, path.basename(before))
-
-        fs.rename(before, after)
-
-      },
-
-      requestDeleteItem(eternally) {
-
-        if (this.isTop) {
-          return
-        }
-
-        if (eternally) ipcRenderer.send('tree-delete', {
-          name: path.basename(this.tree.path),
-          path: this.tree.path
-        })
-
-        else ipcRenderer.send('modal-delete-trash', {
-          name: path.basename(this.tree.path),
-          path: this.tree.path
-        })
-
-      },
-
-      isDisabledItem(disabledOnTop = false, onlyOnTop = false) {
-
-        if (this.isTop && disabledOnTop) {
-          return true
-        }
-
-        if (!this.isTop && onlyOnTop) {
-          return true
-        }
-
-        return false
-
-      },
-
-      getFileIcon(itempath) {
-
-        let ext
-
-        ext = path.extname(itempath)
-        ext = ext.toLowerCase()
-
-        switch (ext) {
-
-          case '.woff':
-          case '.woff2':
-            return 'fonticons'
-
-          case '.png':
-          case '.jpg':
-          case '.jpeg':
-          case '.gif':
-            return 'image'
-
-          case '.mp3':
-            return 'audiotrack'
-
-          case '.mp4':
-            return 'movie'
-
-          case '.esscript':
-            return 'code'
-
-          case '.esdesign_interface':
-            return 'touch_app'
-
-          case '.esdesign_actor':
-            return 'accessibility'
-
-          case '.esdesign_background':
-            return 'camera'
-
-          case '.json':
-            return 'language'
-
-          default:
-            return 'attachment'
-
-        }
-
-      },
-
-      watchDirectory() {
-
-        if (this.top !== this) {
-          return
-        }
-
-        this.tree = dirTree(this.path, this.filter)
-        this.watcher = fs.watch(this.path, {
-          recursive: true
-        }, () => {
-          this.tree = dirTree(this.path, this.filter)
-        })
-
-      },
-
-      unwatchDirectory(p) {
-
-        if (this.top !== this) {
-          return
-        }
-
-        fs.unwatchFile(p, this.watcher)
-
-      }
-
+      copyJSON,
+      isContextItemShow,
+      runShortcut,
+      toggle,
+      openThis,
+      openContextmenu,
+      callContextmenuItem,
+      requestModifyName,
+      modifyName,
+      modifyNameCancel,
+      setDragItem,
+      allowDrop,
+      dropItem,
+      requestDeleteItem,
+      isDisabledItem,
+      getFileIcon,
+      watchDirectory,
+      unwatchDirectory
     },
 
     watch: {
-
-      path(news, old) {
-
-        if (this.top !== this) {
-          return
-        }
-
-        this.unwatchDirectory(old)
-        this.watchDirectory()
-
-      },
-
-      filter() {
-
-        if (this.top !== this) {
-          return
-        }
-
-        this.unwatchDirectory(this.path)
-        this.watchDirectory()
-
-      }
-
+      watchPath,
+      watchFilter,
     },
 
     created() {
@@ -417,6 +189,10 @@
         t.style.marginLeft = `${t.dataset.depth * 10 + 10}px`
       })
 
+    },
+
+    destroyed() {
+      this.unwatchDirectory()
     }
 
   }
@@ -462,9 +238,9 @@
       }
 
       >span {
-        height: 25px;
+        height: 28px;
         font-size: smaller;
-        line-height: 25px;
+        line-height: 28px;
         padding: 0 25px;
         display: block;
       }

@@ -7,12 +7,12 @@
           <v-icon color="white" v-else>check_box_outline_blank</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>
+          <v-list-item-title class="subtitle-1">
             <span v-if="languageModify !== language.id">{{ language.name }}</span>
             <input :value="language.name" v-else @blur="modifyLanguage($event, language.name)" @keydown.enter="modifyLanguage($event, language.name)"
               @keydown.esc="languageModify = null" @click.stop>
           </v-list-item-title>
-          <v-list-item-sub-title>
+          <v-list-item-sub-title class="subtitle-2 grey--text">
             <span v-if="isDefaultLanguage(language.id)">현재 선택된 기본언어입니다</span>
             <span v-else>클릭하면 {{ language.name }}를(을) 기본언어로 지정합니다</span>
           </v-list-item-sub-title>
@@ -32,8 +32,8 @@
           <v-icon>add</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>새로운 언어 추가</v-list-item-title>
-          <v-list-item-sub-title>새로운 언어를 추가합니다</v-list-item-sub-title>
+          <v-list-item-title class="subtitle-1">새로운 언어 추가</v-list-item-title>
+          <v-list-item-sub-title class="subtitle-2 grey--text">새로운 언어를 추가합니다</v-list-item-sub-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -51,13 +51,11 @@
           </p>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="red" @click="languageRemove.dialog = false">
-            <v-icon>cancel</v-icon>
-            아니오
+          <v-btn @click="languageRemove.dialog = false">
+            <v-icon left>cancel</v-icon> 아니오
           </v-btn>
           <v-btn color="warning" @click="removeLanguage">
-            <v-icon>delete</v-icon>
-            삭제합니다
+            <v-icon left>delete</v-icon> 삭제합니다
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -69,7 +67,7 @@
   import {
     ipcRenderer
   } from 'electron'
-  import createItem from '@static/js/createItem'
+  import createItem from '@common/js/createItem'
 
   export default {
     data: () => ({

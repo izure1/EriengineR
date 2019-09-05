@@ -24,7 +24,7 @@ export default {
 
     src = DEFAULT_WORKSPACE
     dist = directoryPath
-    dist = path.posix.join(dist, '.eriengine')
+    dist = path.join(dist, '.eriengine')
 
     try {
 
@@ -40,7 +40,7 @@ export default {
 
     return {
       directory: dist,
-      user: path.posix.join(dist, 'user.json')
+      user: path.join(dist, 'user.json')
     }
 
   },

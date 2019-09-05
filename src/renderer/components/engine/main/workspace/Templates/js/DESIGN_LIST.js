@@ -3,6 +3,13 @@ import banner_design_actor from '@/assets/img/banner_design_actor.png'
 import banner_design_interface from '@/assets/img/banner_design_interface.gif'
 
 
+// constructor
+import ImageObject from '@game/js/ImageObject'
+import TextObject from '@game/js/TextObject'
+import AudioObject from '@game/js/AudioObject'
+import VideoObject from '@game/js/VideoObject'
+
+
 export default [
 
   {
@@ -16,7 +23,8 @@ export default [
     </p>
     `,
     image: null,
-    type: null
+    type: null,
+    Constructor: ImageObject,
   },
 
   {
@@ -30,7 +38,8 @@ export default [
     </p>
     `,
     image: null,
-    type: null
+    type: null,
+    Constructor: ImageObject,
   },
 
   {
@@ -42,7 +51,8 @@ export default [
     </p>
     `,
     image: null,
-    type: null
+    type: null,
+    Constructor: VideoObject,
   },
 
   {
@@ -56,7 +66,8 @@ export default [
     </p>
     `,
     image: null,
-    type: null
+    type: null,
+    Constructor: AudioObject,
   },
 
   {
@@ -70,7 +81,8 @@ export default [
     </p>
     `,
     image: null,
-    type: null
+    type: null,
+    Constructor: TextObject,
   },
 
   {
@@ -84,21 +96,23 @@ export default [
     </p>
     `,
     image: null,
-    type: null
+    type: null,
+    Constructor: TextObject,
   },
 
-  {
-    name: 'GUI',
-    ext: '.esdesign_gui',
-    description: `
-    <p>
-    Graphical User Interface 의 약자입니다. 흔히 인터페이스라고 불립니다.
-    <br>
-    버튼, HP, MP바, 인벤토리 등을 구현하는데 이 객체를 사용합니다.
-    </p>
-    `,
-    image: null,
-    type: null
-  }
+  // {
+  //   name: 'GUI',
+  //   ext: '.esdesign_gui',
+  //   description: `
+  //   <p>
+  //   Graphical User Interface 의 약자입니다. 흔히 인터페이스라고 불립니다.
+  //   <br>
+  //   버튼, HP, MP바, 인벤토리 등을 구현하는데 이 객체를 사용합니다.
+  //   </p>
+  //   `,
+  //   image: null,
+  //   type: null,
+  //   Constructor: ScenePlacableObject,
+  // }
 
 ]

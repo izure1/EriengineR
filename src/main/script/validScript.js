@@ -51,7 +51,7 @@ export default async function () {
 
   for (let directory of directorys) {
 
-    directory = path.posix.join(directory)
+    directory = path.join(directory)
 
     if (!directoryMap.has(directory)) {
       directoryMap.set(directory, [])
@@ -72,7 +72,7 @@ export default async function () {
     let notExists
 
     dir = path.dirname(script.path)
-    dir = path.posix.join(dir)
+    dir = path.join(dir)
 
     notExists = getNotExistItem(script.nexts, directoryMap.get(dir))
 

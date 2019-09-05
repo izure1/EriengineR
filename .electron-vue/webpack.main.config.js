@@ -47,7 +47,9 @@ let mainConfig = {
   ],
   resolve: {
     alias: {
-      '@static': path.join(__dirname, '../static')
+      '@common': path.join(__dirname, '../src/common'),
+      '@static': path.join(__dirname, '../static'),
+      '@game': path.join(__dirname, '../src/game'),
     },
     extensions: ['.js', '.json', '.node', '.ts', '.tsx']
   },

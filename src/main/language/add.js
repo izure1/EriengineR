@@ -3,7 +3,7 @@ import get from './get'
 import fs from 'fs-extra'
 import path from 'path'
 
-import createUUID from '@static/js/createUUID'
+import createUUID from '@common/js/createUUID'
 
 
 export default async function (language) {
@@ -12,7 +12,7 @@ export default async function (language) {
 
   if (languages.filter(item => item.name === language).length === 0) {
 
-    language = path.posix.join(this.variables.project.directory, 'Languages', `${language}.json`)
+    language = path.join(this.variables.project.directory, 'Languages', `${language}.json`)
 
     fs.writeJSONSync(language, {
       id: createUUID(),

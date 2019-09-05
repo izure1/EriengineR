@@ -69,7 +69,7 @@
     jsPlumb
   } from 'jsplumb'
 
-  import createUUID from '@static/js/createUUID'
+  import createUUID from '@common/js/createUUID'
 
 
   // Methods
@@ -99,6 +99,7 @@
   export default {
     props: ['data'],
     data: () => ({
+      watcher: null,
       uuid: createUUID(),
       jsPlumb: jsPlumb.getInstance(),
       scripts: [],
@@ -157,6 +158,9 @@
     },
     mounted() {
       this.setJsPlumbBox()
+    },
+    destroyed() {
+      this.watcher.close()
     },
     watch: {
       'data.script': function () {

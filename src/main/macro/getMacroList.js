@@ -9,7 +9,7 @@ export default function getMacroList(e) {
   let macro
 
 
-  macroDirectory = path.posix.join(__static, 'assets', 'macro')
+  macroDirectory = path.join(__static, 'assets', 'macro')
   macro = {}
 
   // macro 폴더 내에 있는 모든 매크로를 불러옵니다
@@ -18,7 +18,7 @@ export default function getMacroList(e) {
     let dir
     let m
 
-    dir = path.posix.join(macroDirectory, dirname)
+    dir = path.join(macroDirectory, dirname)
     dir = fg.sync('**/*.js', {
       cwd: dir,
       absolute: true

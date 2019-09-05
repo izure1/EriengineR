@@ -2,5 +2,5 @@ import path from 'path'
 
 
 export default function () {
-  return path.posix.join(this.variables.project.directory, 'Scripts')
+  return path.join(this.variables.project.directory, 'Scripts')
 }

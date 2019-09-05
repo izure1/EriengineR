@@ -3,11 +3,11 @@ import fs from 'fs-extra'
 
 import {
   dialog,
-  app,
-  ipcMain
+  app
 } from 'electron'
 
-import getResolvedURI from '@static/js/getResolvedURI'
+import getResolvedURI from '@common/js/getResolvedURI'
+import subDirectory from '../project/subDirectory'
 
 
 export default async function openProject(e, esproject) {
@@ -19,6 +19,8 @@ export default async function openProject(e, esproject) {
     this.variables.project.directory = path.dirname(esproject)
     this.variables.project.information_file = esproject
     this.variables.project.information.set(fs.readJSONSync(esproject))
+
+    await subDirectory(this.variables.project.directory)
 
   } catch (e) {
 
