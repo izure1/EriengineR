@@ -7,7 +7,7 @@ export default [
   'Designs/Actor',
   'Designs/Interface',
   'Designs/Background',
-  'Languages',
+  'Locales',
   'Mods',
   'Mods/Lib',
   'Mods/Module',

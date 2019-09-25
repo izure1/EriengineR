@@ -28,11 +28,11 @@
         </div>
         <dl>
           <dt>새로운 프로젝트</dt>
-          <dd>Ctrl + N</dd>
+          <dd><kbd>Ctrl + N</kbd></dd>
           <dt>프로젝트 불러오기</dt>
-          <dd>Ctrl + O</dd>
+          <dd><kbd>Ctrl + O</kbd></dd>
           <dt>엔진 정보</dt>
-          <dd>Ctrl + I</dd>
+          <dd><kbd>Ctrl + I</kbd></dd>
         </dl>
       </div>
     </div>

@@ -14,7 +14,7 @@
           <a href="#" @click="modifyMacro(event.id, 'events')">{{ event.text }}</a>
         </li>
       </ul>
-      <a href="#" @click="createMacro('events')" v-if="!data.events.length">+</a>
+      <a href="#" @click="createMacro('events')" v-else>+</a>
     </div>
     <div>
       <h6>
@@ -63,7 +63,7 @@
         <v-icon left>delete_forever</v-icon>취소
       </v-btn>
     </div>
-    <v-dialog v-model="modifyMode" width="1024" height="600">
+    <v-dialog v-model="modifyMode" width="80%">
       <macro-modal :information="modifyInformation"></macro-modal>
     </v-dialog>
   </div>

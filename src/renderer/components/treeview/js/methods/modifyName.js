@@ -10,6 +10,10 @@ export default function (e, before) {
   name = e.currentTarget.value
   after = path.join(path.dirname(before), name)
 
+  if (!this.modifyMode) {
+    return
+  }
+
   if (!name) {
     this.modifyNameCancel(e)
     return
@@ -23,14 +27,7 @@ export default function (e, before) {
     })
   }
 
-  fs.rename(before, after, err => {
-
-    this.modifyMode = false
-
-    if (err) {
-      throw err
-    }
-
-  })
+  fs.renameSync(before, after)
+  this.modifyMode = false
 
 }

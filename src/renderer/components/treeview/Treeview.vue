@@ -4,8 +4,8 @@
       @blur="contextmenu_info.open = false" draggable="true" @dragstart="setDragItem" @dragover="allowDrop"
       @drop="dropItem" @keydown="runShortcut($event, tree.path)" class="template-treeview-itemwrap">
       <div class="template-treeview-indent" :data-depth="depth">
-        <v-icon v-if="isFolder" color="yellow" small>{{ open ? 'arrow_drop_down' : 'arrow_right' }}</v-icon>
-        <v-icon v-else color="rgb(140, 140, 140)" small>{{ getFileIcon(tree.path) }}</v-icon>
+        <v-icon v-if="isFolder" color="yellow" small left>{{ open ? 'arrow_drop_down' : 'arrow_right' }}</v-icon>
+        <v-icon v-else color="rgb(140, 140, 140)" small left>{{ getFileIcon(tree.path) }}</v-icon>
         <v-tooltip v-if="!modifyMode" bottom :disabled="isFolder">
           <template v-slot:activator="{ on }">
             <p v-on="on">{{ tree.name }}</p>

@@ -90,7 +90,6 @@
 
   #app {
     color: lightgray;
-    overflow: hidden;
   }
 
   h1,

@@ -1,12 +1,18 @@
 <template>
   <div class="script-viewer-action">
-    <h1 class="headline px-3 my-3">스크립트 뷰어</h1>
+    <h1 class="headline px-3 my-3">
+      <span class="light-green--text">{{ sceneName }}</span> 씬 스크립트 뷰어
+    </h1>
     <v-alert border="left" text tile icon="notification_important" prominent class="mt-3 body-2">
-      스크립트 파일을 분류에 따라 폴더로 나누세요.
+      폴더를 만들어 스크립트 파일을 분류하세요.
       <br>
-      <span class="font-weight-bold light-green--text">폴더를 우클릭하여 스크립트 뷰어 열기를 선택</span>하여, 스크립트를 관리하세요.
+      폴더를 우클릭하여 <span class="font-weight-bold light-green--text">이 폴더에서 스크립트 뷰어 열기</span>를 선택하여, 스크립트를 관리하세요.
     </v-alert>
-    <treeview :path="data.directory" :filter="filter" :configurable="true" :contextmenu="contextmenu"></treeview>
+    <v-alert border="left" tile icon="notification_important" color="warning" class="mt-3 body-2">
+      여기에서 만든 스크립트는, 이 씬에서만 작동합니다. 다른 씬에 영향을 미치지 못하니 유의하세요.
+    </v-alert>
+    <treeview :path="data.directory" :filter="filter" :configurable="true" :openItem="modifyScript"
+      :contextmenu="contextmenu"></treeview>
   </div>
 </template>
 
@@ -30,7 +36,8 @@
     data: () => ({
       filter: {
         extensions: /\.esscript/
-      }
+      },
+      sceneName: null
     }),
 
     computed: {
@@ -70,21 +77,8 @@
         selectScriptMenu = new Treeview.ContextmenuItem('selectScriptMenu', '이 스크립트 편집')
         selectScriptMenu.setOption({
           onlyFile: true
-        }).click(function (e, itempath) {
-
-          let id
-          let directory, script
-
-          id = createUUID()
-          directory = path.dirname(itempath)
-          script = fs.readJSONSync(itempath)
-
-          this.$root.$emit('createWorkspaceTab', id, `${path.basename(itempath)} 스크립트 편집기`, `SCRIPT-EDITOR`)
-          this.$root.$emit('setDataForWorkspaceTab', id, {
-            directory,
-            script
-          })
-
+        }).click((e, itempath) => {
+          this.modifyScript(itempath)
         })
 
         contextmenu.extend(selectDirMenu)
@@ -101,6 +95,32 @@
 
     methods: {
 
+      deepCopy(obj) {
+        return JSON.parse(JSON.stringify(obj))
+      },
+
+      modifyScript(itempath) {
+
+        let script
+
+        try {
+
+          script = fs.readJSONSync(itempath)
+
+        } catch (e) {
+          throw e
+        }
+
+        this.$root.$emit('createWorkspaceTab', script.id, script.id, 'SCRIPT-EDITOR', {})
+        this.$root.$emit('setDataForWorkspaceTab', script.id, this.deepCopy(script))
+
+
+      }
+
+    },
+
+    created() {
+      this.sceneName = path.basename(this.data.directory)
     }
 
 

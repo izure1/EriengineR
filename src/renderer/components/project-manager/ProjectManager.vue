@@ -38,6 +38,7 @@
 
       playLogoSound() {
         audio_startup = new Audio(snd_startup)
+        audio_startup.volume = 0.2
         audio_startup.play()
       },
 

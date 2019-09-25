@@ -109,7 +109,7 @@
           title: '파일을 선택해주세요',
           filters: [{
             name: '에셋 파일',
-            extensions: ['png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4', 'woff', 'woff2']
+            extensions: ['png', 'jpg', 'jpeg', 'gif', 'ogg', 'mp3', 'mp4', 'woff', 'woff2']
           }],
           properties: ['openFile', 'multiSelections']
         })

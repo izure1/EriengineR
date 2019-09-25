@@ -5,7 +5,7 @@ import {
   dialog
 } from 'electron'
 
-import subDirectory from './subDirectory'
+import setSubDirectory from './setSubDirectory'
 
 
 export default async function (e, options) {
@@ -36,7 +36,7 @@ export default async function (e, options) {
 
     // 서브 디렉토리 생성하기
     // 서브 디렉토리 목록은 ./Vars/DIRECTORYS.js 에서 관리할 수 있습니다
-    await subDirectory(dist)
+    await setSubDirectory(dist)
 
     success = true
 

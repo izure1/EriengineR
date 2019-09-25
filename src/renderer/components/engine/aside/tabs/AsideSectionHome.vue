@@ -71,7 +71,7 @@
   .aside-section-tab>ol {
     min-width: 240px;
     padding: 20px 20px 20px 35px;
-    list-style-type: upper-roman;
+    list-style-type:lower-greek;
 
     h4 {
       margin: 3px 0;

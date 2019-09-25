@@ -96,11 +96,15 @@ variables = {
   project: {
     directory: null,
     information_file: null,
-    information: new Information
+    information: new Information,
+    locale: {
+      database: null,
+      path: 'locales/locale.db',
+    }
   },
 
   macro: null,
-  script: null
+  script: null,
 
 }
 
@@ -168,7 +172,7 @@ async function createWindow() {
   })
 
   mainURL = getResolvedURI(mainURL)
-  
+
   Menu.setApplicationMenu(Menu.buildFromTemplate([]))
 
   //mainWindow.webContents.openDevTools()
@@ -236,6 +240,8 @@ import ipc_checkValidScript from './script/checkValidScript'
 import ipc_writeScript from './script/writeScript'
 
 import ipc_getMacroList from './macro/getMacroList'
+import ipc_getMacroValue from './macro/getMacroValue'
+import ipc_addMacroValue from './macro/addMacroValue'
 
 import ipc_addLanguage from './language/addLanguage'
 import ipc_removeLanguage from './language/removeLanguage'
@@ -245,6 +251,12 @@ import ipc_getDefaultLanguage from './language/getDefaultLanguage'
 import ipc_getLanguage from './language/getLanguage'
 import ipc_appendLanguage from './language/appendLanguage'
 import ipc_findLanguage from './language/findLanguage'
+
+import ipc_addLocale from './locale/addLocale'
+import ipc_getLocale from './locale/getLocale'
+import ipc_removeLocale from './locale/removeLocale'
+import ipc_renameLocale from './locale/renameLocale'
+import ipc_getAllLocale from './locale/getAllLocale'
 
 import ipc_getAssetDirectory from './asset/getAssetDirectory'
 import ipc_getAssetList from './asset/getAssetList'
@@ -291,6 +303,8 @@ function runIPC() {
 
   // Macro
   ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow)) // static\assets\macro 내부에 있는 모든 매크로 파일을 배열에 담아 반환합니다
+  ipcMain.on('macro-get-value', ipc_getMacroValue.bind(mainWindow)) // 매크로에서 사용한 입력 변수의 정보를 가져옵니다.
+  ipcMain.on('macro-add-value', ipc_addMacroValue.bind(mainWindow)) // 매크로의 입력 변수 정보를 저장합니다.
 
   // Language, 다국어 관련
   ipcMain.on('language-add', ipc_addLanguage.bind(mainWindow)) // 새로운 언어를 추가할 수 있습니다
@@ -301,6 +315,13 @@ function runIPC() {
   ipcMain.on('language-get-default', ipc_getDefaultLanguage.bind(mainWindow)) // 기본언어를 반환합니다
   ipcMain.on('language-append', ipc_appendLanguage.bind(mainWindow)) // 언어에 문자열을 추가합니다
   ipcMain.on('language-find', ipc_findLanguage.bind(mainWindow)) // 모든 다국어에 추가된 특정 문자열을 찾아 Object 형태로 반환합니다
+
+  // 로케일, 다국어 관련
+  ipcMain.on('locale-add', ipc_addLocale.bind(mainWindow)) // 새로운 언어를 추가할 수 있습니다
+  ipcMain.on('locale-get', ipc_getLocale.bind(mainWindow)) // 특정 언어의 정보를 조회해 반환합니다
+  ipcMain.on('locale-remove', ipc_removeLocale.bind(mainWindow)) // 특정 언어를 제거합니다
+  ipcMain.on('locale-rename', ipc_renameLocale.bind(mainWindow)) //특정 언어의 이름을 변경합니다
+  ipcMain.on('locale-get-all', ipc_getAllLocale.bind(mainWindow)) // 모든 다국어를 배열로 반환합니다
 
   // Assets
   ipcMain.on('asset-get-directory', ipc_getAssetDirectory.bind(mainWindow)) // 현재 프로젝트의 에셋 디렉토리 경로를 반환합니다

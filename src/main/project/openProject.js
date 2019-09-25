@@ -7,7 +7,8 @@ import {
 } from 'electron'
 
 import getResolvedURI from '@common/js/getResolvedURI'
-import subDirectory from '../project/subDirectory'
+import setSubDirectory from './setSubDirectory'
+import setDatabase from './setDatabase'
 
 
 export default async function openProject(e, esproject) {
@@ -20,7 +21,8 @@ export default async function openProject(e, esproject) {
     this.variables.project.information_file = esproject
     this.variables.project.information.set(fs.readJSONSync(esproject))
 
-    await subDirectory(this.variables.project.directory)
+    await setSubDirectory.call(this)
+    await setDatabase.call(this)
 
   } catch (e) {
 

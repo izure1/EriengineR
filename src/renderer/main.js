@@ -30,7 +30,8 @@ customElectronTitlebar = require('custom-electron-titlebar')
 customTitlebar = new customElectronTitlebar.Titlebar({
 
   backgroundColor: customElectronTitlebar.Color.fromHex('#555'),
-  icon: path.join(__static, 'assets/image/ico_eri_16.png').replace(/\\/g, '/')
+  icon: path.join(__static, 'assets/image/ico_eri_16.png').replace(/\\/g, '/'),
+  overflow: 'hidden'
 
 })
 
@@ -58,6 +59,7 @@ import App from './App'
 
 Vue.config.productionTip = false
 Vue.config.silent = true
+Vue.config.runtimeCompiler = true
 
 // Send error
 Vue.config.errorHandler = function (e) {

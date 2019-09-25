@@ -1,11 +1,11 @@
-import subDirectory from './subDirectory'
+import setSubDirectory from './setSubDirectory'
 
 
 export default async function (e, dist) {
 
   let returnValue
 
-  returnValue = await subDirectory(dist)
+  returnValue = await setSubDirectory(dist)
 
   e.sender.send('project-create-subdirectory', returnValue)
   e.returnValue = returnValue
