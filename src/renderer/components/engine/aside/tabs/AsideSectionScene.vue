@@ -25,7 +25,7 @@
       Treeview
     },
     data: () => ({
-      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Scenes'),
+      path: ipcRenderer.sendSync('scene-get-directory', 0),
       filter: {
         extensions: /\.esscene/
       }
@@ -107,14 +107,13 @@
       openScriptViewer(itempath) {
 
         let sceneId, sceneName, sceneDirectory
-        let sceneOrigin
+        let ScenesMaps
 
-        sceneOrigin = ipcRenderer.sendSync('var-get-sync', 'project.directory')
-        sceneOrigin = path.join(sceneOrigin, 'ScenesOrigin')
+        ScenesMaps = ipcRenderer.sendSync('scene-get-directory', 1)
 
         sceneId = fs.readFileSync(itempath, 'utf8')
         sceneName = path.parse(itempath).name
-        sceneDirectory = path.join(sceneOrigin, sceneId)
+        sceneDirectory = path.join(ScenesMaps, sceneId)
 
         // 삭제되었을 경우를 상정하여 새롭게 생성하기
         ipcRenderer.sendSync('scene-add-directory', sceneId)
@@ -131,6 +130,7 @@
       }
 
     }
+    
   }
 </script>
 

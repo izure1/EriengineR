@@ -6,22 +6,22 @@ module.exports = {
   description: '다국어 {{다국어}}, 값 {{값}}, 파일 {{파일}}, 선택 {{선택}}',
   variables: {
     '다국어': {
-      text: '입력',
+      value: '입력',
       type: 'text'
     },
     '값': {
-      text: '입력2',
+      value: '입력2',
       type: 'value'
     },
     '파일': {
-      text: 'undefined',
+      value: 'undefined',
       type: 'file',
-      list: ['.mp3', '.mp4']
+      lists: ['.png', '.mp3', '.mp4']
     },
     '선택': {
-      text: '1번',
-      type: 'select',
-      list: [{
+      value: 1,
+      type: 'radio',
+      lists: [{
           text: '1번',
           value: 1
         },

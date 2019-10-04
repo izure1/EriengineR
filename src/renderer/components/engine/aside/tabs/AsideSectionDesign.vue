@@ -34,7 +34,7 @@
       Treeview
     },
     data: () => ({
-      path: path.join(ipcRenderer.sendSync('var-get-sync', 'project.directory'), 'Designs'),
+      path: path.join(ipcRenderer.sendSync('project-get-directory'), 'Designs'),
       filter: {
         extensions
       }

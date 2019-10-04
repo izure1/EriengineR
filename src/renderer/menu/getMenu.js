@@ -1,4 +1,6 @@
-import electron from 'electron'
+import {
+  remote
+} from 'electron'
 import MENU_BAR from './vars/MENUBAR'
 
 export default function () {
@@ -6,7 +8,7 @@ export default function () {
   let menu
 
   menu = MENU_BAR()
-  menu = electron.remote.Menu.buildFromTemplate(menu)
+  menu = remote.Menu.buildFromTemplate(menu)
 
   return menu
 

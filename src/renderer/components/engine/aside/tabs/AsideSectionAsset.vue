@@ -10,7 +10,7 @@
       <div class="grey--text">
         <span class="white--text mr-1">{{ assetCopyPath }}</span> 에셋 경로 복사 완료!
       </div>
-      <v-btn icon>
+      <v-btn icon @click="assetCopyComplete = false">
         <v-icon color="red">close</v-icon>
       </v-btn>
     </v-snackbar>
@@ -109,7 +109,7 @@
           title: '파일을 선택해주세요',
           filters: [{
             name: '에셋 파일',
-            extensions: ['png', 'jpg', 'jpeg', 'gif', 'ogg', 'mp3', 'mp4', 'woff', 'woff2']
+            extensions: ['png', 'jpg', 'jpeg', 'gif', 'ogg', 'mp3', 'mp4', 'webm', 'woff', 'woff2']
           }],
           properties: ['openFile', 'multiSelections']
         })

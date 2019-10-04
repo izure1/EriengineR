@@ -38,7 +38,7 @@
       project: {
         name: '새로운 프로젝트',
         directory: path.join(os.homedir(), 'Desktop'),
-        id: `org.izure.eriengine.${createUID()}`,
+        id: `org.izure.eriengine.p${createUID()}`,
         width: 1366,
         height: 768,
         color: '#0075c8',

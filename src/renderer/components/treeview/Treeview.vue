@@ -48,7 +48,9 @@
 </template>
 
 <script>
-  import electron from 'electron'
+  import {
+    shell
+  } from 'electron'
 
   // Computed
   import getPreviewSrc from './js/computed/getPreviewSrc'
@@ -130,7 +132,7 @@
       openItem: {
         type: Function,
         default () {
-          electron.shell.openItem(this.tree.path)
+          shell.openItem(this.tree.path)
         }
       }
     },

@@ -21,7 +21,6 @@
 
 <script>
   import Treeview from '@/components/treeview/Treeview'
-  import electron from 'electron'
 
   import fs from 'fs-extra'
   import path from 'path'

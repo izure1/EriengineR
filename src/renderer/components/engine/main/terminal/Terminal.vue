@@ -27,7 +27,9 @@
 </template>
 
 <script>
-  import electron from 'electron'
+  import {
+    ipcRenderer
+  } from 'electron'
 
   import TABS from './vars/TABS'
 
@@ -89,7 +91,7 @@
           out.message = JSON.stringify(out.message)
           out.stack = command
 
-          electron.ipcRenderer.send('send-output', out)
+          ipcRenderer.send('send-output', out)
 
         } catch (e) {
 

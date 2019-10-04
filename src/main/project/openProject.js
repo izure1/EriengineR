@@ -8,8 +8,8 @@ import {
 
 import getResolvedURI from '@common/js/getResolvedURI'
 import setSubDirectory from './setSubDirectory'
+import copyMacroDirectory from '../macro/copyMacroDirectory'
 import setDatabase from './setDatabase'
-
 
 export default async function openProject(e, esproject) {
 
@@ -22,6 +22,7 @@ export default async function openProject(e, esproject) {
     this.variables.project.information.set(fs.readJSONSync(esproject))
 
     await setSubDirectory.call(this)
+    await copyMacroDirectory.call(this)
     await setDatabase.call(this)
 
   } catch (e) {
@@ -33,7 +34,6 @@ export default async function openProject(e, esproject) {
 
   winURL = getResolvedURI(this.webContents.getURL(), '/engine')
 
-  this.setResizable(true)
   this.loadURL(winURL)
   this.maximize()
 

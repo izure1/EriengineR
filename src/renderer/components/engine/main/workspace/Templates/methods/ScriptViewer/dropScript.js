@@ -1,11 +1,13 @@
-import electron from 'electron'
+import {
+  ipcRenderer
+} from 'electron'
 
 
 export default function (script) {
 
   let i
 
-  electron.ipcRenderer.send('modal-delete-trash', {
+  ipcRenderer.send('modal-delete-trash', {
     name: script.id,
     path: script.path
   })
@@ -24,6 +26,6 @@ export default function (script) {
 
   }
 
-  electron.ipcRenderer.sendSync('script-check-valid')
+  ipcRenderer.sendSync('script-check-valid')
 
 }

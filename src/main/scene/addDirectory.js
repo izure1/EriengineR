@@ -1,15 +1,14 @@
 import fs from 'fs-extra'
 import path from 'path'
+import sceneDirectory from './sceneDirectory'
 
 
 export default async function (id) {
 
   let directory
-  let sceneDir
 
-  sceneDir = 'ScenesOrigin'
-
-  directory = path.join(this.variables.project.directory, sceneDir, id)
+  directory = await sceneDirectory.call(this, 1)
+  directory = path.join(directory, id)
 
   await fs.ensureDir(directory)
 

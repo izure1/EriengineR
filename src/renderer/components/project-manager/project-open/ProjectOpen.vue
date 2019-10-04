@@ -11,7 +11,9 @@
 
 <script>
   import os from 'os'
-  import electron from 'electron'
+  import {
+    ipcRenderer
+  } from 'electron'
 
   export default {
     props: {
@@ -21,7 +23,7 @@
 
       let projectDirectory
 
-      projectDirectory = electron.ipcRenderer.sendSync('modal-open-sync', {
+      projectDirectory = ipcRenderer.sendSync('modal-open-sync', {
         title: '프로젝트를 선택해주세요',
         filters: [{
           name: '에리엔진 프로젝트 파일',
@@ -35,7 +37,7 @@
       }
 
       projectDirectory = projectDirectory[0]
-      electron.ipcRenderer.send('project-open', projectDirectory)
+      ipcRenderer.send('project-open', projectDirectory)
 
     }
   }

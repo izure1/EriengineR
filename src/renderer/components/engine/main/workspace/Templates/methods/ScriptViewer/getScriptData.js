@@ -1,4 +1,6 @@
-import electron from 'electron'
+import {
+  ipcRenderer
+} from 'electron'
 
 
 
@@ -18,7 +20,7 @@ export default function () {
   let scripts
 
 
-  scripts = electron.ipcRenderer.sendSync('script-get-list', false, this.data.directory)
+  scripts = ipcRenderer.sendSync('script-get-list', false, this.data.directory)
   scripts = scripts.map(script => setHiddenContext.call(script, 'path', script.path))
 
   return scripts

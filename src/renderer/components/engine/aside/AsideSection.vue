@@ -4,7 +4,6 @@
     <aside-section-asset v-show="tabId === 'asset'"></aside-section-asset>
     <aside-section-design v-show="tabId === 'design'"></aside-section-design>
     <aside-section-scene v-show="tabId === 'scene'"></aside-section-scene>
-    <aside-section-language v-show="tabId === 'language'"></aside-section-language>
   </section>
 </template>
 
@@ -18,15 +17,13 @@
   import AsideSectionAsset from './tabs/AsideSectionAsset'
   import AsideSectionDesign from './tabs/AsideSectionDesign'
   import AsideSectionScene from './tabs/AsideSectionScene'
-  import AsideSectionLanguage from './tabs/AsideSectionLanguage'
 
   export default {
     components: {
       AsideSectionHome,
       AsideSectionAsset,
       AsideSectionDesign,
-      AsideSectionScene,
-      AsideSectionLanguage
+      AsideSectionScene
     },
     data: () => ({
       tabId: 'home'

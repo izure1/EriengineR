@@ -6,15 +6,15 @@
         <v-icon color="white">hearing</v-icon>
       </h6>
       <p>아래 내용이 발생했을 때 작동합니다</p>
-      <ul v-if="data.events.length">
-        <li v-for="(event, index) in data.events" :key="index">
-          <v-btn icon @click="deleteMacro(event.id, 'events')" class="mr-0" small>
-            <v-icon color="grey" size="standard">delete_outline</v-icon>
+      <ul v-if="events.length">
+        <li v-for="(event, index) in events" :key="index">
+          <v-btn icon @click="deleteMacro(event.id)" class="mr-0" small>
+            <v-icon color="grey" size="standard">clear</v-icon>
           </v-btn>
-          <a href="#" @click="modifyMacro(event.id, 'events')">{{ event.text }}</a>
+          <a href="#" @click="modifyMacro(event.id)">{{ getMacroDescription(event) }}</a>
         </li>
       </ul>
-      <a href="#" @click="createMacro('events')" v-else>+</a>
+      <a href="#" @click="createNewMacro('events')" v-else>+</a>
     </div>
     <div>
       <h6>
@@ -22,18 +22,18 @@
         <v-icon color="white">filter_list</v-icon>
       </h6>
       <p>위 사건이 발생했지만, 아래 내용이 모두 충족되어야 합니다. 원한다면 아무것도 넣지 않아도 됩니다</p>
-      <ul v-if="data.conditions.length">
-        <li v-for="(condition, index) in data.conditions" @dblclick="modifyItem(condition)" :key="index">
-          <v-btn icon @click="deleteMacro(condition.id, 'conditions')" class="mr-0" small>
-            <v-icon color="grey" size="standard">delete_outline</v-icon>
+      <ul v-if="conditions.length">
+        <li v-for="(condition, index) in conditions" @dblclick="modifyItem(condition)" :key="index">
+          <v-btn icon @click="deleteMacro(condition.id)" class="mr-0" small>
+            <v-icon color="grey" size="standard">clear</v-icon>
           </v-btn>
-          <v-btn icon @click="copyMacro(condition.id, 'conditions')" class="ml-0" small>
+          <v-btn icon @click="copyMacro(condition.id)" class="ml-0" small>
             <v-icon color="grey" size="standard">file_copy</v-icon>
           </v-btn>
-          <a href="#" @click="modifyMacro(condition.id, 'conditions')">{{ condition.text }}</a>
+          <a href="#" @click="modifyMacro(condition.id)">{{ getMacroDescription(condition) }}</a>
         </li>
       </ul>
-      <a href="#" @click="createMacro('conditions')">+</a>
+      <a href="#" @click="createNewMacro('conditions')">+</a>
     </div>
     <div>
       <h6>
@@ -41,18 +41,18 @@
         <v-icon color="white">directions_run</v-icon>
       </h6>
       <p>모든 조건이 만족하면 순서대로 실행됩니다</p>
-      <ul v-if="data.actions.length">
-        <li v-for="(action, index) in data.actions" @dblclick="modifyItem(action)" :key="index">
-          <v-btn icon @click="deleteMacro(action.id, 'actions')" class="mr-0" small>
-            <v-icon color="grey" size="standard">delete_outline</v-icon>
+      <ul v-if="actions.length">
+        <li v-for="(action, index) in actions" @dblclick="modifyItem(action)" :key="index">
+          <v-btn icon @click="deleteMacro(action.id)" class="mr-0" small>
+            <v-icon color="grey" size="standard">clear</v-icon>
           </v-btn>
-          <v-btn icon @click="copyMacro(action.id, 'actions')" class="ml-0" small>
+          <v-btn icon @click="copyMacro(action.id)" class="ml-0" small>
             <v-icon color="grey" size="standard">file_copy</v-icon>
           </v-btn>
-          <a href="#" @click="modifyMacro(action.id, 'actions')">{{ action.text }}</a>
+          <a href="#" @click="modifyMacro(action.id)">{{ getMacroDescription(action) }}</a>
         </li>
       </ul>
-      <a href="#" @click="createMacro('actions')">+</a>
+      <a href="#" @click="createNewMacro('actions')">+</a>
     </div>
     <v-divider></v-divider>
     <div class="template-scripteditor-actions">
@@ -60,11 +60,11 @@
         <v-icon left>save</v-icon>스크립트 저장
       </v-btn>
       <v-btn large @click="cancelScript">
-        <v-icon left>delete_forever</v-icon>취소
+        <v-icon left>clear</v-icon>취소
       </v-btn>
     </div>
     <v-dialog v-model="modifyMode" width="80%">
-      <macro-modal :information="modifyInformation"></macro-modal>
+      <macro-modal :information="modifyInformation" @done="insertMacro"></macro-modal>
     </v-dialog>
   </div>
 </template>
@@ -72,10 +72,14 @@
 <script>
   import url from 'url'
   import path from 'path'
-  import electron from 'electron'
+  import {
+    remote,
+    ipcRenderer,
+  } from 'electron'
 
   import getResolvedURI from '@common/js/getResolvedURI'
-  import createUUID from '@common/js/createUUID'
+  import createUID from '@common/js/createUID'
+  import Macro from '@common/js/Macro'
 
   import MacroModal from '@/components/macro/Macro'
 
@@ -88,92 +92,137 @@
     },
 
     data: () => ({
+
+      events: [],
+      conditions: [],
+      actions: [],
+
       current: null,
       modifyMode: false,
       modifyInformation: null
+
     }),
 
     methods: {
 
-      deleteMacro(id, column) {
-
-        let contexts
-        let offset
-
-        contexts = this.data[column]
-        offset = this.getMacroOffset(contexts, id)
-
-        contexts.splice(offset, 1)
-
+      deepCopy(o) {
+        return JSON.parse(JSON.stringify(o))
       },
 
-      copyMacro(id, column) {
+      getMacroInformation(id) {
 
-        let contexts, context
-        let offset
+        let target
+        let contexts, column, index, macro
 
-        contexts = this.data[column]
-        offset = this.getMacroOffset(contexts, id)
+        target = {
+          events: this.events,
+          conditions: this.conditions,
+          actions: this.actions,
+        }
 
-        context = contexts[offset]
-        context.id = createUUID()
+        for (let i in target) {
 
+          contexts = target[i]
+          column = i
+          index = 0
 
-        if (context.variables) {
+          let len
+          for (index = 0, len = contexts.length; index < len; index++) {
 
-          let v
+            macro = contexts[index]
 
-          for (let p in context.variables) {
+            if (macro.id !== id) {
+              continue
+            }
 
-            v = context.variables[p]
-            v.id = createUUID()
-
-            if (v.type === 'text') {
-              v.value = '입력하세요'
+            return {
+              contexts,
+              column,
+              index,
+              macro,
             }
 
           }
 
         }
 
-        contexts.splice(offset, 0, context)
+        return {}
+
+      },
+
+      deleteMacro(id) {
+
+        let {
+          contexts,
+          index,
+        } = this.getMacroInformation(id)
+
+        contexts.splice(index, 1)
+
+      },
+
+      copyMacro(id) {
+
+        let {
+          contexts,
+          index,
+          macro,
+        } = this.getMacroInformation(id)
+
+        let newMacro
+
+        newMacro = this.deepCopy(macro)
+        newMacro.id = createUID()
+
+        let v
+
+        for (let i in macro.variables) {
+
+          v = context.variables[i]
+          v.id = createUID()
+
+          if (v.type === 'text') {
+            v.value = '입력'
+          }
+
+        }
+
+        contexts.splice(index, 0, newMacro)
 
       },
 
       // 스크립트를 수정한다면 스크립트 컨텍스트 객체를 복사하고, 수정모드로 탭을 엽니다
-      modifyMacro(id, column) {
+      modifyMacro(id) {
 
-        let contexts
-        let offset
+        let {
+          macro,
+          column,
+        } = this.getMacroInformation(id)
 
-        contexts = this.data[column]
-        offset = this.getMacroOffset(contexts, id)
-
-        this.current = contexts[offset]
+        this.current = macro
         this.openMacroTab(column, this.current)
 
       },
 
       // 스크립트를 추가한다면 새로운 스크립트 컨텍스트 객체를 생성하고, 생성모드로 탭을 엽니다
-      createMacro(column) {
+      createNewMacro(column) {
         this.current = null
         this.openMacroTab(column, this.current)
       },
 
-      getMacroOffset(contexts, id) {
+      getMacroDescription(macro) {
 
-        let offset = -1
+        let origin
+        let description
 
-        for (let i = 0, len = contexts.length; i < len; i++) {
+        origin = ipcRenderer.sendSync('macro-get-information', macro.origin)
+        description = origin.description
 
-          if (contexts[i].id === id) {
-            offset = i
-            break
-          }
-
+        if (!description) {
+          return ''
         }
 
-        return offset
+        return macro.parseDescription(description)
 
       },
 
@@ -189,69 +238,20 @@
           old
         }
 
-
-        // 스크립트의 경로와 해당 매크로의 저장된 내용을 저장해둡니다
-        // 이는 이후 Macro 윈도우에서 가져와서 사용될 것입니다
-
-        // browser = new electron.remote.BrowserWindow({
-        //   width: 1024,
-        //   height: 600,
-        //   modal: true,
-        //   darkTheme: true,
-        //   frame: false,
-        //   parent,
-        //   webPreferences: {
-        //     webSecurity: false
-        //   }
-        // })
-
-        // browser.setMenu(null)
-        // browser.loadURL(childURI)
-
-
-        // browser.on('closed', () => browser = null)
-
-        // // 모달 윈도우로 이전 매크로 정보를 보냅니다.
-        // // 매크로를 수정하는 용도로 사용합니다
-        // browser.on('macro-input-ready', () => {
-        //   browser.emit('macro-send-old', old)
-        // })
-
-        // // 모달 내에서 매크로가 수정되면 스크립트에 대입하고 저장합니다
-        // // 이는 사용자가 저장 버튼을 눌렀을 때 적용됩니다
-        // browser.on('macro-saved', modifiedMacro => {
-
-        //   let contexts
-        //   let offset
-
-        //   contexts = this.data[column]
-        //   offset = this.getMacroOffset(contexts, modifiedMacro.id)
-
-        //   // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
-        //   if (offset !== -1) {
-        //     contexts.splice(offset, 1, modifiedMacro)
-        //   }
-        //   // 존재하지 않는다면 생성모드이므로, 해당 스크립트에 추가합니다
-        //   else {
-        //     contexts.push(modifiedMacro)
-        //   }
-
-        // })
-
       },
 
       saveScript() {
 
         let filepath
 
-        filepath = electron.ipcRenderer.sendSync('script-get-filepath', this.data.id)
+        filepath = ipcRenderer.sendSync('script-get-filepath', this.data.id)
 
         if (!filepath) {
-          electron.remote.dialog.showErrorBox('파일 삭제됨', '해당 파일이 저장될 위치에 파일이 더이상 존재하지 않습니다.')
+          remote.dialog.showErrorBox('파일 삭제됨', '해당 파일이 저장될 위치에 파일이 더이상 존재하지 않습니다.')
           return
         }
 
-        electron.ipcRenderer.sendSync('script-write', filepath, this.data)
+        ipcRenderer.sendSync('script-write', filepath, this.data)
 
         this.tabClose()
 
@@ -259,9 +259,47 @@
 
       cancelScript() {
         this.tabClose()
+      },
+
+      insertMacro(modifiedMacro) {
+
+        // 모달 내에서 매크로가 수정되면 스크립트에 대입하고 저장합니다
+        // 이는 사용자가 저장 버튼을 눌렀을 때 적용됩니다
+
+        let {
+          contexts,
+          index,
+          macro,
+        } = this.getMacroInformation(modifiedMacro.id)
+
+        // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
+        if (macro) {
+          contexts.splice(index, 1, modifiedMacro)
+        }
+        // 존재하지 않는다면 생성모드이므로, 해당 스크립트에 추가합니다
+        else {
+
+          let {
+            column
+          } = this.modifyInformation
+
+          contexts = this[column]
+          contexts.push(modifiedMacro)
+
+        }
+
+        this.modifyMode = false
+
       }
 
+    },
+
+    created() {
+      this.events = this.data.events
+      this.conditions = this.data.conditions
+      this.actions = this.data.actions
     }
+
   }
 </script>
 

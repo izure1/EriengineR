@@ -1,6 +1,3 @@
-import electron from 'electron'
-
-
 export default function () {
 
   this.jsPlumb.reset()

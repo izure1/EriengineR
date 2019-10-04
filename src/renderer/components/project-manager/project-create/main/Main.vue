@@ -16,30 +16,33 @@
           <input type="text" placeholder="이곳에 프로젝트 이름을 입력하세요" v-model="project.name" class="project-setting-needed"
             :class="{invalid: !checkValidName}">
         </dd>
-        <dt title="잘 모른다면 건드리지 마세요. 절대 중복되어선 안되며, 이후 변경할 수 없습니다">프로젝트 고유명</dt>
+        <dt title="잘 모른다면 건드리지 마세요. 절대 중복되어선 안되며, 이후 변경할 수 없습니다">
+          프로젝트 고유명 <span class="caption">(Application ID)</span>
+        </dt>
         <dd>
-          <input type="text" placeholder="이곳에 프로젝트의 고유명을 입력하세요 (ex. org.izure.eriengine)" v-model="project.id" class="project-setting-needed"
-            :class="{invalid: !checkValidId}">
+          <input type="text" placeholder="이곳에 프로젝트의 고유명을 입력하세요 (ex. org.izure.eriengine)" v-model="project.id"
+            class="project-setting-needed" :class="{invalid: !checkValidId}">
         </dd>
         <dt title="게임의 최대 해상도를 설정합니다">해상도</dt>
         <dd>
           <div class="project-setting-resolution">
             <div>
               <p>가로</p>
-              <input type="number" min="1" placeholder="1366" v-model.number="project.width" class="project-setting-needed"
-                :class="{invalid: !checkValidWidth}" @change="autoCalcHeight" @keyup="autoCalcHeight">
+              <input type="number" min="1" placeholder="1366" v-model.number="project.width"
+                class="project-setting-needed" :class="{invalid: !checkValidWidth}" @change="autoCalcHeight"
+                @keyup="autoCalcHeight">
             </div>
             <div>
               <p>세로</p>
-              <input type="number" min="1" placeholder="768" v-model.number="project.height" class="project-setting-needed"
-                :class="{invalid: !checkValidHeight}">
+              <input type="number" min="1" placeholder="768" v-model.number="project.height"
+                class="project-setting-needed" :class="{invalid: !checkValidHeight}">
             </div>
           </div>
         </dd>
         <dt title="게임을 꾸며주는 테마 색상을 설정합니다. rgb, rgba, hash 등을 입력할 수 있습니다">테마 색상</dt>
         <dd>
-          <input type="text" placeholder="#0075c8" v-model="project.color" class="project-setting-needed" :class="{invalid: !checkValidColor}"
-            :style="{backgroundColor: project.color}">
+          <input type="text" placeholder="#0075c8" v-model="project.color" class="project-setting-needed"
+            :class="{invalid: !checkValidColor}" :style="{backgroundColor: project.color}">
         </dd>
         <dt title="테마 색상과 게임 전반을 어우르는 색입니다. rgb, rgba, hash 등을 입력할 수 있습니다">배경 색상</dt>
         <dd>

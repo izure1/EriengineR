@@ -30,14 +30,6 @@ export default function () {
       icon: 'camera_roll',
       select: false,
       hover: false
-    },
-    {
-      alt: '다국어관리자',
-      description: '다국어를 관리합니다. 언어를 추가하거나 제거할 수 있습니다',
-      id: 'language',
-      icon: 'language',
-      select: false,
-      hover: false
     }
   ]
 }

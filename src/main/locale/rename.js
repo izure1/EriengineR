@@ -1,4 +1,5 @@
 import get from './get'
+import ensureDefault from './ensureDefault'
 
 
 export default async function (old, news) {
@@ -9,7 +10,7 @@ export default async function (old, news) {
   rows = await get.call(this, news)
 
   // 이미 존재할 경우
-  if (Object.keys(rows).length) {
+  if (rows) {
     return false
   }
 
@@ -18,6 +19,7 @@ export default async function (old, news) {
   db.run('UPDATE locale SET name = ? WHERE name = ?', [news, old])
   db.save()
 
+  await ensureDefault.call(this)
   return true
 
 }

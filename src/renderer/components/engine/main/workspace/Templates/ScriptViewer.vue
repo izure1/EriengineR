@@ -56,15 +56,9 @@
 </template>
 
 <script>
-  import fs from 'fs-extra'
-  import path from 'path'
-
-  import electron from 'electron'
-
   import {
     dragscroll
   } from 'vue-dragscroll'
-
   import {
     jsPlumb
   } from 'jsplumb'

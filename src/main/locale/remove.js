@@ -1,3 +1,6 @@
+import ensureDefault from './ensureDefault'
+
+
 export default async function (name) {
 
   let db
@@ -7,6 +10,7 @@ export default async function (name) {
   db.run('DELETE FROM locale WHERE name = ?', [name])
   db.save()
 
+  await ensureDefault.call(this)
   return true
 
 }

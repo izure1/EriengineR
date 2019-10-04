@@ -1,11 +1,11 @@
-import get from './get'
+import macroText from './macroText'
 
 
 export default async function (e, id) {
 
   let returnValue
 
-  returnValue = await get.call(this, id)
+  returnValue = await macroText.call(this, id)
 
   e.sender.send('macro-get-value', returnValue)
   e.returnValue = returnValue

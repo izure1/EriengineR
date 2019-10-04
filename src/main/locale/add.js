@@ -1,5 +1,6 @@
 import createUID from '@common/js/createUID'
 import get from './get'
+import ensureDefault from './ensureDefault'
 
 
 export default async function (name) {
@@ -9,7 +10,7 @@ export default async function (name) {
   rows = await get.call(this, name)
 
   // 검색된 결과가 없을 경우
-  if (!Object.keys(rows).length) {
+  if (!rows) {
 
     let id
     let db, stmt
@@ -17,9 +18,9 @@ export default async function (name) {
     id = createUID()
     db = this.variables.project.locale.database
 
-    db.run('INSERT INTO locale VALUES(?, ?);', [id, name])
+    db.run('INSERT INTO locale VALUES(?, ?, 0)', [id, name])
 
-    stmt = db.prepare('SELECT * from locale WHERE name = ?;')
+    stmt = db.prepare('SELECT * from locale WHERE name = ?')
     rows = stmt.getAsObject([name])
 
     stmt.free()
@@ -27,6 +28,7 @@ export default async function (name) {
 
   }
 
+  await ensureDefault.call(this)
   return rows
 
 }

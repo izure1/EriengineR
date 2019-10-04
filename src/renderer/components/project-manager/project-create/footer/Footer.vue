@@ -19,7 +19,9 @@
 </template>
 
 <script>
-  import electron from 'electron'
+  import {
+    ipcRenderer
+  } from 'electron'
   import path from 'path'
 
   export default {
@@ -40,7 +42,7 @@
 
         let directoryPath
 
-        directoryPath = electron.ipcRenderer.sendSync('modal-open-sync', {
+        directoryPath = ipcRenderer.sendSync('modal-open-sync', {
           title: '디렉토리를 선택해주세요',
           properties: ['openDirectory'],
           defaultPath: this.project.directory
@@ -55,8 +57,8 @@
 
         this.creating = true
 
-        electron.ipcRenderer.send('project-create', Object.assign({}, this.project, this.setting))
-        electron.ipcRenderer.once('project-create', async (e, msg) => {
+        ipcRenderer.send('project-create', Object.assign({}, this.project, this.setting))
+        ipcRenderer.once('project-create', async (e, msg) => {
 
           this.creating = false
 
@@ -64,7 +66,7 @@
             return
           }
 
-          electron.ipcRenderer.send('project-open', msg.esproject)
+          ipcRenderer.send('project-open', msg.esproject)
 
         })
 

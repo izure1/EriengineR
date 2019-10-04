@@ -12,6 +12,7 @@ import {
 } from 'electron'
 
 
+
 /* -------------------------------------------------------------------------------------- */
 
 
@@ -220,6 +221,7 @@ import ipc_showItemInFolder from './shell/showItemInFolder'
 import ipc_createProject from './project/createProject'
 import ipc_openProject from './project/openProject'
 import ipc_createSubDirectory from './project/createSubDirectory'
+import ipc_getProjectDirectory from './project/getProjectDirectory'
 
 import ipc_delete from './modal/delete'
 import ipc_deleteTrash from './modal/deleteTrash'
@@ -240,23 +242,17 @@ import ipc_checkValidScript from './script/checkValidScript'
 import ipc_writeScript from './script/writeScript'
 
 import ipc_getMacroList from './macro/getMacroList'
+import ipc_getMacroInformation from './macro/getMacroInformation'
 import ipc_getMacroValue from './macro/getMacroValue'
 import ipc_addMacroValue from './macro/addMacroValue'
-
-import ipc_addLanguage from './language/addLanguage'
-import ipc_removeLanguage from './language/removeLanguage'
-import ipc_modifyLanguage from './language/modifyLanguage'
-import ipc_setDefaultLanguage from './language/setDefaultLanguage'
-import ipc_getDefaultLanguage from './language/getDefaultLanguage'
-import ipc_getLanguage from './language/getLanguage'
-import ipc_appendLanguage from './language/appendLanguage'
-import ipc_findLanguage from './language/findLanguage'
 
 import ipc_addLocale from './locale/addLocale'
 import ipc_getLocale from './locale/getLocale'
 import ipc_removeLocale from './locale/removeLocale'
 import ipc_renameLocale from './locale/renameLocale'
 import ipc_getAllLocale from './locale/getAllLocale'
+import ipc_getDefaultLocale from './locale/getDefaultLocale'
+import ipc_setDefaultLocale from './locale/setDefaultLocale'
 
 import ipc_getAssetDirectory from './asset/getAssetDirectory'
 import ipc_getAssetList from './asset/getAssetList'
@@ -267,17 +263,19 @@ import ipc_getDesignDirectory from './design/getDesignDirectory'
 import ipc_getDesignPath from './design/getDesignPath'
 
 import ipc_addSceneDirectory from './scene/addSceneDirectory'
+import ipc_getSceneDirectory from './scene/getSceneDirectory'
 
 
 function runIPC() {
 
   // Shell
-  ipcMain.on('shell-show-item-in-folder', ipc_showItemInFolder.bind(mainWindow)) // 디렉토리에 있는 파일을 가르킵니다. 이는 Renderer 에서 사용 시 창 앞으로 나오지 않는 오류를 위한 방편입니다.
+  ipcMain.on('shell-show-item-in-folder', ipc_showItemInFolder.bind(mainWindow)) // 디렉토리에 있는 파일을 가르킵니다. 이는 Renderer 에서 사용 시 창 앞으로 나오지 않는 오류를 위한 방편입니다
 
   // Project
   ipcMain.on('project-create', ipc_createProject.bind(mainWindow)) // 프로젝트를 생성하는데 사용합니다
   ipcMain.on('project-open', ipc_openProject.bind(mainWindow)) // 프로젝트를 여는데 사용합니다
   ipcMain.on('project-create-subdirectory', ipc_createSubDirectory.bind(mainWindow)) // 프로젝트 운용에 필요한 서브 디렉토리를 생성하는데 사용합니다
+  ipcMain.on('project-get-directory', ipc_getProjectDirectory.bind(mainWindow)) // 프로젝트 디렉토리 경로를 반환합니다
 
   // Modal
   ipcMain.on('modal-open-sync', ipc_openModal.bind(mainWindow)) // 새로운 모달창을 띄웁니다
@@ -303,18 +301,9 @@ function runIPC() {
 
   // Macro
   ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow)) // static\assets\macro 내부에 있는 모든 매크로 파일을 배열에 담아 반환합니다
-  ipcMain.on('macro-get-value', ipc_getMacroValue.bind(mainWindow)) // 매크로에서 사용한 입력 변수의 정보를 가져옵니다.
-  ipcMain.on('macro-add-value', ipc_addMacroValue.bind(mainWindow)) // 매크로의 입력 변수 정보를 저장합니다.
-
-  // Language, 다국어 관련
-  ipcMain.on('language-add', ipc_addLanguage.bind(mainWindow)) // 새로운 언어를 추가할 수 있습니다
-  ipcMain.on('language-remove', ipc_removeLanguage.bind(mainWindow)) // 특정 언어를 제거합니다
-  ipcMain.on('language-modify', ipc_modifyLanguage.bind(mainWindow)) // 특정 언어의 이름을 변경합니다
-  ipcMain.on('language-get', ipc_getLanguage.bind(mainWindow)) // 모든 다국어를 배열로 반환합니다
-  ipcMain.on('language-set-default', ipc_setDefaultLanguage.bind(mainWindow)) // 기본언어를 설정합니다
-  ipcMain.on('language-get-default', ipc_getDefaultLanguage.bind(mainWindow)) // 기본언어를 반환합니다
-  ipcMain.on('language-append', ipc_appendLanguage.bind(mainWindow)) // 언어에 문자열을 추가합니다
-  ipcMain.on('language-find', ipc_findLanguage.bind(mainWindow)) // 모든 다국어에 추가된 특정 문자열을 찾아 Object 형태로 반환합니다
+  ipcMain.on('macro-get-information', ipc_getMacroInformation.bind(mainWindow)) // id 값으로부터 매크로의 원본을 반환합니다
+  ipcMain.on('macro-get-value', ipc_getMacroValue.bind(mainWindow)) // 매크로에서 사용한 입력 변수의 정보를 가져옵니다
+  ipcMain.on('macro-add-value', ipc_addMacroValue.bind(mainWindow)) // 매크로의 입력 변수 정보를 저장합니다
 
   // 로케일, 다국어 관련
   ipcMain.on('locale-add', ipc_addLocale.bind(mainWindow)) // 새로운 언어를 추가할 수 있습니다
@@ -322,6 +311,8 @@ function runIPC() {
   ipcMain.on('locale-remove', ipc_removeLocale.bind(mainWindow)) // 특정 언어를 제거합니다
   ipcMain.on('locale-rename', ipc_renameLocale.bind(mainWindow)) //특정 언어의 이름을 변경합니다
   ipcMain.on('locale-get-all', ipc_getAllLocale.bind(mainWindow)) // 모든 다국어를 배열로 반환합니다
+  ipcMain.on('locale-get-default', ipc_getDefaultLocale.bind(mainWindow)) // 기본 언어로 설정된 언어를 반환합니다
+  ipcMain.on('locale-set-default', ipc_setDefaultLocale.bind(mainWindow)) // 특정 언어를 기본 언어로 설정하고 반환합니다
 
   // Assets
   ipcMain.on('asset-get-directory', ipc_getAssetDirectory.bind(mainWindow)) // 현재 프로젝트의 에셋 디렉토리 경로를 반환합니다
@@ -334,7 +325,8 @@ function runIPC() {
   ipcMain.on('design-get-path', ipc_getDesignPath.bind(mainWindow)) // 디자인 id로부터 디자인 파일의 경로를 검색해 반환합니다
 
   // Scene
-  ipcMain.on('scene-add-directory', ipc_addSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 SceneOrigin 디렉토리에 특정 씬 전용 디렉토리를 만듭니다.
+  ipcMain.on('scene-add-directory', ipc_addSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 ScenesMaps 디렉토리에 특정 씬 전용 디렉토리를 만듭니다
+  ipcMain.on('scene-get-directory', ipc_getSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 씬 디렉토리 경로를 반환합니다. 0 이면 일반 씬 디렉토리, 1 이면 maps 디렉토리입니다
 
 }
 

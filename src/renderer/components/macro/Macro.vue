@@ -5,17 +5,18 @@
         <v-icon>widgets</v-icon>
       </v-toolbar-title>
       <v-autocomplete v-model="select" :items="macroLists" item-text="title" return-object flat solo-inverted
-        hide-details label="찾고 싶은 매크로를 검색하세요" no-data-text="일치하는 매크로가 없습니다" class="mx-1"></v-autocomplete>
+        hide-details label="찾고 싶은 매크로를 검색하세요" no-data-text="일치하는 매크로가 없습니다" class="mx-1" @change="setMacro">
+      </v-autocomplete>
     </v-toolbar>
     <v-card>
       <section class="pa-5">
         <div class="macro-description-wrap body-2">
-          <macro-description v-if="select" :select="select"></macro-description>
+          <macro-description v-if="select" :select="select" :macro="macro" @modify="setMacroReturn"></macro-description>
           <div v-else>상단에서 매크로를 선택하세요</div>
         </div>
         <v-card-actions>
-          <v-btn right icon :disabled="!done">
-            <v-icon>done</v-icon>
+          <v-btn :disabled="!macroReturn" @click="sendMacro">
+            <v-icon left>done</v-icon> 저장
           </v-btn>
         </v-card-actions>
       </section>
@@ -36,6 +37,9 @@
     ipcRenderer
   } from 'electron'
 
+  import createUID from '@common/js/createUID'
+  import Macro from '@common/js/Macro'
+
   import MacroDescription from './MacroDescription'
 
   export default {
@@ -50,8 +54,9 @@
 
     data: () => ({
       select: null,
-      done: false,
-      macroColumn: {}
+      macro: null,
+      macroColumn: {},
+      macroReturn: null,
     }),
 
     computed: {
@@ -86,6 +91,67 @@
 
       getMacroColumn() {
         return ipcRenderer.sendSync('macro-get-list')
+      },
+
+      getMacroStorage() {
+
+        let old, select
+        let macroInfo
+
+        old = this.information.old
+        select = this.select
+
+        macroInfo = {}
+
+        // 새로운 매크로를 생성할 때
+        if (!old) {
+
+          macroInfo.id = createUID()
+          macroInfo.origin = select.id
+          macroInfo.variables = {}
+
+        }
+        // 기존의 매크로를 수정할 때
+        else {
+
+          macroInfo.id = old.id
+          macroInfo.origin = select.id
+          macroInfo.variables = old.origin !== select.id ?
+            macroInfo.variables = {} : // 기존의 매크로를 수정하지만, 다른 매크로 원형일 때
+            macroInfo.variables = old.variables // 기존에 사용하던 매크로 원형 그대로 수정할 때
+
+        }
+
+        let macro
+
+        macro = new Macro
+        macro.parseFromInformation(macroInfo)
+
+        return macro
+
+      },
+
+      setMacro() {
+        this.macro = this.getMacroStorage()
+      },
+
+      setMacroReturn(done, macro) {
+        this.macroReturn = done ? macro : null
+      },
+
+      sendMacro() {
+
+        if (!this.macroReturn) {
+          return
+        }
+
+        this.$emit('done', this.macroReturn)
+
+      },
+
+      reset() {
+        this.select = null
+        this.macro = null
       }
 
     },
@@ -94,7 +160,7 @@
 
       information() {
         this.select = null
-        this.done = false
+        this.macroReturn = null
       }
 
     },

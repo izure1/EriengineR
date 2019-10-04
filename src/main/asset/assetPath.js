@@ -19,10 +19,6 @@ export default async function (asset, relative = false) {
   p = p.split(path.sep).filter(t => !!t)
   p = p.join(path.sep)
 
-  if (relative) {
-    p = path.sep + p
-  }
-
   return p
 
 }

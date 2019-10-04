@@ -6,7 +6,9 @@
 </template>
 
 <script>
-  import electron from 'electron'
+  import {
+    remote
+  } from 'electron'
 
   import Aside from './aside/Aside'
   import Main from './main/Main'
@@ -18,7 +20,7 @@
     },
     methods: {
       enableMenu() {
-        electron.remote.getCurrentWindow().emit('menu-enable')
+        remote.getCurrentWindow().emit('menu-enable')
       }
     },
     mounted() {

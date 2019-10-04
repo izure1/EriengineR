@@ -1,7 +1,7 @@
 <template>
   <section>
     <v-list subheader>
-      <v-list-item two-line v-for="(language, index) in languages" :key="index" @click="setDefaultLanguage(language.id)">
+      <v-list-item two-line v-for="(language, index) in languages" :key="index" @click="setDefaultLanguage(language.name)">
         <v-list-item-avatar>
           <v-icon color="orange" v-if="isDefaultLanguage(language.id)">check_box</v-icon>
           <v-icon color="white" v-else>check_box_outline_blank</v-icon>
@@ -22,7 +22,7 @@
             <v-icon>settings</v-icon>
           </v-btn>
           <v-btn x-small icon title="해당 언어를 삭제합니다" @click.stop="removeLanguageConfirm(language.name)">
-            <v-icon>delete</v-icon>
+            <v-icon>delete_forever</v-icon>
           </v-btn>
         </v-list-item-action>
       </v-list-item>
@@ -39,15 +39,15 @@
     </v-list>
     <v-dialog v-model="languageRemove.dialog">
       <v-card>
-        <v-card-title>{{ languageRemove.language }} 제거</v-card-title>
+        <v-card-title>{{ languageRemove.locale }} 제거</v-card-title>
         <v-card-text>
           <p>
-            정말로 <b>{{ languageRemove.language }}</b>(를)을 제거하시겠습니까?
+            정말로 <b>{{ languageRemove.locale }}</b>(를)을 제거하시겠습니까?
             <br>
             이전에 작성한 모든 스크립트에서 해당 언어는 영구히 제거됩니다.
           </p>
           <p>
-            이 작업은 복구할 수 없습니다.
+            <span class="orange--text">이 작업은 복구할 수 없습니다.</span>
           </p>
         </v-card-text>
         <v-card-actions>
@@ -55,7 +55,7 @@
             <v-icon left>cancel</v-icon> 아니오
           </v-btn>
           <v-btn color="warning" @click="removeLanguage">
-            <v-icon left>delete</v-icon> 삭제합니다
+            <v-icon left>delete_forever</v-icon> 삭제합니다
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -81,12 +81,12 @@
     }),
     methods: {
 
-      setDefaultLanguage(id) {
-        ipcRenderer.sendSync('language-set-default', id)
+      setDefaultLanguage(name) {
+        ipcRenderer.sendSync('locale-set-default', name)
       },
 
       isDefaultLanguage(id) {
-        return id === this.languageDefault
+        return id === this.languageDefault.id
       },
 
       addLanguage() {
@@ -95,27 +95,27 @@
 
         name = createItem(this.languages.map(language => language.name), '새로운 언어')
 
-        ipcRenderer.sendSync('language-add', name)
+        ipcRenderer.sendSync('locale-add', name)
 
       },
 
       removeLanguageConfirm(name) {
         this.languageRemove.dialog = true
-        this.languageRemove.language = name
+        this.languageRemove.locale = name
       },
 
       removeLanguage() {
 
-        ipcRenderer.sendSync('language-remove', this.languageRemove.language)
+        ipcRenderer.sendSync('locale-remove', this.languageRemove.locale)
 
         this.languageRemove.dialog = false
-        this.languageRemove.language = null
+        this.languageRemove.locale = null
 
       },
 
       modifyLanguage(e, origin) {
 
-        ipcRenderer.sendSync('language-modify', origin, e.currentTarget.value)
+        ipcRenderer.sendSync('locale-rename', origin, e.currentTarget.value)
 
         this.languageModify = null
 
@@ -129,13 +129,13 @@
 
     created() {
 
-      this.languages = ipcRenderer.sendSync('language-get')
-      this.languageDefault = ipcRenderer.sendSync('language-get-default')
+      this.languages = ipcRenderer.sendSync('locale-get-all')
+      this.languageDefault = ipcRenderer.sendSync('locale-get-default')
 
-      ipcRenderer.on('language-update', () => {
+      ipcRenderer.on('locale-update', () => {
 
-        this.languages = ipcRenderer.sendSync('language-get')
-        this.languageDefault = ipcRenderer.sendSync('language-get-default')
+        this.languages = ipcRenderer.sendSync('locale-get-all')
+        this.languageDefault = ipcRenderer.sendSync('locale-get-default')
 
       })
 

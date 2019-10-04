@@ -1,4 +1,6 @@
-import electron from 'electron'
+import {
+  ipcRenderer
+} from 'electron'
 import path from 'path'
 import fs from 'fs-extra'
 
@@ -93,7 +95,7 @@ class Contextmenu {
     let t = new ContextmenuItem('external', '탐색기에서 열기')
 
     t.click(function (e, itempath) {
-      electron.ipcRenderer.send('shell-show-item-in-folder', itempath)
+      ipcRenderer.send('shell-show-item-in-folder', itempath)
     })
 
     return t

@@ -16,7 +16,9 @@
 </template>
 
 <script>
-  import electron from 'electron'
+  import {
+    remote
+  } from 'electron'
 
   import ProjectCreate from './project-create/ProjectCreate'
   import ProjectOpen from './project-open/ProjectOpen'
@@ -43,7 +45,7 @@
       },
 
       disableMenu() {
-        electron.remote.getCurrentWindow().emit('menu-disable')
+        remote.getCurrentWindow().emit('menu-disable')
       },
 
       selectWorkspaceType(type) {

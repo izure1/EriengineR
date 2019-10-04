@@ -26,7 +26,7 @@
           </v-list-item-content>
           <v-list-item-icon>
             <v-btn icon small @click.stop="deleteProperty(target, property)">
-              <v-icon>delete</v-icon>
+              <v-icon>clear</v-icon>
             </v-btn>
           </v-list-item-icon>
         </v-list-item>

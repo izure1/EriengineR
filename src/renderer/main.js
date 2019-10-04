@@ -1,7 +1,10 @@
 import path from 'path'
-import electron from 'electron'
+import {
+  remote,
+  ipcRenderer,
+} from 'electron'
 
-const win = electron.remote.getCurrentWindow()
+const win = remote.getCurrentWindow()
 
 
 /**
@@ -50,9 +53,9 @@ win.on('close', menuDispose.bind(customTitlebar))
  */
 
 import Vue from 'vue'
-import Vuetify from 'vuetify'
 import store from './store/store'
 import router from './router/index'
+import vuetify from './plugins/vuetify'
 
 import App from './App'
 
@@ -69,7 +72,7 @@ Vue.config.errorHandler = function (e) {
     stack
   } = e
 
-  electron.ipcRenderer.send('send-error', {
+  ipcRenderer.send('send-error', {
     message,
     stack
   })
@@ -77,9 +80,6 @@ Vue.config.errorHandler = function (e) {
   throw e
 
 }
-
-
-Vue.use(Vuetify)
 
 /* eslint-disable no-new */
 new Vue({
@@ -91,15 +91,6 @@ new Vue({
 
   store,
   router,
-
-  /*
-   *  Vuetify Setting
-   * 
-   */
-  vuetify: new Vuetify({
-    theme: {
-      dark: true
-    }
-  })
+  vuetify,
 
 }).$mount('#app')
