@@ -1,6 +1,4 @@
-import {
-  Script
-} from '@common/js/Script'
+import Script from '@common/js/Script'
 
 
 export default function (script = new Script) {

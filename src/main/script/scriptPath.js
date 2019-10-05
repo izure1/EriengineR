@@ -1,6 +1,17 @@
-import path from 'path'
+import scriptList from './scriptList'
 
 
-export default function () {
-  return path.join(this.variables.project.directory, 'Scripts')
+export default async function (id) {
+
+  let scripts
+  let target
+
+  scripts = await scriptList.call(this, true)
+  scripts = scripts.filter(script => script.id === id)
+
+  target = scripts.pop()
+  target = target ? target.path : null
+
+  return target
+
 }

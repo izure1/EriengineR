@@ -56,6 +56,10 @@
     </div>
     <v-divider></v-divider>
     <div class="template-scripteditor-actions">
+      <div>
+        <v-textarea label="이 스크립트의 간략한 설명을 입력하세요. 스크립트 뷰어에서 주석으로 보여집니다." no-resize solo flat v-model="data.comment"
+          counter="50" :rules="[v => v.length <= 50 || '너무 길어요. 주석은 간결한 게 알아보기 더 쉽습니다.']"></v-textarea>
+      </div>
       <v-btn large @click="saveScript">
         <v-icon left>save</v-icon>스크립트 저장
       </v-btn>
@@ -109,7 +113,7 @@
         return JSON.parse(JSON.stringify(o))
       },
 
-      getMacroInformation(id) {
+      getInformationFromId(id) {
 
         let target
         let contexts, column, index, macro
@@ -155,7 +159,7 @@
         let {
           contexts,
           index,
-        } = this.getMacroInformation(id)
+        } = this.getInformationFromId(id)
 
         contexts.splice(index, 1)
 
@@ -167,7 +171,7 @@
           contexts,
           index,
           macro,
-        } = this.getMacroInformation(id)
+        } = this.getInformationFromId(id)
 
         let newMacro
 
@@ -197,7 +201,7 @@
         let {
           macro,
           column,
-        } = this.getMacroInformation(id)
+        } = this.getInformationFromId(id)
 
         this.current = macro
         this.openMacroTab(column, this.current)
@@ -210,10 +214,14 @@
         this.openMacroTab(column, this.current)
       },
 
-      getMacroDescription(macro) {
+      getMacroDescription(macroInfo) {
 
+        let macro
         let origin
         let description
+
+        macro = new Macro
+        macro.parseFromInformation(macroInfo)
 
         origin = ipcRenderer.sendSync('macro-get-information', macro.origin)
         description = origin.description
@@ -242,9 +250,7 @@
 
       saveScript() {
 
-        let filepath
-
-        filepath = ipcRenderer.sendSync('script-get-filepath', this.data.id)
+        let filepath = ipcRenderer.sendSync('script-get-path', this.data.id)
 
         if (!filepath) {
           remote.dialog.showErrorBox('파일 삭제됨', '해당 파일이 저장될 위치에 파일이 더이상 존재하지 않습니다.')
@@ -270,7 +276,7 @@
           contexts,
           index,
           macro,
-        } = this.getMacroInformation(modifiedMacro.id)
+        } = this.getInformationFromId(modifiedMacro.id)
 
         // 기존 컨텍스트에 있다면 수정모드이므로, 해당 스크립트를 수정합니다
         if (macro) {
@@ -298,7 +304,7 @@
       this.events = this.data.events
       this.conditions = this.data.conditions
       this.actions = this.data.actions
-    }
+    },
 
   }
 </script>

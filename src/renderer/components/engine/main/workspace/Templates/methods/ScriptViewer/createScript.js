@@ -3,9 +3,7 @@ import {
 } from 'electron'
 import path from 'path'
 import getMouseOffset from '@common/js/getMouseOffset'
-import {
-  Script
-} from '@common/js/Script'
+import Script from '@common/js/Script'
 
 
 export default function (e) {
@@ -23,7 +21,8 @@ export default function (e) {
   x = o.x
   y = o.y
 
-  script = new Script(x, y)
+  script = new Script
+  script.setPosition(x, y)
   scriptname = path.join(this.data.directory, script.id)
   scriptname += '.esscript'
 

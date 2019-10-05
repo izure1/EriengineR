@@ -9,17 +9,18 @@ function sortTree(children) {
 
     if (a.type === 'directory') {
 
-      order = -1
-
-      sortTree(a.children)
+      if (a.type === b.type) {
+        sortTree(a.children)
+        return a.name > b.name ? 1 : -1
+      } else return -1
 
     } else {
 
-      order = 1
+      if (a.type === b.type) {
+        return a.name > b.name ? 1 : -1
+      } else return -1
 
     }
-
-    return order
 
   })
 

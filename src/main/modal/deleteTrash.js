@@ -7,7 +7,7 @@ import trash from 'trash'
 
 export default async function deleteTrash(e, msg) {
 
-  let btnIndex = dialog.showMessageBox(this, {
+  dialog.showMessageBox(this, {
 
     type: 'question',
     title: '에리엔진',
@@ -16,15 +16,17 @@ export default async function deleteTrash(e, msg) {
     buttons: ['휴지통으로 이동', '취소'],
     cancelId: -1
 
+  }, async btnIndex => {
+
+    let deleted = false
+
+    if (btnIndex === 0) {
+      await trash(msg.path)
+      deleted = true
+    }
+
+    e.returnValue = deleted
+
   })
-
-  let deleted = false
-
-  if (btnIndex === 0) {
-    await trash(msg.path)
-    deleted = true
-  }
-
-  e.returnValue = deleted
 
 }

@@ -83,6 +83,7 @@ class TextVariable extends Variable {
 
     let contents
     let locale
+    let row
 
     contents = ipcRenderer.sendSync('macro-get-value', this.value)
     locale = ipcRenderer.sendSync('locale-get-default')
@@ -91,7 +92,10 @@ class TextVariable extends Variable {
       return undefined
     }
 
-    return contents.filter(t => t.locale === locale.id).pop()
+    row = contents.filter(t => t.locale === locale.id).pop()
+    row = row ? row.content : '(비어있음)'
+
+    return row
 
   }
 

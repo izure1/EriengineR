@@ -152,6 +152,20 @@
       reset() {
         this.select = null
         this.macro = null
+      },
+
+      updateAutoComplete() {
+
+        let oldMacro
+
+        oldMacro = this.macroLists.filter(t => t.id === this.information.old.origin)
+        oldMacro = oldMacro.pop() || null
+
+        this.macroReturn = null
+        this.select = oldMacro
+
+        this.setMacro()
+
       }
 
     },
@@ -159,14 +173,14 @@
     watch: {
 
       information() {
-        this.select = null
-        this.macroReturn = null
+        this.updateAutoComplete()
       }
 
     },
 
     created() {
       this.macroColumn = this.getMacroColumn()
+      this.updateAutoComplete()
     }
 
   }

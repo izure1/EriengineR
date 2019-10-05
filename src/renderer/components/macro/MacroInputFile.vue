@@ -3,6 +3,7 @@
     <treeview :path="getRootDir" :filter="getFilter" :openItem="getFilePath" v-if="!value"></treeview>
     <v-textarea v-else no-resize filled clearable clear-icon="clear" label="값을 입력하세요" :hint="tab.hint" v-model="value">
     </v-textarea>
+    <v-divider></v-divider>
   </div>
 </template>
 

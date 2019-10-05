@@ -1,7 +1,7 @@
 import path from 'path'
 import fg from 'fast-glob'
 
-import scriptPath from './scriptPath'
+import scriptDirectory from './scriptDirectory'
 import scriptList from './scriptList'
 import write from './write'
 
@@ -31,14 +31,17 @@ function getNotExistItem(nexts, items) {
 export default async function () {
 
   let directorys
+  let cwd
+
+  cwd = await scriptDirectory.call(this)
 
   directorys = await fg('**/', {
-    cwd: scriptPath.call(this),
+    cwd,
     onlyDirectories: true,
     absolute: true
   })
 
-  directorys = [scriptPath.call(this), ...directorys]
+  directorys = [cwd, ...directorys]
 
 
   let files

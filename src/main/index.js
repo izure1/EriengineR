@@ -168,7 +168,8 @@ async function createWindow() {
     icon: path.join(__static, 'assets/image/ico_eri_64.png'),
     frame: false,
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true,
     }
   })
 
@@ -235,9 +236,9 @@ import ipc_sendError from './terminal/sendError'
 import ipc_sendErrorBeep from './terminal/sendErrorBeep'
 import ipc_sendOutput from './terminal/sendOutput'
 
-import ipc_getScriptPath from './script/getScriptPath'
+import ipc_getScriptDirectory from './script/getScriptDirectory'
 import ipc_getScriptList from './script/getScriptList'
-import ipc_getScriptFilePath from './script/getScriptFilePath'
+import ipc_getScriptPath from './script/getScriptPath'
 import ipc_checkValidScript from './script/checkValidScript'
 import ipc_writeScript from './script/writeScript'
 
@@ -278,7 +279,7 @@ function runIPC() {
   ipcMain.on('project-get-directory', ipc_getProjectDirectory.bind(mainWindow)) // 프로젝트 디렉토리 경로를 반환합니다
 
   // Modal
-  ipcMain.on('modal-open-sync', ipc_openModal.bind(mainWindow)) // 새로운 모달창을 띄웁니다
+  ipcMain.on('modal-open', ipc_openModal.bind(mainWindow)) // 새로운 모달창을 띄웁니다
   ipcMain.on('modal-delete', ipc_delete.bind(mainWindow)) // 파일 영구 삭제 모달창을 띄웁니다. 휴지통에서 복구할 수 없습니다
   ipcMain.on('modal-delete-trash', ipc_deleteTrash.bind(mainWindow)) // 파일 삭제 모달창을 띄웁니다. 휴지통에서 복구가 가능합니다
 
@@ -293,11 +294,11 @@ function runIPC() {
   ipc_catchError.call(mainWindow)
 
   // Script
-  ipcMain.on('script-get-path', ipc_getScriptPath.bind(mainWindow)) // 해당 프로젝트의 스크립트 루트 디렉토리 경로를 반환합니다
+  ipcMain.on('script-get-directory', ipc_getScriptDirectory.bind(mainWindow)) // 해당 프로젝트의 스크립트 루트 디렉토리 경로를 반환합니다
   ipcMain.on('script-get-list', ipc_getScriptList.bind(mainWindow)) // 매개변수로 넘어온 경로에 있는 스크립트 파일 목록을 배열에 담아 반환합니다
   ipcMain.on('script-write', ipc_writeScript.bind(mainWindow)) // 스크립트 파일을 생성하거나 수정합니다
   ipcMain.on('script-check-valid', ipc_checkValidScript.bind(mainWindow)) // 모든 스크립트 파일의 유효성을 검사하고 수정합니다
-  ipcMain.on('script-get-filepath', ipc_getScriptFilePath.bind(mainWindow)) // 스크립트 id로부터 스크립트 파일의 경로를 검색해 반환합니다
+  ipcMain.on('script-get-path', ipc_getScriptPath.bind(mainWindow)) // 스크립트 id로부터 스크립트 파일의 경로를 검색해 반환합니다
 
   // Macro
   ipcMain.on('macro-get-list', ipc_getMacroList.bind(mainWindow)) // static\assets\macro 내부에 있는 모든 매크로 파일을 배열에 담아 반환합니다

@@ -1,11 +1,11 @@
 import scriptPath from './scriptPath'
 
 
-export default function (e) {
+export default async function (e, id) {
 
   let returnValue
 
-  returnValue = scriptPath.call(this)
+  returnValue = await scriptPath.call(this, id)
 
   e.sender.send('script-get-path', returnValue)
   e.returnValue = returnValue

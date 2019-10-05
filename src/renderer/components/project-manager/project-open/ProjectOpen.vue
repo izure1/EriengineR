@@ -16,28 +16,38 @@
   } from 'electron'
 
   export default {
+
     props: {
       workspaceType: Boolean
     },
-    mounted() {
 
-      let projectDirectory
+    methods: {
 
-      projectDirectory = ipcRenderer.sendSync('modal-open-sync', {
-        title: '프로젝트를 선택해주세요',
-        filters: [{
-          name: '에리엔진 프로젝트 파일',
-          extensions: ['esproject']
-        }]
-      })
+      openDirectory() {
 
-      if (!projectDirectory) {
-        this.$emit('failOpenProject')
-        return
+        let projectDirectory = ipcRenderer.sendSync('modal-open', {
+          title: '프로젝트를 선택해주세요',
+          filters: [{
+            name: '에리엔진 프로젝트 파일',
+            extensions: ['esproject']
+          }]
+        })
+
+        if (!projectDirectory) {
+          this.$emit('failOpenProject')
+          return
+        }
+
+        projectDirectory = projectDirectory[0]
+        ipcRenderer.send('project-open', projectDirectory)
+
       }
 
-      projectDirectory = projectDirectory[0]
-      ipcRenderer.send('project-open', projectDirectory)
+    },
+
+    mounted() {
+
+      this.openDirectory()
 
     }
   }

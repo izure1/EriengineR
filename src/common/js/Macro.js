@@ -1,4 +1,7 @@
-import createUUID from '@common/js/createUUID'
+import {
+  ipcRenderer
+} from 'electron'
+
 import {
   Variable,
   VariableParser,
@@ -23,14 +26,27 @@ class Macro {
     let {
       id,
       origin,
-      variables
+      variables,
     } = i
 
     this.id = id
     this.origin = origin
 
+
+    let macroOrigin
+    let macroVariable
+
+    macroOrigin = ipcRenderer.sendSync('macro-get-information', origin)
+
     for (let i in variables) {
-      this.variables[i] = parser.parseFromInformation(variables[i])
+
+      macroVariable = {
+        ...macroOrigin.variables[i],
+        ...variables[i]
+      }
+
+      this.variables[i] = parser.parseFromInformation(macroVariable)
+
     }
 
   }

@@ -16,37 +16,64 @@
       @mouseenter="connection.target = script" @mouseleave="connection.target = null"
       :style="{left: `${script.position.x}px`, top: `${script.position.y}px`}">
       <div class="script-box-header">
-        <span>{{ getScriptTitle(script.path) }}</span>
-        <a href="#" title="스크립트 삭제" @click="dropScript(script)" v-if="!connection.source">
-          <v-icon small>delete_forever</v-icon>
-        </a>
-        <a href="#" title="스크립트 복사" @click="copyScript(script.path)" v-if="!connection.source">
-          <v-icon small>file_copy</v-icon>
-        </a>
-        <a href="#" title="스크립트 연결" @click="createConnection(script)" v-if="!connection.source">
-          <v-icon small>link</v-icon>
-        </a>
+        <div class="script-header-title">
+          <span>{{ getScriptTitle(script.path) }}</span>
+        </div>
+        <div class="script-header-job" v-if="!connection.source">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn icon small @click="createConnection(script)" v-on="on">
+                <v-icon small>link</v-icon>
+              </v-btn>
+            </template>
+            <span>스크립트 연결</span>
+          </v-tooltip>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn icon small @click="copyScript(script.path)" v-on="on">
+                <v-icon small>file_copy</v-icon>
+              </v-btn>
+            </template>
+            <span>스크립트 복사</span>
+          </v-tooltip>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn icon small @click="dropScript(script)" v-on="on">
+                <v-icon small>delete_forever</v-icon>
+              </v-btn>
+            </template>
+            <span>스크립트 삭제</span>
+          </v-tooltip>
+        </div>
       </div>
-      <div class="script-box-container" @dblclick="modifyScript(script)" @click="createConnectionDone(script)">
+      <div class="script-box-comment ma-2 mt-3 caption">
+        <span class="orange--text" v-html="parseCommentToHTML(script.comment)"></span>
+      </div>
+      <div class="script-box-container ma-2" @dblclick="modifyScript(script)" @click="createConnectionDone(script)">
         <div>
           <h6>사건</h6>
           <ul v-if="script.events.length">
-            <li v-for="(event, index) in script.events" :key="index" class="script-box-text">{{ event.text }}</li>
+            <li v-for="(event, index) in script.events" :key="index" class="script-box-text">
+              {{ getMacroDescription(event) }}
+            </li>
           </ul>
           <p v-else class="script-box-text">비어있음</p>
         </div>
         <div>
           <h6>조건</h6>
           <ul v-if="script.conditions.length">
-            <li v-for="(condition, index) in script.conditions" :key="index" class="script-box-text">{{ condition.text
-              }}</li>
+            <li v-for="(condition, index) in script.conditions" :key="index" class="script-box-text">
+              {{ getMacroDescription(condition) }}
+            </li>
           </ul>
           <p v-else class="script-box-text">비어있음</p>
         </div>
         <div>
           <h6>행동</h6>
           <ul v-if="script.actions.length">
-            <li v-for="(action, index) in script.actions" :key="index" class="script-box-text">{{ action.text }}</li>
+            <li v-for="(action, index) in script.actions" :key="index" class="script-box-text">
+              {{ getMacroDescription(action) }}
+            </li>
           </ul>
           <p v-else class="script-box-text">비어있음</p>
         </div>
@@ -79,6 +106,7 @@
   import getScriptData from './methods/ScriptViewer/getScriptData'
   import getOriginScript from './methods/ScriptViewer/getOriginScript'
   import getScriptTitle from './methods/ScriptViewer/getScriptTitle'
+  import getMacroDescription from './methods/ScriptViewer/getMacroDescription'
   import modifyScript from './methods/ScriptViewer/modifyScript'
   import saveScript from './methods/ScriptViewer/saveScript'
   import setAxisAlertor from './methods/ScriptViewer/setAxisAlertor'
@@ -88,6 +116,7 @@
   import setJsPlumbBox from './methods/ScriptViewer/setJsPlumbBox'
   import setZAxis from './methods/ScriptViewer/setZAxis'
   import watchDirectory from './methods/ScriptViewer/watchDirectory'
+  import parseCommentToHTML from './methods/ScriptViewer/parseCommentToHTML'
 
 
   export default {
@@ -128,6 +157,7 @@
       getScriptData,
       getOriginScript,
       getScriptTitle,
+      getMacroDescription,
       getScriptId,
       setCursorInformation,
       setConnectBox,
@@ -145,6 +175,7 @@
       createScript,
       saveScript,
       setAxisAlertor,
+      parseCommentToHTML,
     },
     created() {
       this.setAxisAlertor()
@@ -210,9 +241,9 @@
   .script-box {
     width: 420px;
     position: absolute;
+    overflow: hidden;
     border: 2px solid transparent;
     border-radius: 5px;
-    overflow: hidden;
     background-color: #252525;
     box-shadow: 0px 0px 3px black;
 
@@ -225,43 +256,40 @@
     }
 
     .script-box-header {
-      height: 25px;
+      height: 30px;
       background-color: #333;
-      padding: 0 5px;
+      border-radius: 5px;
+      padding: 0 8px;
       box-sizing: border-box;
-      clear: both;
       cursor: move;
 
-      >* {
-        display: inline-block;
-        vertical-align: top;
-      }
+      display: flex;
+      flex-direction: row;
 
-      >span {
-        width: 320px;
+      span {
+        max-width: 320px;
         font-size: small;
-        line-height: 25px;
+        line-height: 30px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
-      >a {
-        color: gray;
-        line-height: 25px;
-        text-decoration: none;
-        display: block;
-        float: right;
-        padding: 2px 4px;
-
-        .v-icon {
-          margin: 0;
-        }
+      >div {
+        display: flex;
+        flex: 1 1 auto;
       }
     }
 
+    .script-header-job {
+      max-width: 85px;
+    }
+
+    .script-box-comment {
+      line-height: 1.4;
+    }
+
     .script-box-container {
-      padding: 10px;
       cursor: pointer;
 
       >div {

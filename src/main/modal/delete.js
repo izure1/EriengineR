@@ -6,7 +6,7 @@ import del from 'del'
 
 export default async function _delete(e, msg, cb) {
 
-  let btnIndex = dialog.showMessageBox(this, {
+  dialog.showMessageBox(this, {
 
     type: 'warning',
     title: '에리엔진',
@@ -15,18 +15,19 @@ export default async function _delete(e, msg, cb) {
     buttons: ['영구히 삭제', '취소'],
     cancelId: -1
 
+  }, async btnIndex => {
+
+    let deleted = false
+
+    if (btnIndex === 0) {
+      await del(msg.path, {
+        force: true
+      })
+      deleted = true
+    }
+
+    e.returnValue = deleted
+
   })
-
-
-  let deleted = false
-
-  if (btnIndex === 0) {
-    await del(msg.path, {
-      force: true
-    })
-    deleted = true
-  }
-
-  e.returnValue = deleted
 
 }

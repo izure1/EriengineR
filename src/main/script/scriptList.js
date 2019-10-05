@@ -1,6 +1,6 @@
 import fg from 'fast-glob'
 import fs from 'fs-extra'
-import scriptPath from './scriptPath'
+import scriptDirectory from './scriptDirectory'
 
 
 export default async function (deep = false, cwd = null) {
@@ -13,7 +13,7 @@ export default async function (deep = false, cwd = null) {
   scripts = []
 
   if (cwd === null) {
-    cwd = scriptPath.call(this)
+    cwd = await scriptDirectory.call(this)
   }
 
   files = await fg(deep, {

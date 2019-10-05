@@ -102,6 +102,7 @@
       modifyScript(itempath) {
 
         let script
+        let tabName
 
         try {
 
@@ -111,7 +112,9 @@
           throw e
         }
 
-        this.$root.$emit('createWorkspaceTab', script.id, script.id, 'SCRIPT-EDITOR', {})
+        tabName = path.basename(itempath)
+
+        this.$root.$emit('createWorkspaceTab', script.id, tabName, 'SCRIPT-EDITOR', {})
         this.$root.$emit('setDataForWorkspaceTab', script.id, this.deepCopy(script))
 
 
