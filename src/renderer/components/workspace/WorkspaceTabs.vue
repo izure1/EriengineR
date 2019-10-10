@@ -4,7 +4,7 @@
       @dragstart="startDragTab(tab)" @dragover="allowDropTab" @drop="dropTab(tab)">
       <a href="#" v-on="on">
         <p @mousedown="tabClick(tab)">{{ tab.name }}</p>
-        <span @click="tabClose(tab)">⨉</span>
+        <span @click.stop="tabClose(tab)">⨉</span>
         <hr v-if="!tab.selected">
       </a>
       <span v-if="tab.selected" class="workspace-tabs-smoothes left"></span>
@@ -23,6 +23,7 @@
     data: () => ({
       // Workspace에 열려있는 탭의 목록을 관리하는 배열입니다.
       tabs: [],
+      lastTab: null,
       draggingTab: null
     }),
     methods: {
@@ -57,6 +58,8 @@
       tabClick(item) {
 
         this.tabs.forEach(t => t.selected = false)
+        this.lastTab = item
+
         item.selected = true
 
         if (item.onclick && item.onclick.call) {
@@ -85,8 +88,12 @@
 
         }
 
+        if (item === this.lastTab) {
+          this.lastTab = null
+        }
+
         if (this.tabs.length) {
-          this.tabClick(this.tabs[0])
+          this.tabClick(this.lastTab || this.tabs[0])
         }
 
       },

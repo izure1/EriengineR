@@ -1,11 +1,11 @@
 import scriptList from './scriptList'
 
 
-export default async function (e, deep, directory) {
+export default async function (e, directory, deep) {
 
   let returnValue
 
-  returnValue = await scriptList.call(this, deep, directory)
+  returnValue = await scriptList.call(this, directory, deep)
 
   e.sender.send('script-get-list', returnValue)
   e.returnValue = returnValue

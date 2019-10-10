@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import Workspace from './workspace/Workspace'
-  import Terminal from './terminal/Terminal'
+  import Workspace from '../workspace/Workspace'
+  import Terminal from '../terminal/Terminal'
 
   export default {
     components: {

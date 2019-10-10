@@ -6,7 +6,7 @@
           tab.count }}</span></a>
     </section>
     <section class="terminal-container" @click="focusInput">
-      <article v-for="(tab, key) in tabs" :key="key" v-if="currentTab === key">
+      <article v-for="(tab, key) in tabs" :key="key" v-show="currentTab === key">
         <dl v-for="(content, index) in tab.contents" :key="index">
           <dt>When</dt>
           <dd>{{ content.timestamp }}</dd>

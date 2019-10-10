@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import scriptDirectory from './scriptDirectory'
 
 
-export default async function (deep = false, cwd = null) {
+export default async function (cwd = null, deep = true) {
 
   let files
   let scripts
@@ -12,7 +12,7 @@ export default async function (deep = false, cwd = null) {
 
   scripts = []
 
-  if (cwd === null) {
+  if (!cwd) {
     cwd = await scriptDirectory.call(this)
   }
 

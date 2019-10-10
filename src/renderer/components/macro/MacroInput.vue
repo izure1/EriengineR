@@ -4,10 +4,11 @@
       <v-tab v-for="tab in tabs" :key="tab.name" :href="'#tab-' + tab.name">{{ tab.name }}</v-tab>
       <v-tab-item v-for="tab in tabs" :key="tab.name" :value="'tab-' + tab.name">
 
-        <macro-input-text v-if="  tab.type == 'text'  " @change="setInputValue" :tab="tab"></macro-input-text>
-        <macro-input-text v-if="  tab.type == 'value' " @change="setInputValue" :tab="tab"></macro-input-text>
-        <macro-input-file v-if="  tab.type == 'file'  " @change="setInputValue" :tab="tab"></macro-input-file>
-        <macro-input-radio v-if=" tab.type == 'radio' " @change="setInputValue" :tab="tab"></macro-input-radio>
+        <macro-input-text v-if="      tab.type == 'text'     " @change="setInputValue" :tab="tab"></macro-input-text>
+        <macro-input-text v-if="      tab.type == 'value'    " @change="setInputValue" :tab="tab"></macro-input-text>
+        <macro-input-file v-if="      tab.type == 'file'     " @change="setInputValue" :tab="tab"></macro-input-file>
+        <macro-input-radio v-if="     tab.type == 'radio'    " @change="setInputValue" :tab="tab"></macro-input-radio>
+        <macro-input-keyboard v-if="  tab.type == 'keyboard' " @change="setInputValue" :tab="tab"></macro-input-keyboard>
 
       </v-tab-item>
     </v-tabs>
@@ -28,13 +29,15 @@
   import MacroInputText from './MacroInputText'
   import MacroInputFile from './MacroInputFile'
   import MacroInputRadio from './MacroInputRadio'
+  import MacroInputKeyboard from './MacroInputKeyboard'
 
   export default {
 
     components: {
       MacroInputText,
       MacroInputFile,
-      MacroInputRadio
+      MacroInputRadio,
+      MacroInputKeyboard,
     },
 
     props: {

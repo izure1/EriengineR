@@ -1,4 +1,3 @@
-import path from 'path'
 import {
   remote,
   ipcRenderer,
@@ -22,21 +21,7 @@ const win = remote.getCurrentWindow()
 import menuEnable from './menu/menuEnable'
 import menuDisable from './menu/menuDisable'
 import menuDispose from './menu/menuDispose'
-
-
-let customElectronTitlebar
-let customTitlebar
-
-
-customElectronTitlebar = require('custom-electron-titlebar')
-
-customTitlebar = new customElectronTitlebar.Titlebar({
-
-  backgroundColor: customElectronTitlebar.Color.fromHex('#555'),
-  icon: path.join(__static, 'assets/image/ico_eri_16.png').replace(/\\/g, '/'),
-  overflow: 'hidden'
-
-})
+import customTitlebar from './plugins/customElectronTitlebar'
 
 win.on('menu-enable', menuEnable.bind(customTitlebar))
 win.on('menu-disable', menuDisable.bind(customTitlebar))

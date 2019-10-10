@@ -24,6 +24,7 @@ export default function (itempath) {
       return 'audiotrack'
 
     case '.mp4':
+    case '.webm':
       return 'movie'
 
     case '.esscript':

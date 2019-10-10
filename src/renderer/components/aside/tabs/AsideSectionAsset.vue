@@ -105,7 +105,7 @@
         stat = fs.lstatSync(itempath)
         directory = stat.isDirectory() ? itempath : path.dirname(itempath)
 
-        files = ipcRenderer.sendSync('modal-open-sync', {
+        files = ipcRenderer.sendSync('modal-open', {
           title: '파일을 선택해주세요',
           filters: [{
             name: '에셋 파일',

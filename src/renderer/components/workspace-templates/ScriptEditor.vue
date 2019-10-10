@@ -5,11 +5,11 @@
         사건
         <v-icon color="white">hearing</v-icon>
       </h6>
-      <p>아래 내용이 발생했을 때 작동합니다</p>
+      <p>아래 내용이 발생했을 때 작동합니다. 비우면 이 스크립트는 스스로 작동하지 않습니다</p>
       <ul v-if="events.length">
         <li v-for="(event, index) in events" :key="index">
           <v-btn icon @click="deleteMacro(event.id)" class="mr-0" small>
-            <v-icon color="grey" size="standard">clear</v-icon>
+            <v-icon color="grey" size="standard" small>clear</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(event.id)">{{ getMacroDescription(event) }}</a>
         </li>
@@ -25,10 +25,10 @@
       <ul v-if="conditions.length">
         <li v-for="(condition, index) in conditions" @dblclick="modifyItem(condition)" :key="index">
           <v-btn icon @click="deleteMacro(condition.id)" class="mr-0" small>
-            <v-icon color="grey" size="standard">clear</v-icon>
+            <v-icon color="grey" size="standard" small>clear</v-icon>
           </v-btn>
           <v-btn icon @click="copyMacro(condition.id)" class="ml-0" small>
-            <v-icon color="grey" size="standard">file_copy</v-icon>
+            <v-icon color="grey" size="standard" small>file_copy</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(condition.id)">{{ getMacroDescription(condition) }}</a>
         </li>
@@ -44,10 +44,10 @@
       <ul v-if="actions.length">
         <li v-for="(action, index) in actions" @dblclick="modifyItem(action)" :key="index">
           <v-btn icon @click="deleteMacro(action.id)" class="mr-0" small>
-            <v-icon color="grey" size="standard">clear</v-icon>
+            <v-icon color="grey" size="standard" small>clear</v-icon>
           </v-btn>
           <v-btn icon @click="copyMacro(action.id)" class="ml-0" small>
-            <v-icon color="grey" size="standard">file_copy</v-icon>
+            <v-icon color="grey" size="standard" small>file_copy</v-icon>
           </v-btn>
           <a href="#" @click="modifyMacro(action.id)">{{ getMacroDescription(action) }}</a>
         </li>
@@ -58,7 +58,7 @@
     <div class="template-scripteditor-actions">
       <div>
         <v-textarea label="이 스크립트의 간략한 설명을 입력하세요. 스크립트 뷰어에서 주석으로 보여집니다." no-resize solo flat v-model="data.comment"
-          counter="50" :rules="[v => v.length <= 50 || '너무 길어요. 주석은 간결한 게 알아보기 더 쉽습니다.']"></v-textarea>
+          counter="50" :rules="[v => v.length <= 50 || '너무 길어요. 주석은 간결한 게 알아보기 더 쉽습니다.']" success></v-textarea>
       </div>
       <v-btn large @click="saveScript">
         <v-icon left>save</v-icon>스크립트 저장
@@ -173,25 +173,7 @@
           macro,
         } = this.getInformationFromId(id)
 
-        let newMacro
-
-        newMacro = this.deepCopy(macro)
-        newMacro.id = createUID()
-
-        let v
-
-        for (let i in macro.variables) {
-
-          v = context.variables[i]
-          v.id = createUID()
-
-          if (v.type === 'text') {
-            v.value = '입력'
-          }
-
-        }
-
-        contexts.splice(index, 0, newMacro)
+        contexts.splice(index, 0, macro.copy())
 
       },
 
@@ -334,15 +316,28 @@
 
         >li {
           margin: 0;
+          display: flex;
+          flex-direction: row;
+
+          >* {
+            flex: 0 0 30px;
+          }
 
           >a {
+            height: 30px;
             font-size: 13px;
+            color: grey;
+            line-height: 30px;
+            text-decoration: none;
             letter-spacing: -1px;
             word-spacing: 1px;
-            color: gray;
-            text-decoration: none;
-            display: inline-block;
             transition: color 0.15s linear;
+            flex: 1 1 auto;
+            margin-left: 10px;
+
+            &:hover {
+              color: white;
+            }
           }
 
           &:hover {

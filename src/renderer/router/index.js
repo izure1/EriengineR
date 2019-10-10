@@ -8,7 +8,7 @@ let router
 router = new Router({
   routes: [{
       path: '/engine',
-      component: require('@/components/engine/Engine').default
+      component: require('@/components/Engine').default
     },
     // {
     //   path: '/macro/:group',

@@ -62,7 +62,7 @@ export default async function () {
 
     directoryItems = directoryMap.get(directory)
 
-    files = await scriptList.call(this, false, directory)
+    files = await scriptList.call(this, directory, false)
     scripts = [...scripts, ...files]
 
     directoryMap.set(directory, [...directoryItems, ...files])

@@ -20,7 +20,7 @@ export default function () {
   let scripts
 
 
-  scripts = ipcRenderer.sendSync('script-get-list', false, this.data.directory)
+  scripts = ipcRenderer.sendSync('script-get-list', this.data.directory, false)
   scripts = scripts.map(script => setHiddenContext.call(script, 'path', script.path))
 
   return scripts

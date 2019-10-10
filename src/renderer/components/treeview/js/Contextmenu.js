@@ -146,7 +146,12 @@ class Contextmenu {
 
   render() {
 
-    return Array.from(this.menu.values())
+    let contexts
+
+    contexts = this.menu.values()
+    contexts = Array.from(contexts)
+
+    return contexts
 
   }
 

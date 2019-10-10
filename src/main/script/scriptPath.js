@@ -1,12 +1,15 @@
 import scriptList from './scriptList'
+import scriptDirectory from './scriptDirectory'
 
 
 export default async function (id) {
 
   let scripts
   let target
+  let cwd
 
-  scripts = await scriptList.call(this, true)
+  cwd = await scriptDirectory.call(this)
+  scripts = await scriptList.call(this, cwd)
   scripts = scripts.filter(script => script.id === id)
 
   target = scripts.pop()

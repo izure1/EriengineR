@@ -1,6 +1,7 @@
 import {
   remote,
-  shell
+  shell,
+  ipcRenderer,
 } from 'electron'
 
 import HELPERS from './HELPERS'
@@ -49,20 +50,29 @@ export default function () {
       submenu: [{
           label: '다국어 관리',
           click(self, win) {
-            win.webContents.send('vue-emit', ['createWorkspaceTab', 'language-manager', `다국어 관리자`, 'LANGUAGE-MANAGER'])
+            win.webContents.send('vue-emit', ['createWorkspaceTab', 'locale-manager', `다국어 관리자`, 'LOCALE-MANAGER'])
           }
         },
         {
           type: 'separator'
         },
         {
-          label: '매크로 관리'
+          label: '매크로 관리',
+          click() {
+            ipcRenderer.send('shell-show-item-in-folder', ipcRenderer.sendSync('project-get-directory-macro'))
+          }
         },
         {
-          label: '모듈 관리'
+          label: '모듈 관리',
+          click() {
+            ipcRenderer.send('shell-show-item-in-folder', ipcRenderer.sendSync('project-get-directory-module'))
+          }
         },
         {
-          label: 'JS라이브러리 관리'
+          label: 'JS라이브러리 관리',
+          click() {
+            ipcRenderer.send('shell-show-item-in-folder', ipcRenderer.sendSync('project-get-directory-library'))
+          }
         }
       ]
     },

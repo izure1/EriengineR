@@ -61,10 +61,10 @@
     "directory-tree": "^2.2.4",
     "find-package-json": "^1.2.0",
     "fs-extra": "^8.1.0",
-    "fast-glob": "^3.0.4",
+    "fast-glob": "^3.1.0",
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
-    "jsplumb": "^2.11.2",
+    "jsplumb": "^2.12.0",
     "lve": "^3.6.10",
     "material-design-icons-iconfont": "^5.0.1",
     "melanke-watchjs": "^1.5.0",
@@ -78,7 +78,8 @@
     "vuex": "^3.1.1",
     "vuex-electron": "^1.0.3",
     "shortid": "^2.2.15",
-    "sql.js": "^1.0.0"
+    "sql.js": "^1.0.0",
+    "keycode": "^2.2.0"
   },
   "devDependencies": {
     "ajv": "^6.5.5",

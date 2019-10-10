@@ -12,7 +12,8 @@
       </div>
     </div>
     <section v-for="script in scripts" :key="script.id" :id="getScriptId(script.id)" :data-id="script.id"
-      class="script-box" :class="{isdropping: (connection.target === script && connection.source)}"
+      class="script-box"
+      :class="{dropping: (connection.target === script && connection.source)}"
       @mouseenter="connection.target = script" @mouseleave="connection.target = null"
       :style="{left: `${script.position.x}px`, top: `${script.position.y}px`}">
       <div class="script-box-header">
@@ -117,6 +118,7 @@
   import setZAxis from './methods/ScriptViewer/setZAxis'
   import watchDirectory from './methods/ScriptViewer/watchDirectory'
   import parseCommentToHTML from './methods/ScriptViewer/parseCommentToHTML'
+  import isUnrunable from './methods/ScriptViewer/isUnrunable'
 
 
   export default {
@@ -176,6 +178,7 @@
       saveScript,
       setAxisAlertor,
       parseCommentToHTML,
+      isUnrunable,
     },
     created() {
       this.setAxisAlertor()
@@ -251,8 +254,12 @@
       z-index: 1;
     }
 
-    &.isdropping {
+    &.dropping {
       border: 2px solid red;
+    }
+
+    &.unrunable {
+      opacity: 0.3;
     }
 
     .script-box-header {

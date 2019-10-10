@@ -16,7 +16,7 @@ export default {
   },
 
   playbackRate: {
-    description: '재생 속도를 지정합니다.',
+    description: '재생 속도를 지정합니다. 최대 3배까지 가능합니다.',
     valids: ['0 ~ 3']
   },
 

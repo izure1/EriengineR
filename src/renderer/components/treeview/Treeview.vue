@@ -23,18 +23,17 @@
             </div>
           </div>
         </v-tooltip>
-        <input type="text" v-else @keydown.esc="modifyNameCancel" @keydown.enter="modifyName($event, tree.path)"
+        <input v-else type="text" @keydown.esc="modifyNameCancel" @keydown.enter="modifyName($event, tree.path)"
           @blur="modifyName($event, tree.path)">
       </div>
       <div v-if="contextmenu_info.open" class="template-treeview-contextmenu"
         :style="{left: `${contextmenu_info.x}px`, top: `${contextmenu_info.y}px`}">
         <div class="template-treeview-contextitem">
-          <div v-for="(item, index) in contextmenu" :key="index"
-            @click="callContextmenuItem($event, item.handler, tree.path, item.disabledOnTop, item.onlyOnTop)"
-            :class="{disabled: isDisabledItem(item.disabledOnTop, item.onlyOnTop)}"
-            v-show="isContextItemShow(item, index)">
-            <hr v-if="item.separator">
-            <span v-else>{{ item.text }}</span>
+          <div v-for="(ctx, index) in contextmenu" :key="index"
+            @click="callContextmenuItem($event, ctx.handler, tree.path, ctx.disabledOnTop, ctx.onlyOnTop)"
+            :class="{disabled: isDisabledItem(ctx.disabledOnTop, ctx.onlyOnTop)}" v-show="isContextVisible(ctx)" v-once>
+            <hr v-if="ctx.separator">
+            <span v-else>{{ ctx.text }}</span>
           </div>
         </div>
       </div>
@@ -66,7 +65,7 @@
   import copyJSON from './js/methods/copyJSON'
   import dropItem from './js/methods/dropItem'
   import getFileIcon from './js/methods/getFileIcon'
-  import isContextItemShow from './js/methods/isContextItemShow'
+  import isContextVisible from './js/methods/isContextVisible'
   import isDisabledItem from './js/methods/isDisabledItem'
   import modifyName from './js/methods/modifyName'
   import modifyNameCancel from './js/methods/modifyNameCancel'
@@ -139,7 +138,7 @@
     data: () => ({
       open: false,
       modifyMode: false,
-      separatorVisible: false,
+      separatorVisiblity: false,
       contextmenu_info: {
         x: 0,
         y: 0,
@@ -157,7 +156,7 @@
     },
     methods: {
       copyJSON,
-      isContextItemShow,
+      isContextVisible,
       runShortcut,
       toggle,
       openThis,
@@ -173,7 +172,7 @@
       isDisabledItem,
       getFileIcon,
       watchDirectory,
-      unwatchDirectory
+      unwatchDirectory,
     },
 
     watch: {
@@ -266,19 +265,20 @@
       height: 18px;
       font-size: small;
       line-height: 20px;
+      padding: 0;
       margin: 0;
+      border: none;
+      outline: none;
       display: inline-block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       vertical-align: middle;
+      box-sizing: border-box;
     }
 
-    >input {
-      padding: 0;
-      border: 0;
-      border-bottom: 1px solid #0075c8;
-      outline: none;
+    input {
+      padding-top: 3px;
     }
   }
 

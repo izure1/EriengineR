@@ -42,7 +42,7 @@
 
         let directoryPath
 
-        directoryPath = ipcRenderer.sendSync('modal-open-sync', {
+        directoryPath = ipcRenderer.sendSync('modal-open', {
           title: '디렉토리를 선택해주세요',
           properties: ['openDirectory'],
           defaultPath: this.project.directory

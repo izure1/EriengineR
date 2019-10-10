@@ -1,6 +1,6 @@
 module.exports = {
 
-  id: 'test-test',
+  id: 'test-test3',
   class: '테스트',
   title: '테스트 매크로입니다',
   description: '다국어 {{다국어}}, 값 {{값}}, 파일 {{파일}}, 선택 {{선택}} 키 {{키}}',

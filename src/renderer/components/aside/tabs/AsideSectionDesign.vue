@@ -16,7 +16,7 @@
     shell
   } from 'electron'
 
-  import DESIGN_LIST from '../../main/workspace/Templates/js/DESIGN_LIST'
+  import DESIGN_LIST from '@/components/workspace-templates/js/DESIGN_LIST'
 
 
   let extensions = ''

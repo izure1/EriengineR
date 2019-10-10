@@ -1,13 +1,11 @@
 import {
   ipcRenderer
 } from 'electron'
+import keycode from 'keycode'
+import createUID from './createUID'
 
 
 class Variable {
-
-  static inputDataType(option) {
-    return
-  }
 
   constructor(i) {
 
@@ -50,6 +48,18 @@ class Variable {
   setInputData(value) {
     this.value = value
     this.skip = true
+  }
+
+  copy() {
+
+    let copy
+    let parser
+
+    parser = new VariableParser
+    copy = parser.parseFromInformation(this)
+
+    return copy
+
   }
 
 }
@@ -122,6 +132,20 @@ class TextVariable extends Variable {
 
   }
 
+  copy() {
+
+    let fn
+    let copy
+
+    fn = this.constructor.__proto__.prototype.copy
+    
+    copy = fn.call(this)
+    copy.value = createUID()
+
+    return copy
+
+  }
+
 }
 
 class ValueVariable extends Variable {
@@ -184,6 +208,23 @@ class RadioVariable extends Variable {
 }
 
 
+class KeyboardVariable extends Variable {
+
+  constructor() {
+    super(...arguments)
+  }
+
+  get text() {
+    return keycode(this.value - 0)
+  }
+
+  get hint() {
+    return '키보드에서 키를 누르세요'
+  }
+
+}
+
+
 
 
 class VariableParser {
@@ -204,8 +245,11 @@ class VariableParser {
       case 'radio':
         return new RadioVariable(info)
 
+      case 'keyboard':
+        return new KeyboardVariable(info)
+
       default:
-        throw 'Invalid variable type.'
+        throw `'${info.type}' is invalid variable type.`
 
     }
 
@@ -220,6 +264,7 @@ export {
   ValueVariable,
   FileVariable,
   RadioVariable,
+  KeyboardVariable,
 
   VariableParser,
   VariableInputData,

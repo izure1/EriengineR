@@ -177,7 +177,7 @@ async function createWindow() {
 
   Menu.setApplicationMenu(Menu.buildFromTemplate([]))
 
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
   mainWindow.loadURL(mainURL)
   mainWindow.focus()
 
@@ -223,6 +223,9 @@ import ipc_createProject from './project/createProject'
 import ipc_openProject from './project/openProject'
 import ipc_createSubDirectory from './project/createSubDirectory'
 import ipc_getProjectDirectory from './project/getProjectDirectory'
+import ipc_getMacroDirectory from './project/getMacroDirectory'
+import ipc_getModuleDirectory from './project/getModuleDirectory'
+import ipc_getLibraryDirectory from './project/getLibraryDirectory'
 
 import ipc_delete from './modal/delete'
 import ipc_deleteTrash from './modal/deleteTrash'
@@ -238,6 +241,7 @@ import ipc_sendOutput from './terminal/sendOutput'
 
 import ipc_getScriptDirectory from './script/getScriptDirectory'
 import ipc_getScriptList from './script/getScriptList'
+import ipc_getUnrunableList from './script/getUnrunableList'
 import ipc_getScriptPath from './script/getScriptPath'
 import ipc_checkValidScript from './script/checkValidScript'
 import ipc_writeScript from './script/writeScript'
@@ -277,6 +281,9 @@ function runIPC() {
   ipcMain.on('project-open', ipc_openProject.bind(mainWindow)) // 프로젝트를 여는데 사용합니다
   ipcMain.on('project-create-subdirectory', ipc_createSubDirectory.bind(mainWindow)) // 프로젝트 운용에 필요한 서브 디렉토리를 생성하는데 사용합니다
   ipcMain.on('project-get-directory', ipc_getProjectDirectory.bind(mainWindow)) // 프로젝트 디렉토리 경로를 반환합니다
+  ipcMain.on('project-get-directory-macro', ipc_getMacroDirectory.bind(mainWindow)) // 프로젝트의 매크로 디렉토리 경로를 반환합니다
+  ipcMain.on('project-get-directory-module', ipc_getModuleDirectory.bind(mainWindow)) // 프로젝트의 모듈 디렉토리 경로를 반환합니다
+  ipcMain.on('project-get-directory-library', ipc_getLibraryDirectory.bind(mainWindow)) // 프로젝트의 라이브러리 디렉토리 경로를 반환합니다
 
   // Modal
   ipcMain.on('modal-open', ipc_openModal.bind(mainWindow)) // 새로운 모달창을 띄웁니다
@@ -296,6 +303,7 @@ function runIPC() {
   // Script
   ipcMain.on('script-get-directory', ipc_getScriptDirectory.bind(mainWindow)) // 해당 프로젝트의 스크립트 루트 디렉토리 경로를 반환합니다
   ipcMain.on('script-get-list', ipc_getScriptList.bind(mainWindow)) // 매개변수로 넘어온 경로에 있는 스크립트 파일 목록을 배열에 담아 반환합니다
+  ipcMain.on('script-get-list-unrunable', ipc_getUnrunableList.bind(mainWindow)) // 인게임에서 실행되지 않을 스크립트 파일 목록을 배열에 담아 반환합니다
   ipcMain.on('script-write', ipc_writeScript.bind(mainWindow)) // 스크립트 파일을 생성하거나 수정합니다
   ipcMain.on('script-check-valid', ipc_checkValidScript.bind(mainWindow)) // 모든 스크립트 파일의 유효성을 검사하고 수정합니다
   ipcMain.on('script-get-path', ipc_getScriptPath.bind(mainWindow)) // 스크립트 id로부터 스크립트 파일의 경로를 검색해 반환합니다

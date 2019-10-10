@@ -12,8 +12,8 @@
           </template-script-viewer>
           <template-script-editor v-else-if="item.template === 'SCRIPT-EDITOR'" :data="item.data">
           </template-script-editor>
-          <template-language-manager v-else-if="item.template === 'LANGUAGE-MANAGER'" :data="item.data">
-          </template-language-manager>
+          <template-locale-manager v-else-if="item.template === 'LOCALE-MANAGER'" :data="item.data">
+          </template-locale-manager>
           <template-design-creator v-else-if="item.template === 'DESIGN-CREATOR'" :data="item.data">
           </template-design-creator>
           <template-design-editor v-else-if="item.template === 'DESIGN-EDITOR'" :data="item.data">
@@ -43,14 +43,14 @@
   import WorkspaceContent from './js/WorkspaceContent'
 
   // template 목록
-  import TemplateDefault from './Templates/Default'
-  import TemplateCanvas from './Templates/Canvas'
-  import TemplateScriptViewerAction from './Templates/ScriptViewerAction'
-  import TemplateScriptViewer from './Templates/ScriptViewer'
-  import TemplateScriptEditor from './Templates/ScriptEditor'
-  import TemplateLanguageManager from './Templates/LanguageManager'
-  import TemplateDesignCreator from './Templates/DesignCreator'
-  import TemplateDesignEditor from './Templates/DesignEditor'
+  import TemplateDefault from '@/components/workspace-templates/Default'
+  import TemplateCanvas from '@/components/workspace-templates/Canvas'
+  import TemplateScriptViewerAction from '@/components/workspace-templates/ScriptViewerAction'
+  import TemplateScriptViewer from '@/components/workspace-templates/ScriptViewer'
+  import TemplateScriptEditor from '@/components/workspace-templates/ScriptEditor'
+  import TemplateLocaleManager from '@/components/workspace-templates/LocaleManager'
+  import TemplateDesignCreator from '@/components/workspace-templates/DesignCreator'
+  import TemplateDesignEditor from '@/components/workspace-templates/DesignEditor'
 
   export default {
     components: {
@@ -59,7 +59,7 @@
       TemplateScriptViewerAction,
       TemplateScriptViewer,
       TemplateScriptEditor,
-      TemplateLanguageManager,
+      TemplateLocaleManager,
       TemplateDesignCreator,
       TemplateDesignEditor
     },

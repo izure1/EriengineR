@@ -158,6 +158,15 @@
 
         let oldMacro
 
+        if (!this.information.old) {
+
+          this.macroReturn = null
+          this.select = null
+
+          return
+
+        }
+
         oldMacro = this.macroLists.filter(t => t.id === this.information.old.origin)
         oldMacro = oldMacro.pop() || null
 

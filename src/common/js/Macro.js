@@ -11,6 +11,8 @@ import {
   RadioVariable
 } from './Variable'
 
+import createUID from './createUID'
+
 
 class Macro {
 
@@ -75,6 +77,22 @@ class Macro {
       return match
 
     })
+
+  }
+
+  copy() {
+
+    let copy
+
+    copy = new Macro
+    copy.parseFromInformation(this)
+    copy.id = createUID()
+    
+    for (let i in this.variables) {
+      copy.variables[i] = this.variables[i].copy()
+    }
+
+    return copy
 
   }
 
