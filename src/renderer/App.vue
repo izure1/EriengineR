@@ -118,4 +118,14 @@
     height: calc(100% - 30px);
     top: 30px;
   }
+
+  .menubar-menu-container>li {
+
+    width: 400px;
+
+    .action-label {
+      font-size: 13px;
+    }
+
+  }
 </style>

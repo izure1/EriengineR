@@ -8,7 +8,7 @@ export default async function (id) {
   let filenames, filename
   let file
 
-  filenames = await fg(['**/*.esdesign_actor', '**/*.esdesign_interface', '**/*.esdesign_background'], {
+  filenames = await fg('**/*.esdesign', {
     cwd: designDirectory.call(this),
     onlyFiles: true,
     absolute: true
@@ -20,7 +20,7 @@ export default async function (id) {
 
     file = await fs.readJSON(t)
 
-    if (file.__id !== id) {
+    if (file.id !== id) {
       continue
     }
 

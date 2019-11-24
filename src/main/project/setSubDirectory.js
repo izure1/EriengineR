@@ -4,12 +4,9 @@ import path from 'path'
 import DIRECTORYS from './Vars/DIRECTORYS'
 
 
-export default async function () {
+export default async function (dist) {
 
   let directory
-  let dist
-
-  dist = this.variables.project.directory
 
   for (let dirname of DIRECTORYS) {
 

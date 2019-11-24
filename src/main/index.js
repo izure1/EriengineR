@@ -269,6 +269,8 @@ import ipc_getDesignPath from './design/getDesignPath'
 
 import ipc_addSceneDirectory from './scene/addSceneDirectory'
 import ipc_getSceneDirectory from './scene/getSceneDirectory'
+import ipc_getSceneDirectoryScripts from './scene/getSceneDirectoryScripts'
+import ipc_getSceneDirectoryActors from './scene/getSceneDirectoryActors'
 
 
 function runIPC() {
@@ -334,8 +336,10 @@ function runIPC() {
   ipcMain.on('design-get-path', ipc_getDesignPath.bind(mainWindow)) // 디자인 id로부터 디자인 파일의 경로를 검색해 반환합니다
 
   // Scene
-  ipcMain.on('scene-add-directory', ipc_addSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 ScenesMaps 디렉토리에 특정 씬 전용 디렉토리를 만듭니다
-  ipcMain.on('scene-get-directory', ipc_getSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 씬 디렉토리 경로를 반환합니다. 0 이면 일반 씬 디렉토리, 1 이면 maps 디렉토리입니다
+  ipcMain.on('scene-get-directory', ipc_getSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 씬 디렉토리 경로를 반환합니다.
+  ipcMain.on('scene-get-directory-script', ipc_getSceneDirectoryScripts.bind(mainWindow)) // 현재 프로젝트의 씬 스크립트 디렉토리 경로를 반환합니다.
+  ipcMain.on('scene-get-directory-actor', ipc_getSceneDirectoryActors.bind(mainWindow)) // 현재 프로젝트의 씬 오브젝트 디렉토리 경로를 반환합니다.
+  ipcMain.on('scene-add-directory', ipc_addSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 Scenes 디렉토리를 만듭니다
 
 }
 

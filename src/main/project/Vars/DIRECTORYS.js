@@ -16,5 +16,5 @@ export default [
   'Scenes/Title',
   'Scenes/Setting',
   'Scenes/Game',
-  'ScenesMaps'
+  'ScenesMaps',
 ]

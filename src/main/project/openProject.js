@@ -21,7 +21,7 @@ export default async function openProject(e, esproject) {
     this.variables.project.information_file = esproject
     this.variables.project.information.set(fs.readJSONSync(esproject))
 
-    await setSubDirectory.call(this)
+    await setSubDirectory.call(this, this.variables.project.directory)
     await copyMacroDirectory.call(this)
     await setDatabase.call(this)
 

@@ -4,11 +4,13 @@ import {
 
 export default async function openModal(e, options = {}) {
 
-  dialog.showOpenDialog(this, options, filepath => {
+  let returnValue
+  let res
 
-    e.sender.send('modal-open', filepath)
-    e.returnValue = filepath
+  res = await dialog.showOpenDialog(this, options)
+  returnValue = res.canceled ? null : res.filePaths
 
-  })
+  e.sender.send('modal-open', returnValue)
+  e.returnValue = returnValue
 
 }

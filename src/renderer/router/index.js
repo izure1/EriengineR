@@ -8,29 +8,11 @@ let router
 router = new Router({
   routes: [{
       path: '/engine',
-      component: require('@/components/Engine').default
+      component: require('@/components/Engine/Component').default
     },
-    // {
-    //   path: '/macro/:group',
-    //   component: require('@/components/macro/Macro').default,
-    //   meta: {
-    //     title: '스크립트 관리자'
-    //   }
-    // },
-    // {
-    //   path: '/macro-input/:type',
-    //   component: require('@/components/macro/MacroInput').default,
-    //   meta: {
-    //     title: '매크로 입력'
-    //   }
-    // },
-    // {
-    //   path: '/modal',
-    //   component: require('@/modalWindow/components/ModalWindow.vue').default
-    // },
     {
       path: '/project-manager',
-      component: require('@/components/project-manager/ProjectManager').default,
+      component: require('@/components/ProjectManager/Component').default,
       meta: {
         title: '프로젝트 관리자'
       }
@@ -41,7 +23,7 @@ router = new Router({
     },
     {
       path: '*',
-      component: require('@/components/error/Error404').default
+      component: require('@/components/Error404/Component').default
     }
   ]
 })

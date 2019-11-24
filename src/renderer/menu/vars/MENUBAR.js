@@ -40,17 +40,13 @@ export default function () {
       ]
     },
     {
-      label: '데이터',
-      submenu: [{
-        label: '게임 설정 수정'
-      }]
-    },
-    {
       label: '관리',
       submenu: [{
+          label: '게임 설정 수정'
+        }, {
           label: '다국어 관리',
           click(self, win) {
-            win.webContents.send('vue-emit', ['createWorkspaceTab', 'locale-manager', `다국어 관리자`, 'LOCALE-MANAGER'])
+            win.webContents.send('vue-emit', ['create-workspace', 'locale-manager', `다국어 관리자`, 'LOCALE-MANAGER'])
           }
         },
         {

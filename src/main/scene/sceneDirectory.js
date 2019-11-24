@@ -7,7 +7,7 @@ export default async function (v = 0) {
 
   map = [
     'Scenes',
-    'ScenesMaps'
+    'ScenesMaps',
   ]
 
   return path.join(this.variables.project.directory, map[v])
