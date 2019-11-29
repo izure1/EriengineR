@@ -1,6 +1,6 @@
 <template>
   <div class="aside-section-tab">
-    <treeview :path="path" :filter="filter" :openItem="openItem" :selectItem="selectItem" :contextmenu="contextmenu"
+    <treeview :path="path" :filter="filter" :openItem="openItem" :contextmenu="contextmenu"
       :configurable="true">
     </treeview>
   </div>
@@ -58,20 +58,6 @@
     },
 
     methods: {
-
-      selectItem(itempath) {
-
-        let design
-
-        try {
-          design = fs.readJSONSync(itempath)
-        } catch (e) {
-          ipcRenderer.sendSync('send-error', e)
-        }
-
-        this.$store.state.actorDesign = design.id
-
-      },
 
       openItem(itempath) {
 

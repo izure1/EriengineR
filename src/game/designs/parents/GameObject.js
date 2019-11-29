@@ -7,7 +7,7 @@ class GameObject {
 
     this.id = null
     this.name = null
-    this.status = {}
+    this.component = {}
 
   }
 
@@ -16,25 +16,31 @@ class GameObject {
     let {
       id,
       name,
-      status,
+      component,
     } = obj
 
     this.id = id
     this.name = name
 
-    for (let i in status) {
-      this.extendProperties(i, status[i])
+    for (let i in component) {
+      this.extendProperties(i, component[i])
     }
 
   }
 
-  buildToRenderer(name, lve) {
+  getComponent(property) {
 
+    if (this.component.hasOwnProperty(property)) {
+      return this.component[property]
+    }
+
+    return null
+    
   }
 
-  buildToWorld(name) {
+  buildToRenderer(name, lve) {}
 
-  }
+  buildToWorld(name) {}
 
   /**
    * 
@@ -43,12 +49,12 @@ class GameObject {
    */
   extendProperties(p, obj) {
 
-    if (!this.status.hasOwnProperty(p)) {
-      this.status[p] = {}
+    if (!this.component.hasOwnProperty(p)) {
+      this.component[p] = {}
     }
 
-    this.status[p] = {
-      ...this.status[p],
+    this.component[p] = {
+      ...this.component[p],
       ...obj
     }
 

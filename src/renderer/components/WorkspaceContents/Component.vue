@@ -18,6 +18,7 @@
           <template-design-editor v-else-if="item.template === 'DESIGN-EDITOR'" :data="item.data">
           </template-design-editor>
           <template-actor-viewer v-else-if="item.template === 'ACTOR-VIEWER'" :data="item.data"></template-actor-viewer>
+          <template-actor-editor v-else-if="item.template === 'ACTOR-EDITOR'" :data="item.data"></template-actor-editor>
         </section>
       </div>
     </div>
@@ -54,6 +55,7 @@
   import TemplateDesignCreator from '@/components/Template-DesignCreator/Component'
   import TemplateDesignEditor from '@/components/Template-DesignEditor/Component'
   import TemplateActorViewer from '@/components/Template-ActorViewer/Component'
+  import TemplateActorEditor from '@/components/Template-ActorEditor/Component'
 
   export default {
     components: {
@@ -65,6 +67,7 @@
       TemplateDesignCreator,
       TemplateDesignEditor,
       TemplateActorViewer,
+      TemplateActorEditor,
     },
     data: () => ({
       tabs: new VueMap

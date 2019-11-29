@@ -7,31 +7,27 @@ import {
 } from '../vars/name'
 
 
-export default function () {
+export default function (e, dataTransfer) {
 
   this.removePreviewActor()
 
-  if (!this.$store.state.actorDesign) {
+  let actorDesign = dataTransfer.getData('text/actor-design-id')
+
+  if (!actorDesign) {
     return
   }
 
-  if (this.$store.state.actorDesign !== this.actorDesign) {
-    this.actorDesign = this.$store.state.actorDesign
-  }
-
-
-  let design, actor
+  let design
 
   // create design object
-  design = this.createDesignFromId(this.actorDesign)
+  design = this.createDesignFromId(actorDesign)
 
   if (!design) {
     return
   }
 
   // create preview actor to LveJS world
-  actor = this.createActorFromDesign(PREVIEW_ACTOR, design)
-
-  this.actorDesignStyle = design.status.style || {}
+  this.createActorFromDesign(PREVIEW_ACTOR, design)
+  dataTransfer.setData('object/actor-design-style', design.component.style || {})
 
 }

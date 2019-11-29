@@ -33,8 +33,8 @@ export default function (id) {
   designObj = new DesignFactory
   designObj.from(designOrigin)
 
-  if (designObj.status.attribute && designObj.status.attribute.src) {
-    designObj.status.attribute.src = path.join(ipcRenderer.sendSync('project-get-directory'), designObj.status.attribute.src)
+  if (designObj.component.attribute && designObj.component.attribute.src) {
+    designObj.component.attribute.src = path.join(ipcRenderer.sendSync('project-get-directory'), designObj.component.attribute.src)
   }
 
   return designObj

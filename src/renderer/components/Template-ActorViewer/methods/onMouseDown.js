@@ -14,7 +14,6 @@ export default function (e) {
       
     case 3:
       this.isMouseRightDown = true
-      this.$store.state.actorDesign = null
       this.removePreviewActor()
       break
   }

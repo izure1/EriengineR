@@ -32,9 +32,9 @@ class TextObject extends GameObject {
 
     lve(name)
       .create(init)
-      .attr(this.status.attribute)
-      .css(this.status.style)
-      .data(this.status.dataset)
+      .attr(this.component.attribute)
+      .css(this.component.style)
+      .data(this.component.dataset)
 
   }
 

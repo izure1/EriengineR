@@ -6,8 +6,8 @@
         <v-icon color="white">hearing</v-icon>
       </h6>
       <p>아래 내용이 발생했을 때 작동합니다. 비우면 이 스크립트는 스스로 작동하지 않습니다</p>
-      <ul v-if="events.length">
-        <li v-for="(event, index) in events" :key="index">
+      <ul v-if="script.events.length">
+        <li v-for="(event, index) in script.events" :key="index">
           <v-btn icon @click="deleteMacro(event.id)" class="mr-0" small>
             <v-icon color="grey" size="standard" small>clear</v-icon>
           </v-btn>
@@ -22,8 +22,8 @@
         <v-icon color="white">filter_list</v-icon>
       </h6>
       <p>위 사건이 발생했지만, 아래 내용이 모두 충족되어야 합니다. 원한다면 아무것도 넣지 않아도 됩니다</p>
-      <ul v-if="conditions.length">
-        <li v-for="(condition, index) in conditions" @dblclick="modifyItem(condition)" :key="index">
+      <ul v-if="script.conditions.length">
+        <li v-for="(condition, index) in script.conditions" @dblclick="modifyItem(condition)" :key="index">
           <v-btn icon @click="deleteMacro(condition.id)" class="mr-0" small>
             <v-icon color="grey" size="standard" small>clear</v-icon>
           </v-btn>
@@ -41,8 +41,8 @@
         <v-icon color="white">directions_run</v-icon>
       </h6>
       <p>모든 조건이 만족하면 순서대로 실행됩니다</p>
-      <ul v-if="actions.length">
-        <li v-for="(action, index) in actions" @dblclick="modifyItem(action)" :key="index">
+      <ul v-if="script.actions.length">
+        <li v-for="(action, index) in script.actions" @dblclick="modifyItem(action)" :key="index">
           <v-btn icon @click="deleteMacro(action.id)" class="mr-0" small>
             <v-icon color="grey" size="standard" small>clear</v-icon>
           </v-btn>
@@ -57,7 +57,7 @@
     <v-divider></v-divider>
     <div class="template-scripteditor-actions">
       <div>
-        <v-textarea label="이 스크립트의 간략한 설명을 입력하세요. 스크립트 뷰어에서 주석으로 보여집니다." no-resize solo flat v-model="data.comment"
+        <v-textarea label="이 스크립트의 간략한 설명을 입력하세요. 스크립트 뷰어에서 주석으로 보여집니다." no-resize solo flat v-model="script.comment"
           counter="50" :rules="[v => v.length <= 50 || '너무 길어요. 주석은 간결한 게 알아보기 더 쉽습니다.']" success></v-textarea>
       </div>
       <v-btn large @click="saveScript">
@@ -76,6 +76,8 @@
 <script>
   import url from 'url'
   import path from 'path'
+  import fs from 'fs-extra'
+
   import {
     remote,
     ipcRenderer,
@@ -97,9 +99,7 @@
 
     data: () => ({
 
-      events: [],
-      conditions: [],
-      actions: [],
+      script: {},
 
       current: null,
       modifyMode: false,
@@ -119,9 +119,9 @@
         let contexts, column, index, macro
 
         target = {
-          events: this.events,
-          conditions: this.conditions,
-          actions: this.actions,
+          events: this.script.events,
+          conditions: this.script.conditions,
+          actions: this.script.actions,
         }
 
         for (let i in target) {
@@ -217,7 +217,7 @@
       },
 
       tabClose() {
-        this.$root.$emit('close-workspace', this.data.id)
+        this.$root.$emit('close-workspace', this.script.id)
       },
 
       openMacroTab(column, old) {
@@ -232,14 +232,14 @@
 
       saveScript() {
 
-        let filepath = ipcRenderer.sendSync('script-get-path', this.data.id)
+        let filepath = ipcRenderer.sendSync('script-get-path', this.script.id)
 
         if (!filepath) {
           remote.dialog.showErrorBox('파일 삭제됨', '해당 파일이 저장될 위치에 파일이 더이상 존재하지 않습니다.')
           return
         }
 
-        ipcRenderer.sendSync('script-write', filepath, this.data)
+        ipcRenderer.sendSync('script-write', filepath, this.script)
 
         this.tabClose()
 
@@ -283,9 +283,7 @@
     },
 
     created() {
-      this.events = this.data.events
-      this.conditions = this.data.conditions
-      this.actions = this.data.actions
+      this.script = fs.readJSONSync(this.data)
     },
 
   }

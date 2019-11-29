@@ -1,7 +1,5 @@
-export default function (e) {
+export default function (e, dataTransfer) {
 
-  e.preventDefault()
-
-  this.transformPreviewActor(e)
+  this.transformPreviewActor(e, dataTransfer)
 
 }

@@ -32,10 +32,10 @@ class SpriteObject extends GameObject {
 
     lve(name)
       .create(init)
-      .attr(this.status.attribute)
-      .css(this.status.style)
-      .data(this.status.dataset)
-      .sprite(this.status.spriteset)
+      .attr(this.component.attribute)
+      .css(this.component.style)
+      .data(this.component.dataset)
+      .sprite(this.component.spriteset)
 
   }
 

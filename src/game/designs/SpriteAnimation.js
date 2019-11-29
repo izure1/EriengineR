@@ -16,7 +16,7 @@ class SpriteAnimation extends GameObject {
 
   buildToRenderer(name, lve) {
 
-    lve.createSprite(name, this.status.sprite.src, this.status.sprite)
+    lve.createSprite(name, this.component.sprite.src, this.component.sprite)
 
   }
 

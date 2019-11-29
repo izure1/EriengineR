@@ -1,8 +1,8 @@
 <template>
   <div class="template-treeview-item">
-    <div @mousedown="selectThis(tree.path)" @click="toggle(tree.path)" @dblclick="openThis(tree.path)" tabindex="-1" @contextmenu="openContextmenu"
-      @blur="contextmenu_info.open = false" draggable="true" @dragstart="setDragItem" @dragover="allowDrop"
-      @drop="dropItem" @keydown="runShortcut($event, tree.path)" class="template-treeview-itemwrap">
+    <div @mousedown="selectThis(tree.path)" @click="toggle(tree.path)" @dblclick="openThis(tree.path)" tabindex="-1"
+      @contextmenu="openContextmenu" @blur="contextmenu_info.open = false" @keydown="runShortcut($event, tree.path)"
+      class="template-treeview-itemwrap">
       <div class="template-treeview-indent" :data-depth="depth">
         <v-icon v-if="isFolder" color="yellow" small left>{{ open ? 'arrow_drop_down' : 'arrow_right' }}</v-icon>
         <v-icon v-else color="rgb(140, 140, 140)" small left>{{ getFileIcon(tree.path) }}</v-icon>
@@ -52,6 +52,8 @@
     shell
   } from 'electron'
 
+  import Draggable from '@/assets/js/Draggable'
+
   // Computed
   import getPreviewSrc from './computed/getPreviewSrc'
   import isFolder from './computed/isFolder'
@@ -61,7 +63,7 @@
   import nextDepth from './computed/nextDepth'
 
   // Methods
-  import allowDrop from './methods/allowDrop'
+  import setDragEvent from './methods/setDragEvent'
   import callContextmenuItem from './methods/callContextmenuItem'
   import copyJSON from './methods/copyJSON'
   import dropItem from './methods/dropItem'
@@ -144,6 +146,7 @@
       }
     },
     data: () => ({
+      draggable: new Draggable,
       open: false,
       modifyMode: false,
       separatorVisiblity: false,
@@ -163,6 +166,7 @@
       getPreviewSrc,
     },
     methods: {
+      setDragEvent,
       copyJSON,
       isContextVisible,
       runShortcut,
@@ -175,7 +179,6 @@
       modifyName,
       modifyNameCancel,
       setDragItem,
-      allowDrop,
       dropItem,
       requestDeleteItem,
       isDisabledItem,
@@ -199,9 +202,11 @@
         t.style.marginLeft = `${t.dataset.depth * 10 + 10}px`
       })
 
+      this.setDragEvent()
+
     },
 
-    destroyed() {
+    beforeDestroy() {
       this.unwatchDirectory()
     }
 

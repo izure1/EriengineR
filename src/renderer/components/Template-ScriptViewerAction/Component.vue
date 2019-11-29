@@ -131,7 +131,7 @@
         }
 
         this.$root.$emit('create-workspace', file.id, tabname, this.data.action.file, {})
-        this.$root.$emit('set-data-workspace', file.id, this.deepCopy(file))
+        this.$root.$emit('set-data-workspace', file.id, itempath)
 
       }
 

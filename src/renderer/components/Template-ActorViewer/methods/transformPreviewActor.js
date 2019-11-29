@@ -3,7 +3,7 @@ import {
 } from '../vars/name'
 
 
-export default function (e) {
+export default function (e, dataTransfer) {
 
   if (!this.lve) {
     return
@@ -13,11 +13,23 @@ export default function (e) {
     return
   }
 
-  
+
   let actor
-  
+
   actor = this.lve(PREVIEW_ACTOR).get()
   actor.ready(() => {
+
+    if (!dataTransfer.getData('object/actor-preview-size')) {
+
+      let width = actor.width()
+      let height = actor.height()
+
+      dataTransfer.setData('object/actor-preview-size', {
+        width,
+        height
+      })
+
+    }
 
     let {
       x,
@@ -25,17 +37,21 @@ export default function (e) {
     } = this.lve.getMouseCoords(e, true)
 
 
-    let width, height, scale
+    let scale
+    let actorDesignStyle
+    let {
+      width,
+      height
+    } = dataTransfer.getData('object/actor-preview-size')
 
-    width = actor.width()
-    height = actor.height()
+    actorDesignStyle = dataTransfer.getData('object/actor-design-style')
 
-    scale = this.actorDesignStyle.hasOwnProperty('scale') ? this.actorDesignStyle.scale : 1
+    scale = actorDesignStyle.hasOwnProperty('scale') ? actorDesignStyle.scale : 1
     scale = this.calcScale(scale, true)
 
 
     let style = {
-      ...this.actorDesignStyle,
+      ...actorDesignStyle,
       width,
       height,
       scale,
@@ -44,7 +60,7 @@ export default function (e) {
     style = this.lve.calc(x, y, 100, style)
     actor.css(style)
 
-    this.actorPreviewStyle = style
+    dataTransfer.setData('object/actor-preview-style', style)
 
   })
 

@@ -34,10 +34,10 @@ class VideoObject extends GameObject {
 
     lve(name)
       .create(init)
-      .attr(this.status.attribute)
-      .attr('videoset', this.status.videoset)
-      .css(this.status.style)
-      .data(this.status.dataset)
+      .attr(this.component.attribute)
+      .attr('videoset', this.component.videoset)
+      .css(this.component.style)
+      .data(this.component.dataset)
 
   }
 

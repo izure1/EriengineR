@@ -4,6 +4,4 @@ export default function (e) {
     this.moveCamera(e.movementX, e.movementY)
   }
 
-  this.transformPreviewActor(e)
-
 }

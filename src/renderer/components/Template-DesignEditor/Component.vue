@@ -1,6 +1,6 @@
 <template>
   <section class="template-designeditor">
-    <v-card v-for="(section, target) in information.status" :key="target" class="section-wrap" :loading="isSaving">
+    <v-card v-for="(section, target) in information.component" :key="target" class="section-wrap" :loading="isSaving">
       <v-card-title class="headline">
         <v-tooltip right>
           <template v-slot:activator="{ on }">
@@ -41,7 +41,7 @@
             <v-icon>add</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>직접 추가하기</v-list-item-title>
+            <v-list-item-title>추가하기</v-list-item-title>
             <v-list-item-subtitle class="caption">새로운 속성을 만듭니다</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -213,14 +213,14 @@
 
         let information
 
-        properties = Object.keys(this.information.status[target])
+        properties = Object.keys(this.information.component[target])
         information = JSON.stringify(this.information)
         information = JSON.parse(information)
 
         propertyName = name
         propertyName = createItem(properties, propertyName)
 
-        information.status[target][propertyName] = value
+        information.component[target][propertyName] = value
         this.saveFile(information)
 
       },
@@ -229,7 +229,7 @@
 
         let information = this.readFromFile()
 
-        delete information.status[target][property]
+        delete information.component[target][property]
 
         this.saveFile(information)
 
@@ -247,7 +247,7 @@
 
         } catch (e) {}
 
-        information.status[target][property] = value
+        information.component[target][property] = value
 
         this.saveFile(information)
 

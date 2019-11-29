@@ -30,9 +30,9 @@ class AudioObject extends GameObject {
 
     lve(name)
       .create(init)
-      .attr(this.status.attribute)
-      .attr('videoset', this.status.videoset)
-      .data(this.status.dataset)
+      .attr(this.component.attribute)
+      .attr('videoset', this.component.videoset)
+      .data(this.component.dataset)
 
   }
 

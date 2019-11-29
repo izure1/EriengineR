@@ -24,8 +24,8 @@ export default function (tab) {
     tab.contents.push({
       timestamp: new Date().toLocaleString(),
       user: 'Renderer',
-      message: e.error.message,
-      stack: e.error.stack
+      message: e.message,
+      stack: e.stack
     })
 
     ipcRenderer.send('send-error-beep')

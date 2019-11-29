@@ -1,7 +1,6 @@
-export default function (e) {
+export default function (e, dataTransfer) {
 
-  e.preventDefault()
-
+  this.createActorFile(e, dataTransfer)
   this.cancelPreviewActor()
   
 }

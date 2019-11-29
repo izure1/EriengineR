@@ -30,9 +30,9 @@ class ParticleObject extends GameObject {
 
     lve(name)
       .create(init)
-      .attr(this.status.attribute)
-      .data(this.status.dataset)
-      .particle(this.status.particleset)
+      .attr(this.component.attribute)
+      .data(this.component.dataset)
+      .particle(this.component.particleset)
 
   }
 

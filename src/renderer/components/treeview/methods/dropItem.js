@@ -2,12 +2,12 @@ import fs from 'fs-extra'
 import path from 'path'
 
 
-export default function (e) {
+export default function (e, dataTransfer) {
 
   let before
   let after
 
-  before = e.dataTransfer.getData('filePath')
+  before = dataTransfer.getData('text/path')
   after = this.tree.path
   after = path.join(after, path.basename(before))
 

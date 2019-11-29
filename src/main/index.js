@@ -272,6 +272,10 @@ import ipc_getSceneDirectory from './scene/getSceneDirectory'
 import ipc_getSceneDirectoryScripts from './scene/getSceneDirectoryScripts'
 import ipc_getSceneDirectoryActors from './scene/getSceneDirectoryActors'
 
+import ipc_createActor from './actor/createActor'
+import ipc_getActorDirectory from './actor/getActorDirectory'
+import ipc_getActorList from './actor/getActorList'
+
 
 function runIPC() {
 
@@ -337,9 +341,14 @@ function runIPC() {
 
   // Scene
   ipcMain.on('scene-get-directory', ipc_getSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 씬 디렉토리 경로를 반환합니다.
-  ipcMain.on('scene-get-directory-script', ipc_getSceneDirectoryScripts.bind(mainWindow)) // 현재 프로젝트의 씬 스크립트 디렉토리 경로를 반환합니다.
-  ipcMain.on('scene-get-directory-actor', ipc_getSceneDirectoryActors.bind(mainWindow)) // 현재 프로젝트의 씬 오브젝트 디렉토리 경로를 반환합니다.
+  ipcMain.on('scene-get-directory-script', ipc_getSceneDirectoryScripts.bind(mainWindow)) // 현재 프로젝트의 씬 스크립트 디렉토리 경로를 반환합니다
+  ipcMain.on('scene-get-directory-actor', ipc_getSceneDirectoryActors.bind(mainWindow)) // 현재 프로젝트의 씬 오브젝트 디렉토리 경로를 반환합니다
   ipcMain.on('scene-add-directory', ipc_addSceneDirectory.bind(mainWindow)) // 현재 프로젝트의 Scenes 디렉토리를 만듭니다
+
+  // Actor
+  ipcMain.on('actor-create', ipc_createActor.bind(mainWindow)) // 지정된 경로에 새로운 액터 파일을 만듭니다
+  ipcMain.on('actor-get-directory', ipc_getActorDirectory.bind(mainWindow)) // 넘겨받은 씬 아이디로 프로젝트의 액터 디렉토리 경로를 반환합니다
+  ipcMain.on('actor-get-list', ipc_getActorList.bind(mainWindow)) // 넘겨 받은 씬 아이디로 현재 프로젝트의 액터 파일들의 경로를 배열에 담아 반환합니다
 
 }
 
