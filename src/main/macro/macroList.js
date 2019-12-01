@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 import fs from 'fs-extra'
 import fg from 'fast-glob'
 
@@ -9,7 +10,7 @@ export default async function () {
   let macro
 
 
-  macroDirectory = path.join(this.variables.project.directory, 'Mods', 'Macro')
+  macroDirectory = normalize(path.join(this.variables.project.directory, 'Mods', 'Macro'))
   macro = {}
 
   // macro 폴더 내에 있는 모든 매크로를 불러옵니다
@@ -18,7 +19,7 @@ export default async function () {
     let dir
     let m
 
-    dir = path.join(macroDirectory, dirname)
+    dir = normalize(path.join(macroDirectory, dirname))
     dir = fg.sync('**/*.js', {
       cwd: dir,
       absolute: true

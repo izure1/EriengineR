@@ -1,7 +1,7 @@
-import banner_design_background from '@/assets/img/banner_design_background.gif'
-import banner_design_actor from '@/assets/img/banner_design_actor.png'
-import banner_design_sprite from '@/assets/img/banner_design_sprite.png'
-import banner_design_interface from '@/assets/img/banner_design_interface.gif'
+// import banner_design_background from '@/assets/img/banner_design_background.gif'
+// import banner_design_actor from '@/assets/img/banner_design_actor.png'
+// import banner_design_sprite from '@/assets/img/banner_design_sprite.png'
+// import banner_design_interface from '@/assets/img/banner_design_interface.gif'
 
 
 // constructor
@@ -55,7 +55,7 @@ export default [
       이처럼 프레임의 시작과 끝을 지정하여, 하나의 모션을 만들 수 있습니다.
     </p>
     `,
-    image: banner_design_sprite,
+    image: null,
     type: null,
     Factory: SpriteAnimation,
   },

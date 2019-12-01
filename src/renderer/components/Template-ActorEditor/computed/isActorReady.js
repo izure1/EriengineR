@@ -1,4 +1,4 @@
-import Actor from '@common/js/Actor'
+import Actor from '@game/actors/Actor'
 
 
 export default function () {

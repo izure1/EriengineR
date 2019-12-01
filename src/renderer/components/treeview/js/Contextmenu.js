@@ -2,6 +2,7 @@ import {
   ipcRenderer
 } from 'electron'
 import path from 'path'
+import normalize from 'normalize-path'
 import fs from 'fs-extra'
 
 import createItem from '@common/js/createItem'
@@ -82,7 +83,7 @@ class Contextmenu {
       directorys = fs.readdirSync(directory)
 
       name = createItem(directorys, name)
-      fs.ensureDir(path.join(directory, name))
+      fs.ensureDir(normalize(path.join(directory, name)))
 
     })
 

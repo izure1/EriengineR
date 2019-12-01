@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
+import normalize from 'normalize-path'
 
 
 export default function (e, dataTransfer) {
@@ -9,7 +10,7 @@ export default function (e, dataTransfer) {
 
   before = dataTransfer.getData('text/path')
   after = this.tree.path
-  after = path.join(after, path.basename(before))
+  after = normalize(path.join(after, path.basename(before)))
 
   fs.rename(before, after)
 

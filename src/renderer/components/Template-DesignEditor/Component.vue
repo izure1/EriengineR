@@ -95,7 +95,6 @@
 
 <script>
   import fs from 'fs-extra'
-  import path from 'path'
 
   import GameObject from '@game/designs/parents/GameObject'
   import createItem from '@common/js/createItem'

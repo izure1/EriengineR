@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 import read from '../database/read'
 
 import DATABASE_INIT_TABLE_QUERY from './Vars/DATABASE_INIT_TABLE_QUERY'
@@ -8,7 +9,7 @@ export default async function () {
 
   let db, dist
 
-  dist = path.join(this.variables.project.directory, this.variables.project.locale.path)
+  dist = normalize(path.join(this.variables.project.directory, this.variables.project.locale.path))
   db = await read.call(this, dist)
 
   // Database initial

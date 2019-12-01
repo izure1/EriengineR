@@ -30,12 +30,12 @@ class SpriteObject extends GameObject {
       type: 'sprite'
     }
 
-    lve(name)
+    return lve(name)
       .create(init)
-      .attr(this.component.attribute)
-      .css(this.component.style)
-      .data(this.component.dataset)
-      .sprite(this.component.spriteset)
+      .attr(this.getParsedComponent('attribute'))
+      .css(this.getParsedComponent('style'))
+      .data(this.getParsedComponent('dataset'))
+      .sprite(this.getParsedComponent('spriteset'))
 
   }
 

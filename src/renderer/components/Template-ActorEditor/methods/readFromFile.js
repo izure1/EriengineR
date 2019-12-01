@@ -1,6 +1,5 @@
 import fs from 'fs-extra'
-import path from 'path'
-import Actor from '@common/js/Actor'
+import Actor from '@game/actors/Actor'
 
 
 export default function () {

@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 import fg from 'fast-glob'
 
 import scriptDirectory from './scriptDirectory'
@@ -54,8 +55,6 @@ export default async function () {
 
   for (let directory of directorys) {
 
-    directory = path.join(directory)
-
     if (!directoryMap.has(directory)) {
       directoryMap.set(directory, [])
     }
@@ -75,7 +74,7 @@ export default async function () {
     let notExists
 
     dir = path.dirname(script.path)
-    dir = path.join(dir)
+    dir = normalize(path.join(dir))
 
     notExists = getNotExistItem(script.nexts, directoryMap.get(dir))
 

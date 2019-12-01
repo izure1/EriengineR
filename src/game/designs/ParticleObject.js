@@ -28,11 +28,11 @@ class ParticleObject extends GameObject {
       type: 'particle'
     }
 
-    lve(name)
+    return lve(name)
       .create(init)
-      .attr(this.component.attribute)
-      .data(this.component.dataset)
-      .particle(this.component.particleset)
+      .attr(this.getParsedComponent('attribute'))
+      .data(this.getParsedComponent('dataset'))
+      .particle(this.getParsedComponent('particleset'))
 
   }
 

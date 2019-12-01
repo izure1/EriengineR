@@ -2,6 +2,7 @@ import os from 'os'
 import fs from 'fs-extra'
 import url from 'url'
 import path from 'path'
+import normalize from 'normalize-path'
 
 import {
   app,
@@ -42,7 +43,7 @@ switch (process.env.NODE_ENV) {
      */
   default:
     global.__devmode = false
-    global.__static = path.join(__dirname, 'static').replace(/\\/g, '\\\\')
+    global.__static = normalize(path.join(__dirname, 'static').replace(/\\/g, '\\\\'))
     break;
 
 }
@@ -60,7 +61,7 @@ mainURL = global.__devmode ?
   url.format({
     protocol: 'file',
     slashes: true,
-    pathname: path.join(__dirname, 'index.html')
+    pathname: normalize(path.join(__dirname, 'index.html'))
   })
 
 
@@ -124,7 +125,7 @@ variables = {
  */
 
 
-let HOME = os.homedir() // %appdata%
+let HOME = normalize(os.homedir()) // %appdata%
 
 
 import initor from './init/initor'
@@ -165,7 +166,7 @@ async function createWindow() {
   mainWindow = new BrowserWindow({
     height: 670,
     width: 1000,
-    icon: path.join(__static, 'assets/image/ico_eri_64.png'),
+    icon: normalize(path.join(__static, 'assets/image/ico_eri_64.png')),
     frame: false,
     webPreferences: {
       webSecurity: false,
@@ -275,6 +276,8 @@ import ipc_getSceneDirectoryActors from './scene/getSceneDirectoryActors'
 import ipc_createActor from './actor/createActor'
 import ipc_getActorDirectory from './actor/getActorDirectory'
 import ipc_getActorList from './actor/getActorList'
+import ipc_getActorAsset from './actor/getActorAsset'
+import ipc_getActorAssetList from './actor/getActorAssetList'
 
 
 function runIPC() {
@@ -348,7 +351,9 @@ function runIPC() {
   // Actor
   ipcMain.on('actor-create', ipc_createActor.bind(mainWindow)) // 지정된 경로에 새로운 액터 파일을 만듭니다
   ipcMain.on('actor-get-directory', ipc_getActorDirectory.bind(mainWindow)) // 넘겨받은 씬 아이디로 프로젝트의 액터 디렉토리 경로를 반환합니다
-  ipcMain.on('actor-get-list', ipc_getActorList.bind(mainWindow)) // 넘겨 받은 씬 아이디로 현재 프로젝트의 액터 파일들의 경로를 배열에 담아 반환합니다
+  ipcMain.on('actor-get-list', ipc_getActorList.bind(mainWindow)) // 넘겨 받은 씬 아이디로 해당 씬 내부에 있는 액터 파일들의 경로를 배열에 담아 반환합니다
+  ipcMain.on('actor-get-asset', ipc_getActorAsset.bind(mainWindow)) // 넘겨 받은 액터 파일 경로로 해당 액터가 참조하는 에셋 경로를 반환합니다
+  ipcMain.on('actor-get-asset-list', ipc_getActorAssetList.bind(mainWindow)) // 넘겨 받은 씬 아이디로 해당 씬 내부에 있는 액터가 참조하는 에셋 경로를 배열에 담아 반환합니다
 
 }
 

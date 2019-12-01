@@ -1,7 +1,8 @@
 export default function (e) {
 
   if (this.isMouseRightDown) {
-    this.moveCamera(e.movementX, e.movementY)
+    this.cameraLeft -= this.calcScale(e.movementX)
+    this.cameraBottom += this.calcScale(e.movementY)
   }
 
 }

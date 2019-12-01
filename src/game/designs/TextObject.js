@@ -30,11 +30,11 @@ class TextObject extends GameObject {
       type: 'text'
     }
 
-    lve(name)
+    return lve(name)
       .create(init)
-      .attr(this.component.attribute)
-      .css(this.component.style)
-      .data(this.component.dataset)
+      .attr(this.getParsedComponent('attribute'))
+      .css(this.getParsedComponent('style'))
+      .data(this.getParsedComponent('dataset'))
 
   }
 

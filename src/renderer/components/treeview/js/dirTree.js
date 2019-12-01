@@ -28,9 +28,12 @@ function sortTree(children) {
 
 export default function (directory, filter = {}) {
 
-  let tree
+  filter = {
+    ...filter,
+    normalizePath: true,
+  }
 
-  tree = dirTree(directory, filter)
+  let tree = dirTree(directory, filter)
   sortTree(tree.children)
 
   return tree

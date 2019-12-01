@@ -26,7 +26,7 @@ export default function (e, dataTransfer) {
 
       dataTransfer.setData('object/actor-preview-size', {
         width,
-        height
+        height,
       })
 
     }

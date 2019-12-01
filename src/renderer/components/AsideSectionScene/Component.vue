@@ -10,6 +10,7 @@
   import Treeview from '@/components/Treeview/Component'
   import os from 'os'
   import path from 'path'
+  import normalize from 'normalize-path'
   import fs from 'fs-extra'
 
   import createUID from '@common/js/createUID'
@@ -97,7 +98,7 @@
         let sceneExt
 
         sceneId = createUID()
-        scenePath = path.posix.join(itempath, sceneId)
+        scenePath = normalize(path.join(itempath, sceneId))
         sceneExt = '.esscene'
 
         fs.writeFileSync(scenePath + sceneExt, sceneId)

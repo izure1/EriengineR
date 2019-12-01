@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 import fs from 'fs-extra'
 
 import {
@@ -15,8 +16,8 @@ export default async function (e, options) {
   let success
 
   src = options.template.path
-  dist = path.join(options.directory, options.id)
-  esproject = path.join(dist, 'project.esproject')
+  dist = normalize(path.join(options.directory, options.id))
+  esproject = normalize(path.join(dist, 'project.esproject'))
 
   // 쓸모없는 정보를 삭제합니다
   delete options.directory
@@ -50,7 +51,7 @@ export default async function (e, options) {
 
   let ret = {
     success,
-    esproject
+    esproject,
   }
 
   e.sender.send('project-create', ret)

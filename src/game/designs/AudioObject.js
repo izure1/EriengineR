@@ -28,11 +28,11 @@ class AudioObject extends GameObject {
       type: 'video'
     }
 
-    lve(name)
+    return lve(name)
       .create(init)
-      .attr(this.component.attribute)
-      .attr('videoset', this.component.videoset)
-      .data(this.component.dataset)
+      .attr(this.getParsedComponent('attribute'))
+      .attr('videoset', this.getParsedComponent('videoset'))
+      .data(this.getParsedComponent('dataset'))
 
   }
 

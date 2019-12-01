@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 import fs from 'fs-extra'
 
 import {
@@ -24,7 +25,7 @@ export default {
 
     src = DEFAULT_WORKSPACE
     dist = directoryPath
-    dist = path.join(dist, '.eriengine')
+    dist = normalize(path.join(dist, '.eriengine'))
 
     try {
 
@@ -40,7 +41,7 @@ export default {
 
     return {
       directory: dist,
-      user: path.join(dist, 'user.json')
+      user: normalize(path.join(dist, 'user.json'))
     }
 
   },

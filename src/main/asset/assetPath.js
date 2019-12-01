@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 import assetDirectory from './assetDirectory'
 
 export default async function (asset, relative = false) {
@@ -7,6 +8,7 @@ export default async function (asset, relative = false) {
 
   directory = assetDirectory.call(this)
   directory = path.dirname(directory)
+  directory = normalize(directory)
 
   let p
 
@@ -16,8 +18,8 @@ export default async function (asset, relative = false) {
     p = relative ? asset : path.join(directory, asset)
   }
 
-  p = p.split(path.sep).filter(t => !!t)
-  p = p.join(path.sep)
+  p = p.split('/').filter(t => !!t)
+  p = p.join('/')
 
   return p
 

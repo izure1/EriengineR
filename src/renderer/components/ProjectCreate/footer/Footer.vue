@@ -23,6 +23,8 @@
     ipcRenderer
   } from 'electron'
   import path from 'path'
+  import normalize from 'normalize-path'
+
 
   export default {
     data: () => ({
@@ -34,7 +36,7 @@
     },
     computed: {
       getFullDirectoryPath() {
-        return path.join(this.project.directory, this.project.id)
+        return normalize(path.join(this.project.directory, this.project.id))
       }
     },
     methods: {

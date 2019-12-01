@@ -1,8 +1,9 @@
 import path from 'path'
+import normalize from 'normalize-path'
 
 
 export default function () {
 
-  return path.join(this.variables.project.directory, 'Assets')
+  return normalize(path.join(this.variables.project.directory, 'Assets'))
 
 }

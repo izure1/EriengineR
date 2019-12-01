@@ -3,18 +3,13 @@ import {
 } from '../vars/name'
 
 
-export default function (x, y) {
+export default function () {
 
-  if (!this.lve) {
-    return
-  }
-
-  x = this.calcScale(x)
-  y = this.calcScale(y)
+  if (!this.lve) return
 
   this.lve(CAMERA).css({
-    left: `-=${x}`,
-    bottom: `+=${y}`,
+    left: this.cameraLeft,
+    bottom: this.cameraBottom,
   })
 
 }

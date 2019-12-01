@@ -1,8 +1,9 @@
 import path from 'path'
+import normalize from 'normalize-path'
 
 
 export default function (id) {
 
-  return path.join(this.variables.project.directory, 'ScenesMaps', id, 'Actors')
+  return normalize(path.join(this.variables.project.directory, 'ScenesMaps', id, 'Actors'))
 
 }

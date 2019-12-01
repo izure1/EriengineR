@@ -1,4 +1,5 @@
 import fg from 'fast-glob'
+import path from 'path'
 import assetDirectory from './assetDirectory'
 
 export default async function (e) {
@@ -10,6 +11,6 @@ export default async function (e) {
     absolute: true
   })
 
-  return files
+  return files.map(file => file.replace(/\//g, path.sep))
 
 }

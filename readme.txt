@@ -95,6 +95,14 @@
   이는 사용자가 파일을 잘못 삭제하더라도 직접 복구할 수 있게 도움을 준다.
 
 
+경로
+
+  모든 경로는 UNIX 시스템의 슬래시 방식을 이용한다. Windows의 역슬래시는 normalize-path 모듈을 이용하여 정상화한다.
+  path.join, os.homedir, process.cwd, __dirname 등, 반환값이 역슬래시로 변환되는 함수에 함께 사용하도록 한다.
+  EX.
+    path.join(A, B) -> normalize(path.join(A, B))
+
+
 저장/디렉토리 구조
 
   디렉토리에 모듈 디렉토리가 존재할 경우, 디렉토리 내부의 내용을 재귀함수를 이용하여 불러들인다.
@@ -106,18 +114,17 @@
           ...에셋 파일들
         Designs
           ...디자인 파일들 (esdesign)
-        Interfaces
-          ...인터페이스 파일들 (esinterface)
-        Scripts
+        Scenes
+          ...씬 파일들 (esscene)
+        ScenesMaps
           ...스크립트 파일들 (esscript)
+          ...액터 파일들 (esactor)
         프로젝트정보.esproject
 
       모듈 디렉토리
         기본 디렉토리 (UUID)
           Assets
             ...에셋 파일들
-    Backup
-      ...[ package_${timestamp}.esp ]
 
 
 백업
@@ -143,20 +150,19 @@ TreeView
 
 모달
 
-  Electron 내부모듈인 Menu, MenuItem 등을 이용하여 메뉴와 컨텍스트 메뉴를 구성한다.
-  새창은 더 이상 jQuery UI 를 사용하지 않고, BrowserWindow 의 modal: true 속성을 이용한다.
+  Electron 내부모듈인 Menu, MenuItem 등을 이용하지 않는다. (vue 사용으로 인한 로드 속도 저하)
+  vuetify의 v-dialog를 이용하여 반응성 개선
 
 
 디자인
 
-  jQuery UI 를 사용하지 않음에 따라, 에리엔진 리워크에서 공통적으로 사용될 템플릿을 추가한다.
-  디렉토리 구조는 Vue.js의 TreeView 기능을 이용한다.
+  jQuery UI 를 사용하지 않음에 따라, 에리엔진 리워크에서 공통적으로 사용될 템플릿 vuetify를 이용한다.
 
 
 데이터관리
 
   모든 데이터는 Vue.js를 이용하여 Kernel 에서 관리한다.
-  이는 각 모달 간 데이터 관리를 좀 더 수월하게 할 수 있게 도와줄 것이다.
+  이는 각 컴포넌트끼리 데이터 관리를 좀 더 수월하게 할 수 있게 도와줄 것이다.
   모달간 데이터 관리는 Browser.on, Browser.emit 을 이용하여 관리한다. 여의치 않다면 IPC를 활용한다.
 
 

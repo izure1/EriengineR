@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 
 
 export default async function (v = 0) {
@@ -10,6 +11,6 @@ export default async function (v = 0) {
     'ScenesMaps',
   ]
 
-  return path.join(this.variables.project.directory, map[v])
+  return normalize(path.join(this.variables.project.directory, map[v]))
 
 }

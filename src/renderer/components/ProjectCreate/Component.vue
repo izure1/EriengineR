@@ -25,6 +25,7 @@
 
   import os from 'os'
   import path from 'path'
+  import normalize from 'normalize-path'
   import createUID from '@common/js/createUID'
   
 
@@ -37,7 +38,7 @@
     data: () => ({
       project: {
         name: '새로운 프로젝트',
-        directory: path.join(os.homedir(), 'Desktop'),
+        directory: normalize(path.join(os.homedir(), 'Desktop')),
         id: `org.izure.eriengine.p${createUID()}`,
         width: 1366,
         height: 768,

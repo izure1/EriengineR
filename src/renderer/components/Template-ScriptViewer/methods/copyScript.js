@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 import fs from 'fs-extra'
 
 import createItem from '@common/js/createItem'
@@ -15,7 +16,7 @@ export default function (filepath) {
   files = fs.readdirSync(dir).map(t => path.parse(t).name)
 
   file = createItem(files, path.parse(filepath).name)
-  file = path.join(dir, file)
+  file = normalize(path.join(dir, file))
   file += `.${path.parse(filepath).ext}`
 
   context = fs.readJSONSync(filepath)

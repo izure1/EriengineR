@@ -1,4 +1,10 @@
+import {
+  ipcRenderer
+} from 'electron'
+
+import fs from 'fs-extra'
 import LveJS from 'lve'
+
 import {
   EMPTY_TEXT
 } from '../vars/name'
@@ -10,20 +16,25 @@ export default function () {
     this.lve.destroy()
   }
 
+  let sceneId = this.getSceneId()
+  // 현재 씬에서 참조하고 있는 모든 에셋을 얻어옵니다
+  let assetFiles = ipcRenderer.sendSync('actor-get-asset-list', sceneId)
+  // 현재 씬에 있는 모든 액터 파일 경로를 얻어옵니다
+  let actorFiles = ipcRenderer.sendSync('actor-get-list', sceneId)
+
+
   this.lve = new LveJS
   this.lve.init({
     canvas: this.$el.querySelector('canvas')
-  }).ready(() => {
+  }).setBaseURL(this.actorBaseURL).loadAsset(assetFiles).ready(() => {
 
-    this.lve(EMPTY_TEXT).create({
-      type: 'text',
-      text: '이 폴더에 생성된 액터가 없습니다.\n<style fontsize="20">좌측의 디자인 탭에서 디자인을 선택하여 배치하세요.</style>'
-    }).css({
-      fontSize: 30,
-      color: 'grey',
-      textAlign: 'center',
-      lineHeight: '200%'
+    actorFiles.forEach(file => {
+      this.drawActorFromPath(file)
     })
+
+    this.drawGuideText()
+    this.moveCamera()
+    this.zoomCamera()
 
   })
 

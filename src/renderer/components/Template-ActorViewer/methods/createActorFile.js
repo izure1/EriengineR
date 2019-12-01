@@ -3,9 +3,10 @@ import {
 } from 'electron'
 
 import path from 'path'
+import normalize from 'normalize-path'
 
 import createUID from '@common/js/createUID'
-import Actor from '@common/js/Actor'
+import Actor from '@game/actors/Actor'
 
 
 export default function (e, dataTransfer) {
@@ -50,7 +51,7 @@ export default function (e, dataTransfer) {
 
   let filepath
   
-  filepath = path.join(this.path, name)
+  filepath = normalize(path.join(this.path, name))
   filepath += '.esactor'
 
   ipcRenderer.sendSync('actor-create', filepath, actor)

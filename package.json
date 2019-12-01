@@ -65,7 +65,7 @@
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
     "jsplumb": "^2.12.6",
-    "lve": "^5.1.6",
+    "lve": "^5.2.0",
     "material-design-icons-iconfont": "^5.0.1",
     "melanke-watchjs": "^1.5.0",
     "trash": "^6.1.1",
@@ -79,7 +79,8 @@
     "vuex-electron": "^1.0.3",
     "shortid": "^2.2.15",
     "sql.js": "^1.0.1",
-    "keycode": "^2.2.0"
+    "keycode": "^2.2.0",
+    "normalize-path": "^3.0.0"
   },
   "devDependencies": {
     "ajv": "^6.5.0",

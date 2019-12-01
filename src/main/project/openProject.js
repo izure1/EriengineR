@@ -1,4 +1,5 @@
 import path from 'path'
+import normalize from 'normalize-path'
 import fs from 'fs-extra'
 
 import {
@@ -17,7 +18,7 @@ export default async function openProject(e, esproject) {
 
   try {
 
-    this.variables.project.directory = path.dirname(esproject)
+    this.variables.project.directory = normalize(path.dirname(esproject))
     this.variables.project.information_file = esproject
     this.variables.project.information.set(fs.readJSONSync(esproject))
 

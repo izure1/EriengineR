@@ -25,6 +25,7 @@
 
   import fs from 'fs-extra'
   import path from 'path'
+  import normalize from 'normalize-path'
   import createItem from '@common/js/createItem'
   import createUID from '@common/js/createUID'
 
@@ -61,7 +62,7 @@
         filename = createItem(filenames, '새로운 디자인')
         filename += '.esdesign'
 
-        filename = path.join(this.directory, filename)
+        filename = normalize(path.join(this.directory, filename))
 
         sample = new target.Factory
         sample = JSON.stringify(sample)

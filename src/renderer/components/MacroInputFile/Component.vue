@@ -67,7 +67,7 @@
         rootDir = ipcRenderer.sendSync('project-get-directory')
 
         relPath = itempath.replace(rootDir, '')
-        relPath = relPath.split(path.sep).filter(t => !!t).join(path.sep)
+        relPath = relPath.split('/').filter(t => !!t).join('/')
 
         return relPath
 

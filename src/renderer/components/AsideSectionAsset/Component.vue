@@ -21,6 +21,7 @@
   import Treeview from '@/components/Treeview/Component'
   import os from 'os'
   import path from 'path'
+  import normalize from 'normalize-path'
   import fs from 'fs-extra'
   import del from 'del'
   import fg from 'fast-glob'
@@ -143,7 +144,7 @@
           let filename, filepath
 
           filename = path.basename(file)
-          filepath = path.join(itempath, filename)
+          filepath = normalize(path.join(itempath, filename))
           alreadyExists = fs.existsSync(filepath)
 
           // 같은 위치에 이미 파일일 존재하고 있다면 덮어쓰기 위해 원본 파일을 삭제합니다

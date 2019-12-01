@@ -32,12 +32,12 @@ class VideoObject extends GameObject {
       type: 'video'
     }
 
-    lve(name)
+    return lve(name)
       .create(init)
-      .attr(this.component.attribute)
-      .attr('videoset', this.component.videoset)
-      .css(this.component.style)
-      .data(this.component.dataset)
+      .attr(this.getParsedComponent('attribute'))
+      .attr('videoset', this.getParsedComponent('videoset'))
+      .css(this.getParsedComponent('style'))
+      .data(this.getParsedComponent('dataset'))
 
   }
 

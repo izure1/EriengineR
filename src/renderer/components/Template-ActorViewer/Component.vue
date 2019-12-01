@@ -41,12 +41,25 @@
   import moveCamera from './methods/moveCamera'
   import zoomCamera from './methods/zoomCamera'
   import createDesignFromId from './methods/createDesignFromId'
+  import createDesignFromContent from './methods/createDesignFromContent'
+  import createDesignFromPath from './methods/createDesignFromPath'
   import createActorFromDesign from './methods/createActorFromDesign'
   import createPreviewActor from './methods/createPreviewActor'
   import removePreviewActor from './methods/removePreviewActor'
   import transformPreviewActor from './methods/transformPreviewActor'
   import cancelPreviewActor from './methods/cancelPreviewActor'
   import createActorFile from './methods/createActorFile'
+  import getSceneId from './methods/getSceneId'
+  import drawActorFromPath from './methods/drawActorFromPath'
+  import drawGuideText from './methods/drawGuideText'
+
+  import cameraLeft from './watch/cameraLeft'
+  import cameraBottom from './watch/cameraBottom'
+  import cameraPersp from './watch/cameraPersp'
+
+  import {
+    ipcRenderer
+  } from 'electron'
 
 
   export default {
@@ -64,6 +77,8 @@
       draggable: new Draggable,
       canvasWidth: 0,
       canvasHeight: 0,
+      cameraLeft: 0,
+      cameraBottom: 0,
       cameraPersp: 0,
       cameraDefaultPersp: 100,
       isMouseLeftDown: false,
@@ -73,7 +88,8 @@
 
       actorPath: null,
       actorComponentWidth: 350,
-      
+      actorBaseURL: '',
+
     }),
 
     computed: {
@@ -104,16 +120,29 @@
       moveCamera,
       zoomCamera,
       createDesignFromId,
+      createDesignFromContent,
+      createDesignFromPath,
       createActorFromDesign,
       createPreviewActor,
       removePreviewActor,
       transformPreviewActor,
       cancelPreviewActor,
       createActorFile,
+      getSceneId,
+      drawActorFromPath,
+      drawGuideText,
+    },
+
+    watch: {
+      cameraLeft,
+      cameraBottom,
+      cameraPersp,
     },
 
     created() {
       this.path = this.data.directory
+      this.actorBaseURL = ipcRenderer.sendSync('project-get-directory')
+      this.getSceneId()
     },
 
     mounted() {

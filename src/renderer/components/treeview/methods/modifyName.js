@@ -1,5 +1,6 @@
 import fs from 'fs-extra'
 import path from 'path'
+import normalize from 'normalize-path'
 
 
 export default function (e, before) {
@@ -8,7 +9,7 @@ export default function (e, before) {
   let after
 
   name = e.currentTarget.value
-  after = path.join(path.dirname(before), name)
+  after = normalize(path.join(path.dirname(before), name))
 
   if (!this.modifyMode) {
     return

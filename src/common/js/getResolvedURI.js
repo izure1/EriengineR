@@ -1,5 +1,4 @@
 import url from 'url'
-import path from 'path'
 
 
 export default function getResolvedURI(urls, hash = '/') {

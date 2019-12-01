@@ -75,7 +75,6 @@
 
 <script>
   import url from 'url'
-  import path from 'path'
   import fs from 'fs-extra'
 
   import {

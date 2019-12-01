@@ -1,9 +1,8 @@
 import {
   ipcRenderer
 } from 'electron'
-
 import fs from 'fs-extra'
-import DesignParser from '@game/designs/DesignParser'
+import DesignParser from '../designs/DesignParser'
 
 
 class Actor {
@@ -38,7 +37,7 @@ class Actor {
 
   }
 
-  getComponent(property) {
+  getDesign() {
 
     let filepath
     let content
@@ -64,8 +63,32 @@ class Actor {
     designObj = new Factory
     designObj.from(content)
 
+    return designObj
 
-    return designObj.getComponent(property)
+  }
+
+  getLveJSData(option) {
+
+    let designObj = this.getDesign()
+    if (!designObj) return {}
+
+    let level = this.level
+    let dataset = this.data
+    let {
+      x,
+      y,
+      z,
+    } = this.position
+
+    return {
+      level,
+      dataset,
+      style: {
+        left: x,
+        bottom: y,
+        perspective: z,
+      }
+    }
 
   }
 

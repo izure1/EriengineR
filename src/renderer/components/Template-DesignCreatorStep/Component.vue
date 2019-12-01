@@ -23,7 +23,6 @@
   import Treeview from '@/components/Treeview/Component'
 
   import fs from 'fs-extra'
-  import path from 'path'
 
   import DESIGN_LISTS from '@game/designs/vars/DESIGN_LISTS'
   import REGEXP from '@/assets/js/vars/REGEXP'

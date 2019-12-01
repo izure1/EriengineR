@@ -5,9 +5,7 @@ import {
 
 export default function () {
 
-  if (!this.lve) {
-    return
-  }
+  if (!this.lve) return
 
   this.lve(CAMERA).css('perspective', this.cameraPersp)
 

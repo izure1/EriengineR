@@ -6,7 +6,6 @@ export default function (e) {
     this.cameraPersp = 50
   }
 
-  this.zoomCamera()
   this.transformPreviewActor(e)
 
 }

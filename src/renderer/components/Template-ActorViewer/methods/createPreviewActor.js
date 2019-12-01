@@ -12,19 +12,11 @@ export default function (e, dataTransfer) {
   this.removePreviewActor()
 
   let actorDesign = dataTransfer.getData('text/actor-design-id')
-
-  if (!actorDesign) {
-    return
-  }
-
-  let design
+  if (!actorDesign) return
 
   // create design object
-  design = this.createDesignFromId(actorDesign)
-
-  if (!design) {
-    return
-  }
+  let design = this.createDesignFromId(actorDesign)
+  if (!design) return
 
   // create preview actor to LveJS world
   this.createActorFromDesign(PREVIEW_ACTOR, design)
