@@ -1,3 +1,5 @@
+:no_entry: [DEPRECATED] Active at https://github.com/izure1/eriengine4
+
 # Eriengine
 
 > Web Visualnovel Engine
